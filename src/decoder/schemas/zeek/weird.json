@@ -1,0 +1,11 @@
+{
+    "log_type": "weird.log",
+    "fields": [
+        "weird.addl",
+        "weird.id.orig_h",
+        "weird.id.resp_h",
+        "weird.id.resp_p",
+        "weird.name",
+        "weird.ts"
+    ]
+}

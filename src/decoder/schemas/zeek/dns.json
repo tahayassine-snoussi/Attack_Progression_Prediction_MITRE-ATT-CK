@@ -1,0 +1,12 @@
+{
+    "log_type": "dns.log",
+    "fields": [
+        "dns.answers",
+        "dns.id.orig_h",
+        "dns.qtype",
+        "dns.qtype_name",
+        "dns.query",
+        "dns.rcode",
+        "dns.ts"
+    ]
+}

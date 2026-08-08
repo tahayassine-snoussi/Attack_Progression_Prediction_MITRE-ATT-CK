@@ -1,0 +1,15 @@
+{
+    "log_type": "ssl.log",
+    "fields": [
+        "ssl.cipher",
+        "ssl.id.orig_h",
+        "ssl.id.resp_h",
+        "ssl.id.resp_p",
+        "ssl.issuer",
+        "ssl.server_name",
+        "ssl.subject",
+        "ssl.ts",
+        "ssl.validation_status",
+        "ssl.version"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "log_type": "ftp.log",
+    "fields": [
+        "ftp.arg",
+        "ftp.command",
+        "ftp.file_size",
+        "ftp.id.orig_h",
+        "ftp.id.resp_h",
+        "ftp.reply_code",
+        "ftp.ts",
+        "ftp.user"
+    ]
+}

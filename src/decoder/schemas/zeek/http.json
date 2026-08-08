@@ -1,0 +1,21 @@
+{
+    "log_type": "http.log",
+    "fields": [
+        "files.filename",
+        "files.md5",
+        "files.mime_type",
+        "files.ts",
+        "http.filename",
+        "http.host",
+        "http.id.orig_h",
+        "http.id.resp_h",
+        "http.method",
+        "http.referrer",
+        "http.request_body_len",
+        "http.response_body_len",
+        "http.status_code",
+        "http.ts",
+        "http.uri",
+        "http.user_agent"
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "log_type": "notice.log",
+    "fields": [
+        "notice.dst",
+        "notice.msg",
+        "notice.note",
+        "notice.src",
+        "notice.sub",
+        "notice.ts"
+    ]
+}

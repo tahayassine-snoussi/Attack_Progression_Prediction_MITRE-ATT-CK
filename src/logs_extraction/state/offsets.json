@@ -1,0 +1,22 @@
+{
+    "zeek_conn": {
+        "offset": 188728,
+        "inode": 798626
+    },
+    "zeek_dns": {
+        "offset": 146683,
+        "inode": 799374
+    },
+    "zeek_notice": {
+        "offset": 200,
+        "inode": 786636
+    },
+    "zeek_ssh": {
+        "offset": 484,
+        "inode": 793962
+    },
+    "zeek_weird": {
+        "offset": 215,
+        "inode": 794313
+    }
+}

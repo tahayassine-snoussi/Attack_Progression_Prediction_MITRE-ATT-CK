@@ -1,0 +1,81 @@
+{
+    "sources": [
+        {
+            "id": "zeek_conn",
+            "source": "zeek",
+            "log_type": "conn.log",
+            "remote_path": "/opt/zeek/logs/current/conn.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_dns",
+            "source": "zeek",
+            "log_type": "dns.log",
+            "remote_path": "/opt/zeek/logs/current/dns.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_files",
+            "source": "zeek",
+            "log_type": "files.log",
+            "remote_path": "/opt/zeek/logs/current/files.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_ftp",
+            "source": "zeek",
+            "log_type": "ftp.log",
+            "remote_path": "/opt/zeek/logs/current/ftp.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_http",
+            "source": "zeek",
+            "log_type": "http.log",
+            "remote_path": "/opt/zeek/logs/current/http.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_notice",
+            "source": "zeek",
+            "log_type": "notice.log",
+            "remote_path": "/opt/zeek/logs/current/notice.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_smb_files",
+            "source": "zeek",
+            "log_type": "smb_files.log",
+            "remote_path": "/opt/zeek/logs/current/smb_files.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_ssh",
+            "source": "zeek",
+            "log_type": "ssh.log",
+            "remote_path": "/opt/zeek/logs/current/ssh.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_ssl",
+            "source": "zeek",
+            "log_type": "ssl.log",
+            "remote_path": "/opt/zeek/logs/current/ssl.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "zeek_weird",
+            "source": "zeek",
+            "log_type": "weird.log",
+            "remote_path": "/opt/zeek/logs/current/weird.log",
+            "decoder": "zeek"
+        },
+        {
+            "id": "wazuh_alerts",
+            "source": "wazuh",
+            "log_type": "alerts.json",
+            "remote_path": "/var/ossec/logs/alerts/alerts.json",
+            "decoder": "wazuh"
+        }
+    ]
+}

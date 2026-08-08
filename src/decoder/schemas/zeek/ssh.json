@@ -1,0 +1,12 @@
+{
+    "log_type": "ssh.log",
+    "fields": [
+        "ssh.auth_success",
+        "ssh.client",
+        "ssh.direction",
+        "ssh.id.orig_h",
+        "ssh.id.resp_h",
+        "ssh.server",
+        "ssh.ts"
+    ]
+}

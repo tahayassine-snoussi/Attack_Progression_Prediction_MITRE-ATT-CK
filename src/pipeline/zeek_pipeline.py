@@ -1,0 +1,43 @@
+import json
+
+from decoder.decoder_engine import decode_zeek_event
+
+
+def process_zeek_bytes(data: bytes, log_type: str):
+
+    decoded_events = []
+
+    text = data.decode(
+        "utf-8",
+        errors="replace"
+    )
+
+    for line in text.splitlines():
+
+        line = line.strip()
+
+        if not line:
+            continue
+
+        try:
+            raw_event = json.loads(line)
+
+        except json.JSONDecodeError as error:
+
+            print(
+                f"[PIPELINE] Invalid JSON "
+                f"in {log_type}: {error}"
+            )
+
+            continue
+
+        decoded_event = decode_zeek_event(
+            raw_event,
+            log_type
+        )
+
+        decoded_events.append(
+            decoded_event
+        )
+
+    return decoded_events

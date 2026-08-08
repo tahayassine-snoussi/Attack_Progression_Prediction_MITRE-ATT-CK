@@ -1,0 +1,15 @@
+{
+    "log_type": "conn.log",
+    "fields": [
+        "conn.conn_state",
+        "conn.duration",
+        "conn.id.orig_h",
+        "conn.id.resp_h",
+        "conn.id.resp_p",
+        "conn.orig_bytes",
+        "conn.proto",
+        "conn.resp_bytes",
+        "conn.service",
+        "conn.ts"
+    ]
+}

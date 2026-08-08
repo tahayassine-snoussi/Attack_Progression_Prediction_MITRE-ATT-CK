@@ -1,0 +1,11 @@
+,log_type,unique_required_fields
+0,conn.log,"['conn.conn_state', 'conn.duration', 'conn.id.orig_h', 'conn.id.resp_h', 'conn.id.resp_p', 'conn.orig_bytes', 'conn.proto', 'conn.resp_bytes', 'conn.service', 'conn.ts']"
+1,dns.log,"['dns.answers', 'dns.id.orig_h', 'dns.qtype', 'dns.qtype_name', 'dns.query', 'dns.rcode', 'dns.ts']"
+2,files.log,"['files.filename', 'files.md5', 'files.mime_type', 'files.rx_hosts', 'files.sha1', 'files.source', 'files.ts', 'files.tx_hosts', 'http.host', 'http.id.orig_h', 'http.id.resp_h', 'http.method', 'http.status_code', 'http.uri', 'http.user_agent']"
+3,ftp.log,"['ftp.arg', 'ftp.command', 'ftp.file_size', 'ftp.id.orig_h', 'ftp.id.resp_h', 'ftp.reply_code', 'ftp.ts', 'ftp.user']"
+4,http.log,"['files.filename', 'files.md5', 'files.mime_type', 'files.ts', 'http.filename', 'http.host', 'http.id.orig_h', 'http.id.resp_h', 'http.method', 'http.referrer', 'http.request_body_len', 'http.response_body_len', 'http.status_code', 'http.ts', 'http.uri', 'http.user_agent']"
+5,notice.log,"['notice.dst', 'notice.msg', 'notice.note', 'notice.src', 'notice.sub', 'notice.ts']"
+6,smb_files.log,"['conn.duration', 'conn.id.orig_h', 'conn.id.resp_h', 'conn.id.resp_p', 'conn.orig_bytes', 'conn.resp_bytes', 'conn.service', 'conn.ts']"
+7,ssh.log,"['ssh.auth_success', 'ssh.client', 'ssh.direction', 'ssh.id.orig_h', 'ssh.id.resp_h', 'ssh.server', 'ssh.ts']"
+8,ssl.log,"['ssl.cipher', 'ssl.id.orig_h', 'ssl.id.resp_h', 'ssl.id.resp_p', 'ssl.issuer', 'ssl.server_name', 'ssl.subject', 'ssl.ts', 'ssl.validation_status', 'ssl.version']"
+9,weird.log,"['weird.addl', 'weird.id.orig_h', 'weird.id.resp_h', 'weird.id.resp_p', 'weird.name', 'weird.ts']"

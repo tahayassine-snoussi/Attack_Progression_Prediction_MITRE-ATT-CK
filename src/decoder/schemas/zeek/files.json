@@ -1,0 +1,20 @@
+{
+    "log_type": "files.log",
+    "fields": [
+        "files.filename",
+        "files.md5",
+        "files.mime_type",
+        "files.rx_hosts",
+        "files.sha1",
+        "files.source",
+        "files.ts",
+        "files.tx_hosts",
+        "http.host",
+        "http.id.orig_h",
+        "http.id.resp_h",
+        "http.method",
+        "http.status_code",
+        "http.uri",
+        "http.user_agent"
+    ]
+}
