@@ -1,10 +1,10 @@
 {
     "zeek_conn": {
-        "offset": 688074,
+        "offset": 1252591,
         "inode": 792359
     },
     "zeek_dns": {
-        "offset": 454080,
+        "offset": 804722,
         "inode": 792681
     },
     "zeek_files": {
@@ -15,20 +15,28 @@
         "offset": 483,
         "inode": 800660
     },
+    "zeek_notice": {
+        "offset": 210,
+        "inode": 790312
+    },
     "zeek_ssh": {
-        "offset": 1451,
+        "offset": 1935,
         "inode": 798431
     },
     "zeek_ssl": {
-        "offset": 8853,
+        "offset": 17157,
         "inode": 799935
     },
     "zeek_weird": {
-        "offset": 644,
+        "offset": 859,
         "inode": 799630
     },
     "wazuh_alerts": {
-        "offset": 2875573,
+        "offset": 3245047,
         "inode": 798628
+    },
+    "wazuh_archives": {
+        "offset": 46050481,
+        "inode": 798538
     }
 }

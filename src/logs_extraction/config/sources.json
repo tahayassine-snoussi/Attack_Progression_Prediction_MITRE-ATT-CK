@@ -76,6 +76,14 @@
             "log_type": "alerts.json",
             "remote_path": "/var/ossec/logs/alerts/alerts.json",
             "decoder": "wazuh"
+        },
+        {
+            "id": "wazuh_archives",
+            "source": "wazuh",
+            "log_type": "archives.json",
+            "remote_path": "/var/ossec/logs/archives/archives.json",
+            "decoder": "wazuh"
         }
+
     ]
 }
