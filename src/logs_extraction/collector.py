@@ -26,17 +26,11 @@ class Collector:
 
         self.ssh = SSHClient()
 
-        self.reader = RemoteReader(
-            self.ssh
-        )
+        self.reader = RemoteReader(self.ssh)
 
-        self.offset_store = OffsetStore(
-            OFFSET_PATH
-        )
+        self.offset_store = OffsetStore(OFFSET_PATH)
 
-        self.registry = SourceRegistry(
-            CONFIG_PATH
-        )
+        self.registry = SourceRegistry(CONFIG_PATH)
 
     def collect_source(self, source):
 

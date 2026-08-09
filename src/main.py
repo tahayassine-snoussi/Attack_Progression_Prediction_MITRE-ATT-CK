@@ -1,5 +1,6 @@
 from logs_extraction.collector import Collector
 from pipeline.zeek_pipeline import process_zeek_bytes
+from pipeline.wazuh_pipeline import process_wazuh_bytes
 from storage.event_store import EventStore
 
 
@@ -43,14 +44,12 @@ def main():
                         log_type
                     )
 
-                else:
+                elif source["source"] == "wazuh":
 
-                    print(
-                        f"[MAIN] Unsupported source: "
-                        f"{source['source']}"
+                    events = process_wazuh_bytes(
+                        data,
+                        log_type
                     )
-
-                    continue
 
                 # =====================================
                 # 4. STORE NORMALIZED EVENTS

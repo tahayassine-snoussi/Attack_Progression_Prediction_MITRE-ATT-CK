@@ -45,6 +45,19 @@ def load_schema(log_type: str) -> dict:
     return schema
 
 
+from datetime import datetime, timezone
+
+
+def normalize_timestamp(timestamp):
+
+    if timestamp is None:
+        return None
+
+    return datetime.fromtimestamp(
+        float(timestamp),
+        tz=timezone.utc
+    ).isoformat(timespec="milliseconds")
+
 # ============================================================
 # EXTRACT REQUIRED VALUES
 # ============================================================
@@ -58,15 +71,18 @@ def extract_values(log_event: dict, schema: dict) -> dict:
     log_type = schema["log_type"]
 
     # Remove .log
-    prefix = log_type[:-4] if log_type.endswith(".log") else log_type
+    prefix = (
+        log_type[:-4]
+        if log_type.endswith(".log")
+        else log_type
+    )
 
     for normalized_field in required_fields:
 
         # Example:
-        # conn.id.orig_h
-        #
-        # becomes:
-        # id.orig_h
+        # ftp.ts
+        #   ↓
+        # ts
 
         if normalized_field.startswith(prefix + "."):
             raw_field = normalized_field[
@@ -75,12 +91,17 @@ def extract_values(log_event: dict, schema: dict) -> dict:
         else:
             raw_field = normalized_field
 
-        decoded_values[normalized_field] = (
-            log_event.get(raw_field)
-        )
+        value = log_event.get(raw_field)
+
+        # ------------------------------------------------
+        # Normalize Zeek timestamp fields
+        # ------------------------------------------------
+        if normalized_field.endswith(".ts"):
+            value = normalize_timestamp(value)
+
+        decoded_values[normalized_field] = value
 
     return decoded_values
-
 
 # ============================================================
 # MAIN ZEEK DECODER
@@ -88,6 +109,7 @@ def extract_values(log_event: dict, schema: dict) -> dict:
 
 
 def decode_zeek_event(log_event: dict, log_type: str) -> dict:
+
     """
     Main entry point of the Zeek decoder engine.
     """
@@ -114,6 +136,26 @@ def decode_zeek_event(log_event: dict, log_type: str) -> dict:
     return {
         "telemetry_source": "Zeek",
         "log_type": log_type,
-        "timestamp": log_event.get("ts"),
+        "timestamp": normalize_timestamp(log_event.get("ts")),
         "decoded_fields": decoded_values
+    }
+
+
+
+
+def decode_wazuh_event(log_event: dict, log_type: str) -> dict:
+
+    """
+    Main entry point of the Wazuh decoder engine.
+    """
+
+    # --------------------------------------------------------
+    # 1. Return normalized decoded event
+    # --------------------------------------------------------
+
+    return {
+        "telemetry_source": "Wazuh",
+        "log_type": log_type,
+        "timestamp": log_event.get("timestamp"),
+        "decoded_fields": log_event
     }

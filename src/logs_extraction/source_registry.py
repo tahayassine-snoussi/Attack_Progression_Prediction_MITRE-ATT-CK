@@ -9,11 +9,7 @@ class SourceRegistry:
         self.sources = self._load()
 
     def _load(self):
-        with open(
-            self.config_path,
-            "r",
-            encoding="utf-8"
-        ) as file:
+        with open(self.config_path, "r", encoding="utf-8") as file:
             config = json.load(file)
 
         return config.get("sources", [])
