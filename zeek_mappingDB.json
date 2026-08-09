@@ -1,12 +1,44 @@
 {
   "database_metadata": {
-    "name": "Zeek-to-MITRE-ATT&CK Mapping Database",
-    "version": "1.0.0",
-    "author": "Research Project: Probabilistic Attack Progression Prediction",
-    "created": "2025-01-01",
-    "telemetry_source": "Zeek Network Security Monitor",
-    "total_mappings": 52,
-    "lab_environment": "Windows Server 2019 AD, Ubuntu Linux, Apache/Tomcat Web Stack"
+    "name": "AI-Driven Cyber Attack Progression Prediction System - Zeek-to-MITRE ATT&CK Mapping Database",
+    "version": "2.0.0",
+    "description": "Machine-readable Zeek telemetry to MITRE ATT&CK technique mapping database with structured correlation rules for behavioral detection.",
+    "correlation_rule_format": "structured",
+    "correlation_rule_version": "1.0",
+    "total_mappings": 57,
+    "last_updated": "2026-08-09",
+    "telemetry_source": "Zeek",
+    "supported_aggregation_functions": [
+      "count",
+      "nunique",
+      "mean",
+      "sum",
+      "min",
+      "max",
+      "ratio",
+      "standard_deviation",
+      "coefficient_of_variation",
+      "entropy",
+      "rate",
+      "subnet_density"
+    ],
+    "supported_operators": [
+      ">",
+      ">=",
+      "<",
+      "<=",
+      "==",
+      "!=",
+      "in",
+      "is_null"
+    ],
+    "schema_notes": [
+      "All correlation rules are declarative, machine-readable, and SQL-free.",
+      "The generic correlation engine consumes correlation_rule fields directly.",
+      "Field names preserve original Zeek log field naming (conn.id.orig_h, etc.).",
+      "Endpoint confirmation is represented via external_context, not fabricated fields.",
+      "confidence_score represents mapping strength, not runtime detection confidence."
+    ]
   },
   "mappings": [
     {
@@ -19,13 +51,14 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.85",
+      "confidence_score": 0.85,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
         "conn.id.resp_p",
         "conn.proto",
         "conn.conn_state",
+        "conn.duration",
         "conn.ts"
       ],
       "evidence_conditions": [
@@ -36,11 +69,70 @@
         "Connection duration is very short (scanning behavior)"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_p) >= 15 AND COUNT(DISTINCT conn.id.resp_h) >= 5 AND AVG(conn.duration) < 2.0 WITHIN 60 seconds. Weight increased if conn_state IN ('S0', 'REJ') > 80% of connections.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_resp_ports": {
+            "function": "nunique",
+            "field": "conn.id.resp_p"
+          },
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_ports",
+            "operator": ">=",
+            "value": 15
+          },
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "avg_duration",
+            "operator": "<",
+            "value": 2.0
+          }
+        ],
+        "state_condition": {
+          "field": "conn.conn_state",
+          "values": [
+            "S0",
+            "REJ"
+          ],
+          "aggregation": "ratio",
+          "operator": ">=",
+          "value": 0.8
+        },
+        "scoring": {
+          "base_weight": 1.0,
+          "state_condition_weight": 1.15
+        }
+      },
       "false_positive_notes": "Network vulnerability scanners (Nessus, OpenVAS), legitimate asset discovery tools, and automated monitoring systems may trigger this. Verify against known scanner IPs and scan schedules.",
+      "false_positive_context": {
+        "known_scanner": true,
+        "monitoring_system": true,
+        "asset_inventory_required": true
+      },
       "explanation": "Port scanning produces distinctive patterns in conn.log: a single host rapidly probes multiple ports across one or more targets. Zeek captures each connection attempt with conn_state reflecting the scan type (S0 for SYN scans, REJ for connect scans). The behavioral correlation engine must aggregate by source IP and count unique destination ports within a time window to distinguish scanning from normal traffic.",
-      "related_techniques": ["T1595.001", "T1595.002", "T1018", "T1049"]
+      "related_techniques": [
+        "T1595.001",
+        "T1595.002",
+        "T1018",
+        "T1049"
+      ]
     },
     {
       "mapping_id": "ZEK-T1046-002",
@@ -52,7 +144,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -67,11 +159,50 @@
         "Very short connection durations"
       ],
       "correlation_required": true,
-      "correlation_window": "30 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_h HAVING COUNT(DISTINCT conn.id.resp_p) >= 20 WITHIN 30 seconds. Flag if conn_state IN ('S0', 'REJ') ratio > 70%.",
+      "correlation_rule": {
+        "window_seconds": 30,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_h"
+        ],
+        "aggregations": {
+          "unique_resp_ports": {
+            "function": "nunique",
+            "field": "conn.id.resp_p"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_ports",
+            "operator": ">=",
+            "value": 20
+          }
+        ],
+        "state_condition": {
+          "field": "conn.conn_state",
+          "values": [
+            "S0",
+            "REJ"
+          ],
+          "aggregation": "ratio",
+          "operator": ">",
+          "value": 0.7
+        },
+        "scoring": {
+          "base_weight": 1.0,
+          "state_condition_weight": 1.1
+        }
+      },
       "false_positive_notes": "Application health checks, load balancer probes, and some monitoring tools perform multi-port checks. Cross-reference with asset inventory.",
+      "false_positive_context": {
+        "monitoring_system": true,
+        "asset_inventory_required": true
+      },
       "explanation": "Vertical scanning targets a single host across many ports. In conn.log, this appears as numerous conn records sharing the same orig_h and resp_h but varying resp_p. The correlation engine groups by source-target pair and counts unique ports.",
-      "related_techniques": ["T1595.002", "T1018"]
+      "related_techniques": [
+        "T1595.002",
+        "T1018"
+      ]
     },
     {
       "mapping_id": "ZEK-T1595.001-001",
@@ -83,7 +214,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.82",
+      "confidence_score": 0.82,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -98,11 +229,57 @@
         "High connection rate spanning subnet range"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_p HAVING COUNT(DISTINCT conn.id.resp_h) >= 10 AND network_prefix(conn.id.resp_h, 24) shows sequential or dense coverage WITHIN 120 seconds.",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_p"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "subnet_density": {
+            "function": "subnet_density",
+            "field": "conn.id.resp_h",
+            "prefix_length": 24
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "metric": "subnet_density",
+            "operator": ">=",
+            "value": 0.5
+          }
+        ],
+        "state_condition": {
+          "field": "conn.conn_state",
+          "values": [
+            "S0",
+            "REJ"
+          ],
+          "aggregation": "ratio",
+          "operator": ">=",
+          "value": 0.7
+        },
+        "scoring": {
+          "base_weight": 1.0,
+          "state_condition_weight": 1.1
+        }
+      },
       "false_positive_notes": "Network discovery protocols and broadcast traffic may appear similar. This lab does not use DHCP, reducing false positives.",
       "explanation": "IP block scanning targets an entire subnet rather than individual hosts. In conn.log, this manifests as a single source connecting to many hosts within the same /24 or larger prefix, typically on the same port. The correlation engine must identify subnet-level targeting patterns.",
-      "related_techniques": ["T1046", "T1595.002", "T1018"]
+      "related_techniques": [
+        "T1046",
+        "T1595.002",
+        "T1018"
+      ]
     },
     {
       "mapping_id": "ZEK-T1595.002-001",
@@ -114,7 +291,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.88",
+      "confidence_score": 0.88,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -132,11 +309,66 @@
         "Rapid request rate exceeding normal browsing behavior"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING COUNT(DISTINCT http.uri) >= 30 AND (COUNT(CASE WHEN http.status_code IN (404, 400) THEN 1 END) / COUNT(*)) > 0.6 WITHIN 60 seconds. Boost confidence if uri matches vulnerability patterns OR user_agent contains scanner signatures.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "unique_uris": {
+            "function": "nunique",
+            "field": "http.uri"
+          },
+          "total_requests": {
+            "function": "count"
+          },
+          "error_ratio": {
+            "function": "ratio",
+            "field": "http.status_code",
+            "match_values": [
+              404,
+              400
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_uris",
+            "operator": ">=",
+            "value": 30
+          },
+          {
+            "metric": "error_ratio",
+            "operator": ">",
+            "value": 0.6
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "URI matches vulnerability exploit patterns",
+              "weight": 1.1
+            },
+            {
+              "description": "User-Agent contains scanner signature",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Web crawlers (Googlebot), security assessment tools run by administrators, and broken link checkers may trigger. Validate against scheduled scanning activities and user agent strings.",
+      "false_positive_context": {
+        "known_scanner": true,
+        "admin_activity": true
+      },
       "explanation": "Web vulnerability scanners generate highly distinctive http.log patterns: rapid-fire requests to numerous URLs on a target host, with most returning 404/400 errors as the scanner probes for vulnerable endpoints. The correlation engine must count unique URIs, measure error ratios, and detect scanner user-agents or malicious URI patterns.",
-      "related_techniques": ["T1046", "T1190", "T1083"]
+      "related_techniques": [
+        "T1046",
+        "T1190",
+        "T1083"
+      ]
     },
     {
       "mapping_id": "ZEK-T1590.001-001",
@@ -148,7 +380,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -164,11 +396,13 @@
         "Queries for subdomains or wildcard patterns"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single dns.log record with qtype_name IN ('MX', 'NS', 'SOA', 'TXT', 'ANY') for target domain from non-DNS infrastructure host indicates domain reconnaissance.",
       "false_positive_notes": "Email servers, mail clients, and legitimate applications query MX records. DNS resolvers query NS records. Context of originating host is critical.",
       "explanation": "DNS reconnaissance for domain properties involves querying non-standard record types (MX, NS, SOA, TXT) to map infrastructure. Zeek dns.log captures qtype_name directly. A single query for these record types from a non-infrastructure host provides direct evidence of reconnaissance, though confidence is moderate due to legitimate use cases.",
-      "related_techniques": ["T1590.002", "T1596.001", "T1078"]
+      "related_techniques": [
+        "T1590.002",
+        "T1596.001",
+        "T1078"
+      ]
     },
     {
       "mapping_id": "ZEK-T1590.002-001",
@@ -180,7 +414,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.78",
+      "confidence_score": 0.78,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -196,11 +430,57 @@
         "High query rate exceeding normal DNS client behavior"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY dns.id.orig_h HAVING COUNT(DISTINCT dns.query) >= 20 AND shared_domain_suffix(dns.query) = target_domain AND COUNT(CASE WHEN dns.rcode = 3 THEN 1 END) > 5 WITHIN 60 seconds. Sequential subdomains or dictionary-like patterns increase confidence.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "dns.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_queries": {
+            "function": "nunique",
+            "field": "dns.query"
+          },
+          "nxdomain_count": {
+            "function": "ratio",
+            "field": "dns.rcode",
+            "match_values": [
+              3
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_queries",
+            "operator": ">=",
+            "value": 20
+          },
+          {
+            "metric": "nxdomain_count",
+            "operator": ">",
+            "value": 0.25
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Queries share same domain suffix (subdomain enumeration)",
+              "weight": 1.15
+            },
+            {
+              "description": "Sequential or dictionary-like subdomain patterns",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Web browsers with prefetching, anti-virus software, and some applications perform multiple DNS lookups. However, subdomain enumeration patterns (dictionary words, sequential) are distinct.",
       "explanation": "DNS-based reconnaissance involves enumerating subdomains to map target infrastructure. In dns.log, this appears as numerous A/AAAA queries from a single source for varying subdomains of the same domain, often with NXDOMAIN responses for non-existent hosts. The correlation engine groups by source IP and detects enumeration patterns.",
-      "related_techniques": ["T1590.001", "T1596.001", "T1046"]
+      "related_techniques": [
+        "T1590.001",
+        "T1596.001",
+        "T1046"
+      ]
     },
     {
       "mapping_id": "ZEK-T1592-001",
@@ -212,7 +492,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.70",
+      "confidence_score": 0.7,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -220,6 +500,7 @@
         "conn.proto",
         "conn.service",
         "conn.conn_state",
+        "conn.duration",
         "conn.ts"
       ],
       "evidence_conditions": [
@@ -230,11 +511,78 @@
         "Pattern suggests service version enumeration"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_h) >= 5 AND COUNT(DISTINCT conn.id.resp_p) >= 3 AND conn.id.resp_p IN (21, 23, 25, 110, 143, 3306, 5432) AND AVG(duration) < 1 WITHIN 120 seconds.",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "unique_resp_ports": {
+            "function": "nunique",
+            "field": "conn.id.resp_p"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "unique_resp_ports",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "metric": "avg_duration",
+            "operator": "<",
+            "value": 1.0
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "field_in_set",
+            "field": "conn.id.resp_p",
+            "values": [
+              21,
+              23,
+              25,
+              110,
+              143,
+              3306,
+              5432
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Target ports match banner-grabbing services",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Network inventory tools and some monitoring systems perform service enumeration. Distinguished by source host role and scan pattern.",
+      "false_positive_context": {
+        "monitoring_system": true,
+        "asset_inventory_required": true
+      },
       "explanation": "Host information gathering involves identifying services and versions running on target systems. In conn.log, this appears as connections to banner-grabbing ports across multiple hosts with very short durations. The correlation engine detects service enumeration patterns.",
-      "related_techniques": ["T1046", "T1595.002", "T1018"]
+      "related_techniques": [
+        "T1046",
+        "T1595.002",
+        "T1018"
+      ]
     },
     {
       "mapping_id": "ZEK-T1083-001",
@@ -246,7 +594,7 @@
         "tactic": "Discovery"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.82",
+      "confidence_score": 0.82,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -263,11 +611,58 @@
         "Request rate exceeds normal browsing (no referrer, no linked page structure)"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING COUNT(DISTINCT http.uri) >= 25 AND (COUNT(CASE WHEN http.status_code = 404 THEN 1 END) / COUNT(*)) > 0.7 WITHIN 60 seconds. Increase confidence if uri contains directory enumeration patterns OR path traversal sequences.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "unique_uris": {
+            "function": "nunique",
+            "field": "http.uri"
+          },
+          "not_found_ratio": {
+            "function": "ratio",
+            "field": "http.status_code",
+            "match_values": [
+              404
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_uris",
+            "operator": ">=",
+            "value": 25
+          },
+          {
+            "metric": "not_found_ratio",
+            "operator": ">",
+            "value": 0.7
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "URI contains directory enumeration patterns",
+              "weight": 1.15
+            },
+            {
+              "description": "URI contains path traversal sequences",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Broken link checkers, some web crawlers, and misconfigured applications may generate 404s. However, directory enumeration patterns and lack of referrer information distinguish malicious scanning.",
       "explanation": "Web directory enumeration is a form of file and directory discovery. In http.log, attackers probe for sensitive directories and files by requesting common paths. The correlation engine identifies this by counting unique URIs with high 404 ratios from a single source, especially when paths match known sensitive directories.",
-      "related_techniques": ["T1595.002", "T1190", "T1083"]
+      "related_techniques": [
+        "T1595.002",
+        "T1190",
+        "T1083"
+      ]
     },
     {
       "mapping_id": "ZEK-T1018-001",
@@ -279,7 +674,7 @@
         "tactic": "Discovery"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -296,11 +691,62 @@
         "Pattern suggests systematic host enumeration"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_p HAVING COUNT(DISTINCT conn.id.resp_h) >= 10 WITHIN 120 seconds. Increase confidence if resp_p IN (445, 3389, 22, 5985, 80, 443) and conn_state distribution shows mix of S0 (offline) and SF/S1 (live).",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_p"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 10
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "field_in_set",
+            "field": "conn.id.resp_p",
+            "values": [
+              445,
+              3389,
+              22,
+              5985,
+              80,
+              443
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Connection state distribution shows mix of S0 (offline) and SF/S1 (live)",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Network management tools, inventory scanners, and legitimate administration scripts may connect to many hosts. Context of source IP (admin workstation vs. compromised host) is critical.",
+      "false_positive_context": {
+        "admin_activity": true,
+        "monitoring_system": true
+      },
       "explanation": "Remote system discovery involves identifying live hosts on the network. In conn.log, this appears as connections from a single source to many destination IPs, typically on common service ports. Live hosts return SF/S1 states while offline hosts return S0. The correlation engine counts unique destination hosts per source and port.",
-      "related_techniques": ["T1046", "T1016", "T1021.001", "T1021.002", "T1021.004"]
+      "related_techniques": [
+        "T1046",
+        "T1016",
+        "T1021.001",
+        "T1021.002",
+        "T1021.004"
+      ]
     },
     {
       "mapping_id": "ZEK-T1016-001",
@@ -312,7 +758,7 @@
         "tactic": "Discovery"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.65",
+      "confidence_score": 0.65,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -326,11 +772,13 @@
         "Queries for network time protocol (NTP) or internal DNS servers"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: dns.log record with qtype_name = 'PTR' for internal IP space from non-infrastructure host. Single record sufficient for weak direct evidence.",
       "false_positive_notes": "Many applications and services perform reverse DNS lookups. Confidence is intentionally moderate to reflect high false positive potential without additional context.",
       "explanation": "Network configuration discovery may involve reverse DNS lookups to map internal network topology. Zeek dns.log captures PTR queries. A single PTR query for internal space from a non-infrastructure host provides direct but weak evidence, as reverse lookups are common.",
-      "related_techniques": ["T1018", "T1049", "T1590.002"]
+      "related_techniques": [
+        "T1018",
+        "T1049",
+        "T1590.002"
+      ]
     },
     {
       "mapping_id": "ZEK-T1049-001",
@@ -342,13 +790,15 @@
         "tactic": "Discovery"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.70",
+      "confidence_score": 0.7,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
         "conn.id.resp_p",
         "conn.proto",
         "conn.service",
+        "conn.orig_bytes",
+        "conn.resp_bytes",
         "conn.ts"
       ],
       "evidence_conditions": [
@@ -358,11 +808,65 @@
         "May combine with DNS queries for discovered hosts"
       ],
       "correlation_required": true,
-      "correlation_window": "180 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_h) >= 8 AND COUNT(DISTINCT conn.id.resp_p) >= 5 AND AVG(conn.orig_bytes + conn.resp_bytes) < 500 WITHIN 180 seconds.",
+      "correlation_rule": {
+        "window_seconds": 180,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "unique_resp_ports": {
+            "function": "nunique",
+            "field": "conn.id.resp_p"
+          },
+          "avg_orig_bytes": {
+            "function": "mean",
+            "field": "conn.orig_bytes"
+          },
+          "avg_resp_bytes": {
+            "function": "mean",
+            "field": "conn.resp_bytes"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 8
+          },
+          {
+            "metric": "unique_resp_ports",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "avg_orig_bytes",
+            "operator": "<",
+            "value": 250
+          },
+          {
+            "metric": "avg_resp_bytes",
+            "operator": "<",
+            "value": 250
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0
+        }
+      },
       "false_positive_notes": "Network monitoring systems, discovery protocols, and some legitimate applications connect broadly. Low data transfer volume helps distinguish reconnaissance from legitimate use.",
+      "false_positive_context": {
+        "monitoring_system": true
+      },
       "explanation": "Network connections discovery maps active services and hosts. In conn.log, this appears as a single source connecting to many hosts and ports with minimal data transfer, suggesting service enumeration rather than exploitation. The correlation engine groups by source and looks for breadth of connections with low byte counts.",
-      "related_techniques": ["T1018", "T1046", "T1016"]
+      "related_techniques": [
+        "T1018",
+        "T1046",
+        "T1016"
+      ]
     },
     {
       "mapping_id": "ZEK-T1190-001",
@@ -374,7 +878,7 @@
         "tactic": "Initial Access"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.92",
+      "confidence_score": 0.92,
       "required_fields": [
         "notice.src",
         "notice.dst",
@@ -390,11 +894,13 @@
         "Notice message contains exploit-specific indicators"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single notice.log record with note field indicating exploit detection provides strong direct evidence of attempted exploitation against public-facing application.",
       "false_positive_notes": "Zeek notice framework is signature-based and may have false positives for complex injection attacks. Verify against application logs and endpoint telemetry.",
       "explanation": "Zeek's notice.log generates alerts for specific attack signatures detected in network traffic. When notice.note indicates HTTP::SQL_Injection, HTTP::Shellshock, or similar exploit categories targeting a public-facing web application, this constitutes direct evidence of T1190. The probabilistic engine should weight notice.log entries heavily due to Zeek's built-in detection logic.",
-      "related_techniques": ["T1595.002", "T1505.003", "T1203"]
+      "related_techniques": [
+        "T1595.002",
+        "T1505.003",
+        "T1203"
+      ]
     },
     {
       "mapping_id": "ZEK-T1190-002",
@@ -405,8 +911,8 @@
         "technique_name": "Exploit Public-Facing Application",
         "tactic": "Initial Access"
       },
-      "mapping_type": "behavioral",
-      "confidence_score": "0.78",
+      "mapping_type": "direct",
+      "confidence_score": 0.78,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -424,12 +930,20 @@
         "Status code 500 (Internal Server Error) following suspicious request suggests successful exploitation",
         "User-Agent may be missing, generic, or attacker-specific"
       ],
-      "correlation_required": true,
-      "correlation_window": "30 seconds",
-      "correlation_logic": "Single http.log record with uri matching exploit patterns AND (status_code = 500 OR method IN ('PUT', 'DELETE') to unusual endpoint) within 30 seconds of suspicious pattern. Correlation with weird.log entries for same connection increases confidence.",
+      "correlation_required": false,
+      "external_context": {
+        "recommended_sources": [
+          "Zeek weird.log"
+        ],
+        "correlation_note": "Correlation with weird.log protocol anomaly for same connection increases confidence to 0.88"
+      },
       "false_positive_notes": "Legitimate API usage, web application testing, and some content management systems may use PUT/DELETE. SQL-like strings in URIs can occur in search functionality. Context of endpoint and application type is critical.",
       "explanation": "Web application exploitation often produces detectable patterns in http.log: malicious payloads in URIs or request bodies, unusual HTTP methods, and server error responses indicating successful exploitation. The correlation engine should match URI patterns against known exploit signatures and watch for 500 status codes as exploitation success indicators.",
-      "related_techniques": ["T1595.002", "T1505.003", "T1059"]
+      "related_techniques": [
+        "T1595.002",
+        "T1505.003",
+        "T1059"
+      ]
     },
     {
       "mapping_id": "ZEK-T1190-003",
@@ -441,7 +955,7 @@
         "tactic": "Initial Access"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "weird.id.orig_h",
         "weird.id.resp_h",
@@ -457,11 +971,20 @@
         "Weird events targeting web server ports (80, 443, 8080, 8443)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single weird.log record with name indicating HTTP/S protocol anomaly targeting web server port. Correlation with conn.log showing same connection and http.log showing subsequent request increases confidence.",
+      "external_context": {
+        "recommended_sources": [
+          "Zeek conn.log",
+          "Zeek http.log"
+        ],
+        "correlation_note": "Correlation with conn.log showing same connection and http.log showing subsequent request increases confidence"
+      },
       "false_positive_notes": "Broken clients, misconfigured proxies, and some mobile applications generate protocol anomalies. Evaluate weird.name against known exploit-related anomalies.",
       "explanation": "Exploitation attempts may cause protocol-level anomalies detectable by Zeek's protocol analyzers. weird.log captures parsing failures, malformed requests, and other deviations from expected protocol behavior. When these anomalies target web application ports, they may indicate exploitation attempts or payload delivery.",
-      "related_techniques": ["T1190", "T1210", "T1095"]
+      "related_techniques": [
+        "T1190",
+        "T1210",
+        "T1095"
+      ]
     },
     {
       "mapping_id": "ZEK-T1133-001",
@@ -473,7 +996,7 @@
         "tactic": "Initial Access"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.70",
+      "confidence_score": 0.7,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -492,11 +1015,17 @@
         "Service field matches expected protocol (ssh, ssl, rdp)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single conn.log record with id.orig_h from external network AND id.resp_p IN (22, 3389, 5900, 5985, 5986) AND conn_state IN ('SF', 'S1') AND duration > 60. Confidence is moderate because external remote access may be legitimate.",
       "false_positive_notes": "Legitimate remote administration, VPN users, and third-party support access. Confidence increases if source IP is unknown, access is outside business hours, or correlates with failed authentication attempts.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "External remote services provide initial access vectors. Zeek conn.log captures all remote access connections. A single connection from an external IP to an internal host on a remote access port with established state and significant duration provides direct but moderate-confidence evidence, as remote access is often legitimate.",
-      "related_techniques": ["T1021.001", "T1021.004", "T1021.005", "T1078"]
+      "related_techniques": [
+        "T1021.001",
+        "T1021.004",
+        "T1021.005",
+        "T1078"
+      ]
     },
     {
       "mapping_id": "ZEK-T1078-001",
@@ -508,7 +1037,7 @@
         "tactic": "Initial Access"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.68",
+      "confidence_score": 0.68,
       "required_fields": [
         "ssh.id.orig_h",
         "ssh.id.resp_h",
@@ -524,11 +1053,26 @@
         "May follow brute force or password spraying pattern"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single ssh.log record with auth_success = T AND id.orig_h from external network AND id.orig_h NOT IN known_admin_ips. Correlation with prior T1110 (brute force) or T1110.003 (password spraying) on same target within 300 seconds increases confidence to 0.90.",
+      "external_context": {
+        "recommended_sources": [
+          "Zeek ssh.log",
+          "Wazuh Windows Security Events",
+          "Sysmon"
+        ],
+        "correlation_note": "Correlation with prior T1110 (brute force) or T1110.003 (password spraying) on same target within 300 seconds increases confidence to 0.90"
+      },
       "false_positive_notes": "Remote workers, VPN users, and third-party contractors may legitimately access systems externally. Context of source IP, time, and user role is essential.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "Valid account compromise often results in successful authentication from unexpected sources. Zeek ssh.log captures auth_success and source IP. A successful SSH login from an external, non-administrative IP provides direct evidence of potential account compromise. Correlation with prior brute force attempts strongly indicates successful credential compromise.",
-      "related_techniques": ["T1110", "T1110.001", "T1110.003", "T1021.004", "T1133"]
+      "related_techniques": [
+        "T1110",
+        "T1110.001",
+        "T1110.003",
+        "T1021.004",
+        "T1133"
+      ]
     },
     {
       "mapping_id": "ZEK-T1078-002",
@@ -540,7 +1084,7 @@
         "tactic": "Initial Access"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.65",
+      "confidence_score": 0.65,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -559,23 +1103,38 @@
         "Significant byte transfer indicating active session"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single conn.log record with id.resp_p = 3389 AND id.orig_h external AND conn_state IN ('SF', 'S1') AND duration > 300. Correlation with Windows Security Event Log successful login from same source increases confidence.",
+      "external_context": {
+        "recommended_sources": [
+          "Wazuh Windows Security Events",
+          "Sysmon"
+        ],
+        "correlation_note": "Correlation with Windows Security Event Log successful login from same source increases confidence"
+      },
       "false_positive_notes": "Remote desktop access for administration, help desk, and remote workers is common. Context of source IP and time is critical.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "RDP access with valid compromised credentials appears in conn.log as sustained connections to port 3389 from external sources. Zeek does not capture authentication success for RDP directly, but connection state and duration indicate successful sessions. This mapping requires endpoint correlation for strong confidence.",
-      "related_techniques": ["T1021.001", "T1133", "T1110"]
+      "related_techniques": [
+        "T1021.001",
+        "T1133",
+        "T1110"
+      ]
     },
     {
       "mapping_id": "ZEK-T1505.003-001",
       "telemetry_source": "Zeek",
-      "log_type": "http.log",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
       "attack_technique": {
         "technique_id": "T1505.003",
         "technique_name": "Server Software Component: Web Shell",
         "tactic": "Persistence"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.85",
+      "confidence_score": 0.85,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -597,11 +1156,16 @@
         "MIME type mismatch (e.g., application/x-dosexec labeled as image/jpeg)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single http.log record with method IN ('POST', 'PUT') AND (uri contains upload path OR filename has script/executable extension) AND status_code = 200. Cross-reference with files.log for mime_type verification.",
       "false_positive_notes": "Legitimate file uploads to content management systems, document repositories, and development environments. Validate against known upload endpoints and file type policies.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "Web shell installation typically involves uploading a script or executable file to a web server via HTTP POST/PUT. Zeek http.log captures the upload method, URI, and filename. When the uploaded file has a script extension (.jsp, .php, .asp) or executable type, and the endpoint is not a known upload functionality, this provides direct evidence of potential web shell placement.",
-      "related_techniques": ["T1190", "T1105", "T1059"]
+      "related_techniques": [
+        "T1190",
+        "T1105",
+        "T1059"
+      ]
     },
     {
       "mapping_id": "ZEK-T1505.003-002",
@@ -613,7 +1177,7 @@
         "tactic": "Persistence"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.88",
+      "confidence_score": 0.88,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -623,6 +1187,7 @@
         "http.user_agent",
         "http.request_body_len",
         "http.response_body_len",
+        "http.referrer",
         "http.ts"
       ],
       "evidence_conditions": [
@@ -634,101 +1199,182 @@
         "Activity occurs outside business hours or from unusual source IPs"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY http.host, http.uri HAVING COUNT(*) >= 3 AND (uri matches command-parameter patterns OR request_body_len shows command-like sizes) AND (referrer IS NULL OR user_agent IS suspicious) WITHIN 300 seconds. Correlation with files.log showing script mime_type on same URI increases confidence.",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "http.host",
+          "http.uri"
+        ],
+        "aggregations": {
+          "request_count": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "request_count",
+            "operator": ">=",
+            "value": 3
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "URI matches command-parameter patterns",
+              "weight": 1.15
+            },
+            {
+              "description": "Referrer is NULL or User-Agent is suspicious",
+              "weight": 1.1
+            },
+            {
+              "description": "Correlation with files.log showing script mime_type on same URI",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate API endpoints, administrative interfaces, and some web applications use command-like parameters. Web shells are distinguished by unusual URI paths, lack of referrer, and command-output responses.",
       "explanation": "Active web shell usage produces behavioral patterns in http.log: repeated requests to an unusual URI with command parameters, minimal headers, and responses containing system command output. The correlation engine must identify persistent access to non-standard URIs with command-like request patterns.",
-      "related_techniques": ["T1190", "T1071.001", "T1059"]
+      "related_techniques": [
+        "T1190",
+        "T1071.001",
+        "T1059"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1105-HTTP-SCRIPT-001",
-        "telemetry_source": "Zeek",
-        "log_type": [
-            "http.log",
-            "files.log"
+      "mapping_id": "ZEK-T1105-HTTP-SCRIPT-001",
+      "telemetry_source": "Zeek",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
+      "attack_technique": {
+        "technique_id": "T1105",
+        "technique_name": "Ingress Tool Transfer",
+        "tactic": "Command and Control"
+      },
+      "mapping_type": "direct",
+      "confidence_score": 0.85,
+      "required_fields": [
+        "http.id.orig_h",
+        "http.id.resp_h",
+        "http.host",
+        "http.uri",
+        "http.method",
+        "http.status_code",
+        "http.user_agent",
+        "files.filename",
+        "files.mime_type",
+        "files.ts"
+      ],
+      "evidence_conditions": [
+        "Internal host downloads executable, script, archive, or tool-related files through HTTP",
+        "HTTP GET request retrieves suspicious file extensions such as .ps1, .exe, .dll, .bat, .cmd, .vbs, .zip",
+        "HTTP response status is 200 OK",
+        "Downloaded file is identified by files.log metadata",
+        "Source host is external or previously unseen",
+        "File transfer is followed by execution telemetry from endpoint sources"
+      ],
+      "correlation_required": false,
+      "external_context": {
+        "recommended_sources": [
+          "Sysmon",
+          "Windows Security Events",
+          "Linux auditd"
         ],
-        "attack_technique": {
-            "technique_id": "T1105",
-            "technique_name": "Ingress Tool Transfer",
-            "tactic": "Command and Control"
-        },
-        "mapping_type": "direct",
-        "evidence_level": "direct_network_observation",
-        "confidence_score": "0.85",
-        "required_fields": [
-            "http.id.orig_h",
-            "http.id.resp_h",
-            "http.host",
-            "http.uri",
-            "http.method",
-            "http.status_code",
-            "http.user_agent",
-            "files.filename",
-            "files.mime_type",
-            "files.ts"
-        ],
-        "evidence_conditions": [
-            "Internal host downloads executable, script, archive, or tool-related files through HTTP",
-            "HTTP GET request retrieves suspicious file extensions such as .ps1, .exe, .dll, .bat, .cmd, .vbs, .zip",
-            "HTTP response status is 200 OK",
-            "Downloaded file is identified by files.log metadata",
-            "Source host is external or previously unseen",
-            "File transfer is followed by execution telemetry from endpoint sources"
-        ],
-        "correlation_required": true,
-        "correlation_window": "300 seconds",
-        "correlation_logic": "Detect HTTP file download where method='GET' AND status_code=200 AND files.filename matches executable or scripting extensions. Increase confidence when the same destination host generates subsequent endpoint execution telemetry such as Sysmon Event ID 1 showing execution of the downloaded file.",
-        "false_positive_notes": "Legitimate software updates, package managers, browser downloads, and enterprise deployment tools may generate similar behavior. Validate source reputation and destination domain.",
-        "explanation": "Zeek can directly observe file transfers but cannot observe execution. A downloaded PowerShell script or executable represents potential tool transfer. Execution techniques such as PowerShell or Command Shell must be confirmed using endpoint telemetry.",
-        "related_techniques": [
-            "T1059.001",
-            "T1059.003",
-            "T1204.002"
-        ]
+        "correlation_note": "Endpoint execution telemetry confirming execution of downloaded file increases confidence"
+      },
+      "false_positive_notes": "Legitimate software updates, package managers, browser downloads, and enterprise deployment tools may generate similar behavior. Validate source reputation and destination domain.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
+      "explanation": "Zeek can directly observe file transfers but cannot observe execution. A downloaded PowerShell script or executable represents potential tool transfer. Execution techniques such as PowerShell or Command Shell must be confirmed using endpoint telemetry.",
+      "related_techniques": [
+        "T1059.001",
+        "T1059.003",
+        "T1204.002"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1021.002-SMB-001",
-        "telemetry_source": "Zeek",
-        "log_type": [
-            "conn.log",
-            "smb_files.log"
+      "mapping_id": "ZEK-T1021.002-SMB-001",
+      "telemetry_source": "Zeek",
+      "log_type": [
+        "conn.log",
+        "smb_files.log"
+      ],
+      "attack_technique": {
+        "technique_id": "T1021.002",
+        "technique_name": "SMB/Windows Admin Shares",
+        "tactic": "Lateral Movement"
+      },
+      "mapping_type": "behavioral",
+      "confidence_score": 0.8,
+      "required_fields": [
+        "conn.id.orig_h",
+        "conn.id.resp_h",
+        "conn.id.resp_p",
+        "conn.service",
+        "conn.orig_bytes",
+        "conn.resp_bytes",
+        "conn.duration",
+        "conn.ts"
+      ],
+      "evidence_conditions": [
+        "Internal host initiates SMB connection to another internal host",
+        "Destination port 445 is used",
+        "Source host communicates with multiple SMB targets in a short period",
+        "Large SMB transfers occur after authentication events",
+        "Behavior differs from normal baseline activity"
+      ],
+      "correlation_required": true,
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "conn.id.orig_h"
         ],
-        "attack_technique": {
-            "technique_id": "T1021.002",
-            "technique_name": "SMB/Windows Admin Shares",
-            "tactic": "Lateral Movement"
+        "aggregations": {
+          "unique_smb_targets": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          }
         },
-        "mapping_type": "behavioral",
-        "evidence_level": "network_behavior_observation",
-        "confidence_score": "0.80",
-        "required_fields": [
-            "conn.id.orig_h",
-            "conn.id.resp_h",
-            "conn.id.resp_p",
-            "conn.service",
-            "conn.orig_bytes",
-            "conn.resp_bytes",
-            "conn.duration",
-            "conn.ts"
+        "conditions": [
+          {
+            "metric": "unique_smb_targets",
+            "operator": ">=",
+            "value": 2
+          }
         ],
-        "evidence_conditions": [
-            "Internal host initiates SMB connection to another internal host",
-            "Destination port 445 is used",
-            "Source host communicates with multiple SMB targets in a short period",
-            "Large SMB transfers occur after authentication events",
-            "Behavior differs from normal baseline activity"
+        "optional_conditions": [
+          {
+            "field": "conn.id.resp_p",
+            "operator": "==",
+            "value": 445
+          }
         ],
-        "correlation_required": true,
-        "correlation_window": "300 seconds",
-        "correlation_logic": "GROUP BY conn.id.orig_h HAVING connections to multiple internal hosts where conn.id.resp_p=445 within 300 seconds. Increase confidence if followed by authentication activity, remote execution telemetry, or administrative share access events from Windows logs.",
-        "false_positive_notes": "File servers, backup systems, domain controllers, and administrative tools commonly generate SMB traffic. Baseline normal SMB behavior before alerting.",
-        "explanation": "Zeek can observe SMB network communication and lateral movement patterns but cannot determine whether credential dumping occurred. Credential access techniques require endpoint telemetry such as Sysmon process access events or Windows security auditing.",
-        "related_techniques": [
-            "T1003",
-            "T1078",
-            "T1021.001",
-            "T1059"
-        ]
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Followed by authentication activity or remote execution telemetry",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
+      "false_positive_notes": "File servers, backup systems, domain controllers, and administrative tools commonly generate SMB traffic. Baseline normal SMB behavior before alerting.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
+      "explanation": "Zeek can observe SMB network communication and lateral movement patterns but cannot determine whether credential dumping occurred. Credential access techniques require endpoint telemetry such as Sysmon process access events or Windows security auditing.",
+      "related_techniques": [
+        "T1003",
+        "T1078",
+        "T1021.001",
+        "T1059"
+      ]
     },
     {
       "mapping_id": "ZEK-T1203-001",
@@ -740,7 +1386,7 @@
         "tactic": "Execution"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "files.source",
         "files.tx_hosts",
@@ -759,23 +1405,34 @@
         "File hash can be checked against threat intelligence"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single files.log record with source = 'HTTP' AND mime_type IN ('application/x-dosexec', 'application/x-executable') AND rx_hosts is internal workstation. Correlation with http.log showing download from suspicious domain increases confidence.",
+      "external_context": {
+        "recommended_sources": [
+          "Zeek http.log"
+        ],
+        "correlation_note": "Correlation with http.log showing download from suspicious domain increases confidence"
+      },
       "false_positive_notes": "Legitimate software downloads, updates, and installers. Verify against software inventory and code signing. Hash reputation checks reduce false positives.",
       "explanation": "Client exploitation often involves delivering malicious executables via web download. Zeek files.log captures file metadata including MIME type, filename, and hash. An executable downloaded from HTTP to an internal workstation provides direct evidence of potential client exploitation or malware delivery.",
-      "related_techniques": ["T1105", "T1059", "T1190"]
+      "related_techniques": [
+        "T1105",
+        "T1059",
+        "T1190"
+      ]
     },
     {
       "mapping_id": "ZEK-T1204-001",
       "telemetry_source": "Zeek",
-      "log_type": "http.log",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
       "attack_technique": {
         "technique_id": "T1204",
         "technique_name": "User Execution",
         "tactic": "Execution"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.60",
+      "confidence_score": 0.6,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -796,11 +1453,14 @@
         "User-Agent matches browser (indicates user-driven download)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single http.log record with method = 'GET' AND status_code = 200 AND (uri ends with risky extension OR files.mime_type is executable) AND user_agent matches browser AND referrer is present. This indicates user-driven download of potentially malicious content.",
       "false_positive_notes": "Legitimate software downloads, email attachments opened via webmail, and user-initiated file transfers. Domain reputation and file hash analysis reduce false positives.",
       "explanation": "User execution involves a user voluntarily running malicious code, often after clicking a link. Zeek http.log can detect the download event that precedes execution. While Zeek cannot observe the actual execution, the download of executable files from suspicious domains via browser user-agents provides indirect evidence of potential user execution.",
-      "related_techniques": ["T1566.001", "T1566.002", "T1203", "T1105"]
+      "related_techniques": [
+        "T1566.001",
+        "T1566.002",
+        "T1203",
+        "T1105"
+      ]
     },
     {
       "mapping_id": "ZEK-T1110-001",
@@ -812,7 +1472,7 @@
         "tactic": "Credential Access"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.88",
+      "confidence_score": 0.88,
       "required_fields": [
         "ssh.id.orig_h",
         "ssh.id.resp_h",
@@ -830,11 +1490,58 @@
         "Connection duration is very short (failed authentication)"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY ssh.id.orig_h, ssh.id.resp_h HAVING COUNT(*) >= 10 AND (COUNT(CASE WHEN ssh.auth_success = F THEN 1 END) / COUNT(*)) > 0.9 WITHIN 60 seconds. Increase confidence if attempts exceed 20 or if followed by auth_success = T (successful breach).",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "ssh.id.orig_h",
+          "ssh.id.resp_h"
+        ],
+        "aggregations": {
+          "total_attempts": {
+            "function": "count"
+          },
+          "failed_ratio": {
+            "function": "ratio",
+            "field": "ssh.auth_success",
+            "match_values": [
+              false
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_attempts",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "metric": "failed_ratio",
+            "operator": ">",
+            "value": 0.9
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Attempts exceed 20",
+              "weight": 1.1
+            },
+            {
+              "description": "Followed by successful authentication",
+              "weight": 1.2
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Automated scripts with wrong credentials, misconfigured applications, and legitimate users with expired passwords. Distinguished by high volume and consistent failure pattern.",
       "explanation": "SSH brute force attacks produce clear patterns in ssh.log: numerous connection attempts from one source to one target with auth_success consistently false. Zeek captures each SSH authentication attempt. The correlation engine groups by source-target pair and counts failed attempts within a time window.",
-      "related_techniques": ["T1110.001", "T1110.003", "T1078", "T1021.004"]
+      "related_techniques": [
+        "T1110.001",
+        "T1110.003",
+        "T1078",
+        "T1021.004"
+      ]
     },
     {
       "mapping_id": "ZEK-T1110-002",
@@ -846,7 +1553,7 @@
         "tactic": "Credential Access"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.82",
+      "confidence_score": 0.82,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -866,11 +1573,68 @@
         "High frequency of attempts within short window"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host, login_endpoint HAVING COUNT(*) >= 10 AND uri matches login patterns AND status_code IN (401, 403, 200) WITHIN 60 seconds. Increase confidence if request_body_len is consistent and user_agent is suspicious.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "total_attempts": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_attempts",
+            "operator": ">=",
+            "value": 10
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "pattern_match",
+            "field": "http.uri",
+            "patterns": [
+              "/login",
+              "/auth",
+              "/signin",
+              "/wp-login.php",
+              "/administrator"
+            ]
+          },
+          {
+            "field": "http.status_code",
+            "operator": "in",
+            "value": [
+              401,
+              403,
+              200
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Request body length consistent with credential submission",
+              "weight": 1.05
+            },
+            {
+              "description": "User-Agent is suspicious or missing",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate users with forgotten passwords, automated monitoring systems testing authentication, and some mobile applications. Distinguished by volume and failure patterns.",
       "explanation": "HTTP-based brute force attacks target web application login forms. In http.log, this appears as repeated POST requests to authentication endpoints with failure status codes. Zeek captures the method, URI, status code, and timing. The correlation engine groups by source and login endpoint to detect brute force patterns.",
-      "related_techniques": ["T1110.001", "T1110.003", "T1078", "T1190"]
+      "related_techniques": [
+        "T1110.001",
+        "T1110.003",
+        "T1078",
+        "T1190"
+      ]
     },
     {
       "mapping_id": "ZEK-T1110.001-001",
@@ -882,7 +1646,7 @@
         "tactic": "Credential Access"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.85",
+      "confidence_score": 0.85,
       "required_fields": [
         "ssh.id.orig_h",
         "ssh.id.resp_h",
@@ -898,11 +1662,57 @@
         "Eventually may succeed (auth_success = T) indicating password cracked"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY ssh.id.orig_h, ssh.id.resp_h HAVING COUNT(*) >= 15 AND auth_success = F ratio > 0.95 AND inter_attempt_interval < 5 seconds WITHIN 120 seconds. Flag as password guessing if single target is focused. If followed by auth_success = T within 300 seconds, escalate to confirmed breach.",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "ssh.id.orig_h",
+          "ssh.id.resp_h"
+        ],
+        "aggregations": {
+          "total_attempts": {
+            "function": "count"
+          },
+          "failed_ratio": {
+            "function": "ratio",
+            "field": "ssh.auth_success",
+            "match_values": [
+              false
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_attempts",
+            "operator": ">=",
+            "value": 15
+          },
+          {
+            "metric": "failed_ratio",
+            "operator": ">",
+            "value": 0.95
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Inter-attempt interval < 5 seconds",
+              "weight": 1.1
+            },
+            {
+              "description": "Followed by successful authentication within 300 seconds",
+              "weight": 1.25
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate users with password issues, automated backup scripts with stale credentials. Distinguished by volume and automation patterns.",
       "explanation": "Password guessing focuses on a single account with many password attempts. In ssh.log, this appears as repeated failed authentications from one source to one target in rapid succession. Zeek does not capture the actual password, but the volume and timing pattern indicate password guessing.",
-      "related_techniques": ["T1110", "T1110.003", "T1078"]
+      "related_techniques": [
+        "T1110",
+        "T1110.003",
+        "T1078"
+      ]
     },
     {
       "mapping_id": "ZEK-T1110.003-001",
@@ -914,7 +1724,7 @@
         "tactic": "Credential Access"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.86",
+      "confidence_score": 0.86,
       "required_fields": [
         "ssh.id.orig_h",
         "ssh.id.resp_h",
@@ -930,11 +1740,53 @@
         "Low and slow pattern: attempts spaced to evade detection"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY ssh.id.orig_h HAVING COUNT(DISTINCT ssh.id.resp_h) >= 5 AND AVG(attempts_per_target) <= 3 WITHIN 300 seconds. Password spraying is distinguished from brute force by breadth (many targets) and low depth (few attempts per target).",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "ssh.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_targets": {
+            "function": "nunique",
+            "field": "ssh.id.resp_h"
+          },
+          "total_attempts": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_targets",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "total_attempts",
+            "operator": "<=",
+            "value": 15
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Average attempts per target <= 3",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Configuration management tools (Ansible, Puppet) and legitimate administrative scripts may SSH to many hosts. Distinguished by authentication success rate and source IP context.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "Password spraying uses one password against many accounts to avoid lockout thresholds. In ssh.log, this appears as a single source connecting to many targets with very few attempts per target. The correlation engine must detect the breadth-over-depth pattern that distinguishes spraying from targeted brute force.",
-      "related_techniques": ["T1110", "T1110.001", "T1078", "T1021.004"]
+      "related_techniques": [
+        "T1110",
+        "T1110.001",
+        "T1078",
+        "T1021.004"
+      ]
     },
     {
       "mapping_id": "ZEK-T1110.003-002",
@@ -946,7 +1798,7 @@
         "tactic": "Credential Access"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -963,55 +1815,109 @@
         "Timing is distributed to evade rate limiting"
       ],
       "correlation_required": true,
-      "correlation_window": "600 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h HAVING COUNT(DISTINCT http.host) >= 5 AND AVG(attempts_per_host) <= 3 AND uri matches login patterns WITHIN 600 seconds. Distributed timing and multiple targets distinguish spraying from targeted brute force.",
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "http.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_hosts": {
+            "function": "nunique",
+            "field": "http.host"
+          },
+          "total_attempts": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_hosts",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "total_attempts",
+            "operator": "<=",
+            "value": 15
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "pattern_match",
+            "field": "http.uri",
+            "patterns": [
+              "login"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Distributed timing across targets",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Single sign-on systems, federation services, and legitimate multi-system authentication. Context of source IP and authentication infrastructure is important.",
       "explanation": "HTTP password spraying targets multiple web applications or user accounts with few attempts each. In http.log, this appears as login requests to many hosts from one source with minimal attempts per target. The correlation engine detects the distributed attack pattern across multiple targets.",
-      "related_techniques": ["T1110", "T1110.001", "T1078"]
+      "related_techniques": [
+        "T1110",
+        "T1110.001",
+        "T1078"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1105-HTTP-SCRIPT-CMD-001",
-        "telemetry_source": "Zeek",
-        "log_type": [
-            "http.log",
-            "files.log"
+      "mapping_id": "ZEK-T1105-HTTP-SCRIPT-CMD-001",
+      "telemetry_source": "Zeek",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
+      "attack_technique": {
+        "technique_id": "T1105",
+        "technique_name": "Ingress Tool Transfer",
+        "tactic": "Command and Control"
+      },
+      "mapping_type": "direct",
+      "confidence_score": 0.85,
+      "required_fields": [
+        "http.id.orig_h",
+        "http.id.resp_h",
+        "http.host",
+        "http.uri",
+        "http.method",
+        "http.status_code",
+        "files.filename",
+        "files.mime_type",
+        "files.ts"
+      ],
+      "evidence_conditions": [
+        "HTTP download of command scripts such as .bat, .cmd, .vbs, .js, or .wsf files",
+        "Download originates from external or suspicious internal server",
+        "HTTP response status code 200",
+        "File metadata confirms script file transfer",
+        "Endpoint telemetry may later confirm script execution"
+      ],
+      "correlation_required": false,
+      "external_context": {
+        "recommended_sources": [
+          "Sysmon",
+          "Windows Security Events"
         ],
-        "attack_technique": {
-            "technique_id": "T1105",
-            "technique_name": "Ingress Tool Transfer",
-            "tactic": "Command and Control"
-        },
-        "mapping_type": "direct",
-        "evidence_level": "direct_network_observation",
-        "confidence_score": "0.85",
-        "required_fields": [
-            "http.id.orig_h",
-            "http.id.resp_h",
-            "http.host",
-            "http.uri",
-            "http.method",
-            "http.status_code",
-            "files.filename",
-            "files.mime_type",
-            "files.ts"
-        ],
-        "evidence_conditions": [
-            "HTTP download of command scripts such as .bat, .cmd, .vbs, .js, or .wsf files",
-            "Download originates from external or suspicious internal server",
-            "HTTP response status code 200",
-            "File metadata confirms script file transfer",
-            "Endpoint telemetry may later confirm script execution"
-        ],
-        "correlation_required": true,
-        "correlation_window": "300 seconds",
-        "correlation_logic": "Direct detection when HTTP GET retrieves script extensions (.bat, .cmd, .vbs, .js, .wsf). Increase confidence when endpoint telemetry confirms execution through cmd.exe, wscript.exe, cscript.exe, or related interpreters.",
-        "false_positive_notes": "Administrative scripts, software deployment systems, and internal automation frameworks may legitimately transfer scripts.",
-        "explanation": "Zeek detects the movement of script files but cannot confirm Windows Command Shell execution. The execution technique T1059.003 should be assigned only after endpoint telemetry confirms interpreter execution.",
-        "related_techniques": [
-            "T1059.003",
-            "T1059.001",
-            "T1204.002"
-        ]
+        "correlation_note": "Endpoint telemetry confirming execution through cmd.exe, wscript.exe, cscript.exe, or related interpreters increases confidence"
+      },
+      "false_positive_notes": "Administrative scripts, software deployment systems, and internal automation frameworks may legitimately transfer scripts.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
+      "explanation": "Zeek detects the movement of script files but cannot confirm Windows Command Shell execution. The execution technique T1059.003 should be assigned only after endpoint telemetry confirms interpreter execution.",
+      "related_techniques": [
+        "T1059.003",
+        "T1059.001",
+        "T1204.002"
+      ]
     },
     {
       "mapping_id": "ZEK-T1021.001-001",
@@ -1023,7 +1929,7 @@
         "tactic": "Lateral Movement"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.72",
+      "confidence_score": 0.72,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1044,11 +1950,17 @@
         "Source host is not typical RDP client (workstation connecting to server, or server to server)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single conn.log record with id.resp_p = 3389 AND id.orig_h is internal AND id.resp_h is internal AND conn_state IN ('SF', 'S1') AND duration > 60. Confidence is moderate because RDP is common for administration.",
       "false_positive_notes": "Legitimate remote administration, help desk access, and server management. Confidence increases if source is compromised, access is unusual for user role, or occurs outside business hours.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "RDP lateral movement appears in conn.log as connections to port 3389 between internal hosts. Zeek captures the connection metadata. Direct mapping is possible but confidence is moderate because RDP is legitimate. Contextual factors (source host role, timing, user behavior) must elevate confidence.",
-      "related_techniques": ["T1021.002", "T1021.004", "T1078", "T1210"]
+      "related_techniques": [
+        "T1021.002",
+        "T1021.004",
+        "T1078",
+        "T1210"
+      ]
     },
     {
       "mapping_id": "ZEK-T1021.002-001",
@@ -1060,7 +1972,7 @@
         "tactic": "Lateral Movement"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.70",
+      "confidence_score": 0.7,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1078,11 +1990,23 @@
         "Connection to ADMIN$ or C$ shares (inferred from SMB protocol analysis if available)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single conn.log record with id.resp_p = 445 AND id.orig_h is internal workstation AND id.resp_h is internal server AND conn_state = 'SF'. Correlation with multiple targets within short window increases confidence for lateral movement vs. legitimate file access.",
+      "external_context": {
+        "recommended_sources": [
+          "Zeek smb_files.log"
+        ],
+        "correlation_note": "Correlation with multiple targets within short window increases confidence for lateral movement vs. legitimate file access"
+      },
       "false_positive_notes": "File server access, print services, and legitimate administrative file sharing. Distinguished by source host role and number of targets accessed.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "SMB lateral movement uses Windows admin shares (ADMIN$, C$, IPC$). Zeek conn.log captures SMB connections on port 445. While Zeek does not parse SMB share names in standard configurations, the connection pattern itself provides evidence. Direct mapping is possible but requires behavioral correlation to distinguish lateral movement from legitimate use.",
-      "related_techniques": ["T1021.001", "T1003", "T1077", "T1570"]
+      "related_techniques": [
+        "T1021.001",
+        "T1003",
+        "T1077",
+        "T1570"
+      ]
     },
     {
       "mapping_id": "ZEK-T1021.004-001",
@@ -1094,7 +2018,7 @@
         "tactic": "Lateral Movement"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "ssh.id.orig_h",
         "ssh.id.resp_h",
@@ -1111,11 +2035,20 @@
         "Connection followed by additional SSH connections to other internal hosts"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single ssh.log record with id.orig_h internal AND id.resp_h internal AND auth_success = T. Behavioral correlation: if same orig_h connects to >= 3 internal resp_h within 300 seconds, confidence increases to 0.85.",
+      "external_context": {
+        "correlation_note": "Behavioral correlation: if same orig_h connects to >= 3 internal resp_h within 300 seconds, confidence increases to 0.85"
+      },
       "false_positive_notes": "Legitimate administration, automation scripts, and developer access. Distinguished by host roles and authentication patterns.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "SSH lateral movement appears in ssh.log as successful SSH connections between internal hosts. Zeek captures auth_success, which is critical for distinguishing successful lateral movement from failed attempts. Direct mapping is strong when combined with host role context.",
-      "related_techniques": ["T1021.001", "T1021.002", "T1078", "T1110"]
+      "related_techniques": [
+        "T1021.001",
+        "T1021.002",
+        "T1078",
+        "T1110"
+      ]
     },
     {
       "mapping_id": "ZEK-T1021.004-002",
@@ -1127,7 +2060,7 @@
         "tactic": "Lateral Movement"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.78",
+      "confidence_score": 0.78,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1146,11 +2079,68 @@
         "Source host accessed targets in rapid succession"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_h) >= 3 AND conn.id.resp_p = 22 AND conn_state IN ('SF', 'S1') AND AVG(duration) > 30 WITHIN 300 seconds. Correlation with ssh.log auth_success = T for these connections confirms lateral movement.",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_targets": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_targets",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "metric": "avg_duration",
+            "operator": ">",
+            "value": 30
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "conn.id.resp_p",
+            "operator": "==",
+            "value": 22
+          },
+          {
+            "field": "conn.conn_state",
+            "operator": "in",
+            "value": [
+              "SF",
+              "S1"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Correlation with ssh.log auth_success = T for these connections",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Ansible playbooks, configuration management, and administrative scripts may SSH to many hosts. Distinguished by timing regularity and host role context.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "SSH lateral movement across multiple targets produces a distinctive conn.log pattern: one source connecting to many internal targets on port 22 with successful connection states. The correlation engine groups by source and counts unique targets to detect lateral movement patterns.",
-      "related_techniques": ["T1021.004", "T1078", "T1110"]
+      "related_techniques": [
+        "T1021.004",
+        "T1078",
+        "T1110"
+      ]
     },
     {
       "mapping_id": "ZEK-T1210-001",
@@ -1162,7 +2152,7 @@
         "tactic": "Lateral Movement"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1183,11 +2173,48 @@
         "Large unexpected data transfer following connection to service port"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_p HAVING COUNT(DISTINCT conn.id.resp_h) >= 5 AND (service mismatch OR unusual_byte_pattern) WITHIN 120 seconds. Correlation with weird.log or notice.log for same connections increases confidence significantly.",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_p"
+        ],
+        "aggregations": {
+          "unique_targets": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_targets",
+            "operator": ">=",
+            "value": 5
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Service mismatch or unusual byte pattern",
+              "weight": 1.15
+            },
+            {
+              "description": "Correlation with weird.log or notice.log for same connections",
+              "weight": 1.2
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Port forwarding, NAT traversal, and some legitimate services may use non-standard ports. Service mismatch alone is not sufficient without additional exploit indicators.",
       "explanation": "Remote service exploitation for lateral movement may produce network indicators in conn.log: exploit sweeps across internal hosts, service mismatches, or unusual data patterns following connection establishment. This is a behavioral mapping because exploitation is primarily an endpoint activity; network indicators are secondary.",
-      "related_techniques": ["T1190", "T1021.001", "T1021.002", "T1021.004", "T1203"]
+      "related_techniques": [
+        "T1190",
+        "T1021.001",
+        "T1021.002",
+        "T1021.004",
+        "T1203"
+      ]
     },
     {
       "mapping_id": "ZEK-T1071.001-001",
@@ -1199,7 +2226,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.82",
+      "confidence_score": 0.82,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -1209,6 +2236,7 @@
         "http.user_agent",
         "http.request_body_len",
         "http.response_body_len",
+        "http.referrer",
         "http.ts"
       ],
       "evidence_conditions": [
@@ -1221,11 +2249,65 @@
         "Host header may be IP address rather than domain name"
       ],
       "correlation_required": true,
-      "correlation_window": "1800 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING COUNT(*) >= 4 AND inter_request_interval CV < 0.3 (consistent beaconing) AND referrer IS NULL AND (user_agent IS generic OR uri matches encoded-pattern) WITHIN 1800 seconds. Jitter analysis: beaconing intervals of 30s, 60s, 300s, 600s are strong indicators.",
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "request_count": {
+            "function": "count"
+          },
+          "interval_cv": {
+            "function": "coefficient_of_variation",
+            "field": "http.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "request_count",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "metric": "interval_cv",
+            "operator": "<",
+            "value": 0.3
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "http.referrer",
+            "operator": "is_null"
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "URI contains encoded data or random strings",
+              "weight": 1.1
+            },
+            {
+              "description": "User-Agent is generic or missing",
+              "weight": 1.1
+            },
+            {
+              "description": "Host header is IP address",
+              "weight": 1.05
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Software update checks, cloud synchronization clients, and some monitoring agents exhibit regular HTTP patterns. Distinguished by domain reputation, URI structure, and user agent analysis.",
       "explanation": "HTTP-based C2 channels produce beaconing patterns in http.log: regular requests to external hosts with consistent timing, unusual URIs, and minimal headers. The correlation engine must analyze inter-request intervals for consistency (low coefficient of variation), detect missing referrers, and identify suspicious URI patterns.",
-      "related_techniques": ["T1071.004", "T1105", "T1041", "T1571"]
+      "related_techniques": [
+        "T1071.004",
+        "T1105",
+        "T1041",
+        "T1571"
+      ]
     },
     {
       "mapping_id": "ZEK-T1071.001-002",
@@ -1237,7 +2319,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "ssl.id.orig_h",
         "ssl.id.resp_h",
@@ -1259,11 +2341,59 @@
         "Connection duration and byte transfer show periodic data exchange pattern"
       ],
       "correlation_required": true,
-      "correlation_window": "1800 seconds",
-      "correlation_logic": "GROUP BY ssl.id.orig_h, ssl.id.resp_h HAVING COUNT(*) >= 4 AND inter_connection_interval CV < 0.3 WITHIN 1800 seconds. Correlation with conn.log showing consistent orig_bytes/resp_bytes pattern increases confidence. Certificate anomalies (self-signed, suspicious issuer, validation_status != 'ok') boost confidence to 0.88.",
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "ssl.id.orig_h",
+          "ssl.id.resp_h"
+        ],
+        "aggregations": {
+          "connection_count": {
+            "function": "count"
+          },
+          "interval_cv": {
+            "function": "coefficient_of_variation",
+            "field": "ssl.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "connection_count",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "metric": "interval_cv",
+            "operator": "<",
+            "value": 0.3
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Certificate is self-signed or has suspicious issuer",
+              "weight": 1.15
+            },
+            {
+              "description": "Validation status is not ok",
+              "weight": 1.1
+            },
+            {
+              "description": "SNI is missing or IP-based",
+              "weight": 1.05
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Cloud services, CDN connections, and legitimate HTTPS APIs may show regular patterns. Distinguished by certificate validity, domain reputation, and SNI analysis.",
       "explanation": "HTTPS C2 channels encrypt traffic but still produce observable patterns in ssl.log and conn.log. Zeek captures TLS handshake metadata including SNI, certificate details, and cipher suites. Beaconing patterns in SSL connections with certificate anomalies provide strong behavioral evidence of C2 communication.",
-      "related_techniques": ["T1071.004", "T1573", "T1105", "T1041"]
+      "related_techniques": [
+        "T1071.004",
+        "T1573",
+        "T1105",
+        "T1041"
+      ]
     },
     {
       "mapping_id": "ZEK-T1071.004-001",
@@ -1275,7 +2405,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.85",
+      "confidence_score": 0.85,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -1293,11 +2423,69 @@
         "Queries to domains with short TTLs or recently registered domains"
       ],
       "correlation_required": true,
-      "correlation_window": "1800 seconds",
-      "correlation_logic": "GROUP BY dns.id.orig_h, domain_suffix(dns.query) HAVING COUNT(DISTINCT subdomain(dns.query)) >= 10 AND inter_query_interval CV < 0.4 AND qtype_name IN ('A', 'AAAA') WITHIN 1800 seconds. DGA detection: entropy of subdomain > threshold. DNS tunneling: query length > 50 characters or encoded data pattern.",
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "dns.id.orig_h",
+          "domain_suffix"
+        ],
+        "aggregations": {
+          "unique_subdomains": {
+            "function": "nunique",
+            "field": "dns.query"
+          },
+          "query_count": {
+            "function": "count"
+          },
+          "interval_cv": {
+            "function": "coefficient_of_variation",
+            "field": "dns.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_subdomains",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "metric": "interval_cv",
+            "operator": "<",
+            "value": 0.4
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "dns.qtype_name",
+            "operator": "in",
+            "value": [
+              "A",
+              "AAAA"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "High subdomain entropy indicating DGA",
+              "weight": 1.15
+            },
+            {
+              "description": "Domain has short TTL or recently registered",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "CDN load balancing, anti-virus cloud lookups, and some legitimate applications use multiple subdomains. DGA detection and query entropy analysis help distinguish C2 from legitimate traffic.",
       "explanation": "DNS-based C2 uses DNS queries and responses to tunnel commands and data. In dns.log, this appears as regular queries with unusual subdomain patterns, high entropy names, or encoded data. The correlation engine must detect beaconing intervals, DGA patterns, and high query volumes to the same domain with varying subdomains.",
-      "related_techniques": ["T1071.001", "T1572", "T1048.003", "T1105"]
+      "related_techniques": [
+        "T1071.001",
+        "T1572",
+        "T1048.003",
+        "T1105"
+      ]
     },
     {
       "mapping_id": "ZEK-T1572-001",
@@ -1309,7 +2497,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.88",
+      "confidence_score": 0.88,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -1327,11 +2515,71 @@
         "Query rate far exceeds normal DNS client behavior (>1 query per second sustained)"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY dns.id.orig_h, domain_suffix(dns.query) HAVING COUNT(*) >= 50 AND AVG(LENGTH(dns.query)) > 60 AND qtype_name IN ('A', 'TXT', 'NULL') WITHIN 300 seconds. DNS tunneling score: query_length * query_rate * entropy. Threshold > 0.8 indicates tunneling.",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "dns.id.orig_h",
+          "domain_suffix"
+        ],
+        "aggregations": {
+          "query_count": {
+            "function": "count"
+          },
+          "avg_query_length": {
+            "function": "mean",
+            "field": "dns.query",
+            "property": "length"
+          },
+          "query_rate": {
+            "function": "rate",
+            "field": "dns.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "query_count",
+            "operator": ">=",
+            "value": 50
+          },
+          {
+            "metric": "avg_query_length",
+            "operator": ">",
+            "value": 60
+          },
+          {
+            "metric": "query_rate",
+            "operator": ">",
+            "value": 1.0
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "dns.qtype_name",
+            "operator": "in",
+            "value": [
+              "A",
+              "TXT",
+              "NULL"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Response answers contain base64-like or hex-encoded data",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Some CDN and cloud services generate many DNS queries. However, extremely long queries and TXT record tunneling are rare in legitimate traffic. Query length and rate are strong discriminators.",
       "explanation": "DNS tunneling encapsulates non-DNS protocol data within DNS queries and responses. Zeek dns.log captures query names, types, and answers. Tunneling produces distinctive patterns: very long queries with encoded data, high query rates, and TXT record usage. The correlation engine must analyze query length distribution, rate, and record type patterns.",
-      "related_techniques": ["T1071.004", "T1048.003", "T1105"]
+      "related_techniques": [
+        "T1071.004",
+        "T1048.003",
+        "T1105"
+      ]
     },
     {
       "mapping_id": "ZEK-T1571-001",
@@ -1343,7 +2591,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1364,11 +2612,17 @@
         "Sustained connection with regular byte transfer suggesting C2 channel"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single conn.log record where service IN ('http', 'ssh', 'dns', 'ssl') AND id.resp_p NOT IN standard_ports_for_service AND conn_state IN ('SF', 'S1') AND duration > 60. Correlation with beaconing pattern increases confidence.",
+      "external_context": {
+        "correlation_note": "Correlation with beaconing pattern increases confidence"
+      },
       "false_positive_notes": "Some legitimate services use non-standard ports (SSH on 2222, HTTP on 8080). The mapping excludes commonly used alternative ports. Context of destination IP and domain reputation is important.",
       "explanation": "Attackers may run C2 protocols on non-standard ports to evade detection. Zeek's service field identifies the application protocol regardless of port. A direct mapping exists when Zeek detects HTTP, SSH, DNS, or SSL on unusual ports with sustained connections.",
-      "related_techniques": ["T1071.001", "T1071.004", "T1095", "T1572"]
+      "related_techniques": [
+        "T1071.001",
+        "T1071.004",
+        "T1095",
+        "T1572"
+      ]
     },
     {
       "mapping_id": "ZEK-T1095-001",
@@ -1380,7 +2634,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.78",
+      "confidence_score": 0.78,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1401,23 +2655,91 @@
         "Port number is unusual and not associated with known services"
       ],
       "correlation_required": true,
-      "correlation_window": "1800 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_h, conn.id.resp_p HAVING COUNT(*) >= 3 AND service = '-' AND AVG(duration) > 300 AND (orig_bytes > 0 AND resp_bytes > 0) WITHIN 1800 seconds. Beaconing interval analysis: inter-connection CV < 0.3 indicates C2.",
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_h",
+          "conn.id.resp_p"
+        ],
+        "aggregations": {
+          "connection_count": {
+            "function": "count"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          },
+          "total_orig_bytes": {
+            "function": "sum",
+            "field": "conn.orig_bytes"
+          },
+          "total_resp_bytes": {
+            "function": "sum",
+            "field": "conn.resp_bytes"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "connection_count",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "metric": "avg_duration",
+            "operator": ">",
+            "value": 300
+          },
+          {
+            "metric": "total_orig_bytes",
+            "operator": ">",
+            "value": 0
+          },
+          {
+            "metric": "total_resp_bytes",
+            "operator": ">",
+            "value": 0
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "conn.service",
+            "operator": "==",
+            "value": "-"
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Beaconing interval CV < 0.3",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Custom applications, gaming traffic, and some VPN protocols may use raw TCP/UDP. Distinguished by destination reputation, port analysis, and connection patterns.",
       "explanation": "Raw TCP/UDP C2 channels avoid application-layer detection by using custom protocols. Zeek conn.log captures these as connections with empty service fields and sustained data transfer. The correlation engine must detect persistent connections with regular data exchange on unrecognized protocols.",
-      "related_techniques": ["T1571", "T1071", "T1041"]
+      "related_techniques": [
+        "T1571",
+        "T1071",
+        "T1041"
+      ]
     },
     {
       "mapping_id": "ZEK-T1105-001",
       "telemetry_source": "Zeek",
-      "log_type": "http.log",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
       "attack_technique": {
         "technique_id": "T1105",
         "technique_name": "Ingress Tool Transfer",
         "tactic": "Command and Control"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.88",
+      "confidence_score": 0.88,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -1440,11 +2762,17 @@
         "User-Agent may be generic or attacker-specific"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single http.log record with method = 'GET' AND status_code = 200 AND (uri ends with executable extension OR files.mime_type IN ('application/x-dosexec', 'application/x-executable')) AND id.orig_h is internal AND host is external. Correlation with prior T1190 or T1071 mapping on same host increases confidence to 0.95.",
+      "external_context": {
+        "correlation_note": "Correlation with prior T1190 or T1071 mapping on same host increases confidence to 0.95"
+      },
       "false_positive_notes": "Legitimate software downloads, updates, and open-source tool downloads. Hash reputation checking and domain verification reduce false positives.",
       "explanation": "Ingress tool transfer involves downloading tools or malware to a compromised host. Zeek http.log and files.log capture file downloads with metadata. Direct mapping is strong when executable files are downloaded from external sources to internal hosts, especially when correlated with prior exploitation or C2 activity.",
-      "related_techniques": ["T1190", "T1071.001", "T1059", "T1203"]
+      "related_techniques": [
+        "T1190",
+        "T1071.001",
+        "T1059",
+        "T1203"
+      ]
     },
     {
       "mapping_id": "ZEK-T1105-002",
@@ -1456,7 +2784,7 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "direct",
-      "confidence_score": "0.85",
+      "confidence_score": 0.85,
       "required_fields": [
         "ftp.id.orig_h",
         "ftp.id.resp_h",
@@ -1475,11 +2803,19 @@
         "File size is consistent with tool/malware size (>10KB)"
       ],
       "correlation_required": false,
-      "correlation_window": "N/A",
-      "correlation_logic": "Direct mapping: Single ftp.log record with command = 'RETR' AND arg ends with executable extension AND reply_code = 226 AND id.orig_h is internal. Correlation with files.log for mime_type verification increases confidence.",
+      "external_context": {
+        "recommended_sources": [
+          "Zeek files.log"
+        ],
+        "correlation_note": "Correlation with files.log for mime_type verification increases confidence"
+      },
       "false_positive_notes": "Legitimate FTP downloads of software, patches, and data files. File extension and source server reputation help distinguish malicious transfers.",
       "explanation": "FTP may be used for tool transfer in environments where HTTP is monitored. Zeek ftp.log captures FTP commands and file transfers. A RETR command downloading an executable from an external FTP server provides direct evidence of ingress tool transfer.",
-      "related_techniques": ["T1071.002", "T1059", "T1203"]
+      "related_techniques": [
+        "T1071.002",
+        "T1059",
+        "T1203"
+      ]
     },
     {
       "mapping_id": "ZEK-T1041-001",
@@ -1491,7 +2827,7 @@
         "tactic": "Exfiltration"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.82",
+      "confidence_score": 0.82,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1512,11 +2848,56 @@
         "Connection shows beaconing pattern followed by large burst transfer"
       ],
       "correlation_required": true,
-      "correlation_window": "3600 seconds",
-      "correlation_logic": "Requires prior T1071 mapping for same (orig_h, resp_h) pair. GROUP BY conn.id.orig_h, conn.id.resp_h HAVING SUM(conn.orig_bytes) > 10000000 AND AVG(conn.duration) > 300 AND beaconing_pattern_detected WITHIN 3600 seconds. orig_bytes/resp_bytes ratio > 10 indicates exfiltration vs. interactive C2.",
+      "correlation_rule": {
+        "window_seconds": 3600,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_h"
+        ],
+        "aggregations": {
+          "total_orig_bytes": {
+            "function": "sum",
+            "field": "conn.orig_bytes"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_orig_bytes",
+            "operator": ">",
+            "value": 10000000
+          },
+          {
+            "metric": "avg_duration",
+            "operator": ">",
+            "value": 300
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Prior T1071 mapping for same orig_h, resp_h pair",
+              "weight": 1.2
+            },
+            {
+              "description": "orig_bytes/resp_bytes ratio > 10",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Cloud backups, file synchronization services, and legitimate large uploads may appear similar. Correlation with C2 beaconing is essential for distinguishing exfiltration from legitimate activity.",
       "explanation": "Exfiltration over C2 channels uses the existing command and control connection to transfer data. In conn.log, this appears as large data transfers from internal to external hosts during established C2 sessions. The correlation engine must link the data transfer to a previously identified C2 channel and analyze byte ratios to distinguish exfiltration from normal C2 traffic.",
-      "related_techniques": ["T1071.001", "T1071.004", "T1048", "T1567"]
+      "related_techniques": [
+        "T1071.001",
+        "T1071.004",
+        "T1048",
+        "T1567"
+      ]
     },
     {
       "mapping_id": "ZEK-T1048.003-001",
@@ -1528,7 +2909,7 @@
         "tactic": "Exfiltration"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.80",
+      "confidence_score": 0.8,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -1537,6 +2918,7 @@
         "http.status_code",
         "http.request_body_len",
         "http.user_agent",
+        "http.referrer",
         "http.ts"
       ],
       "evidence_conditions": [
@@ -1548,11 +2930,54 @@
         "Request occurs outside business hours or after suspicious activity"
       ],
       "correlation_required": true,
-      "correlation_window": "600 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING SUM(http.request_body_len) > 5000000 AND method = 'POST' AND (referrer IS NULL OR user_agent is suspicious) WITHIN 600 seconds. Large POST body to external host without prior browsing context is strong exfiltration indicator.",
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "total_request_body": {
+            "function": "sum",
+            "field": "http.request_body_len"
+          },
+          "post_count": {
+            "function": "count",
+            "field": "http.method",
+            "match_values": [
+              "POST"
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_request_body",
+            "operator": ">",
+            "value": 5000000
+          },
+          {
+            "metric": "post_count",
+            "operator": ">=",
+            "value": 1
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Referrer is NULL or User-Agent is suspicious",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Cloud storage uploads, file sharing services, and legitimate API bulk uploads. Distinguished by host reputation, URI patterns, and user agent analysis.",
       "explanation": "HTTP exfiltration uploads data to external servers via large POST requests. In http.log, this appears as unusually large request bodies to external hosts without normal browsing context. The correlation engine must detect large POST volumes and distinguish them from legitimate uploads.",
-      "related_techniques": ["T1041", "T1567", "T1071.001"]
+      "related_techniques": [
+        "T1041",
+        "T1567",
+        "T1071.001"
+      ]
     },
     {
       "mapping_id": "ZEK-T1048.003-002",
@@ -1564,7 +2989,7 @@
         "tactic": "Exfiltration"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.87",
+      "confidence_score": 0.87,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -1582,11 +3007,65 @@
         "TXT or NULL record queries used for larger data transfer"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY dns.id.orig_h, domain_suffix(dns.query) HAVING COUNT(*) >= 100 AND AVG(LENGTH(dns.query)) > 70 AND query_rate > 1/second AND qtype_name IN ('A', 'TXT', 'NULL') WITHIN 300 seconds. Data exfiltration via DNS tunneling shows higher volume and longer queries than C2-only tunneling.",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "dns.id.orig_h",
+          "domain_suffix"
+        ],
+        "aggregations": {
+          "query_count": {
+            "function": "count"
+          },
+          "avg_query_length": {
+            "function": "mean",
+            "field": "dns.query",
+            "property": "length"
+          },
+          "query_rate": {
+            "function": "rate",
+            "field": "dns.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "query_count",
+            "operator": ">=",
+            "value": 100
+          },
+          {
+            "metric": "avg_query_length",
+            "operator": ">",
+            "value": 70
+          },
+          {
+            "metric": "query_rate",
+            "operator": ">",
+            "value": 1.0
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "dns.qtype_name",
+            "operator": "in",
+            "value": [
+              "A",
+              "TXT",
+              "NULL"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0
+        }
+      },
       "false_positive_notes": "Very rare in legitimate traffic. Some security tools and DNS-based services generate queries but not at exfiltration volumes. Query length and rate are strong discriminators.",
       "explanation": "DNS tunneling for exfiltration encodes data in query names and sends it to attacker-controlled DNS servers. Zeek dns.log captures every query. Exfiltration produces higher volumes and longer queries than C2 tunneling because data must be chunked and transmitted. The correlation engine must detect sustained high-rate querying with very long encoded subdomains.",
-      "related_techniques": ["T1071.004", "T1572", "T1041"]
+      "related_techniques": [
+        "T1071.004",
+        "T1572",
+        "T1041"
+      ]
     },
     {
       "mapping_id": "ZEK-T1567-001",
@@ -1598,7 +3077,7 @@
         "tactic": "Exfiltration"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.78",
+      "confidence_score": 0.78,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -1618,11 +3097,68 @@
         "No prior normal browsing pattern to same service"
       ],
       "correlation_required": true,
-      "correlation_window": "600 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING SUM(http.request_body_len) > 10000000 AND method IN ('POST', 'PUT') AND host matches cloud_storage_domains WITHIN 600 seconds. Correlation with prior T1071 or T1190 on same orig_h increases confidence to 0.88.",
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "total_request_body": {
+            "function": "sum",
+            "field": "http.request_body_len"
+          },
+          "upload_count": {
+            "function": "count",
+            "field": "http.method",
+            "match_values": [
+              "POST",
+              "PUT"
+            ]
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_request_body",
+            "operator": ">",
+            "value": 10000000
+          },
+          {
+            "metric": "upload_count",
+            "operator": ">=",
+            "value": 1
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "field_in_set",
+            "field": "http.host",
+            "values": [
+              "dropbox.com",
+              "drive.google.com",
+              "pastebin.com",
+              "github.com",
+              "mega.nz"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Prior T1071 or T1190 on same orig_h",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate cloud backup services, file synchronization, and developer uploads. Distinguished by account ownership, upload timing, and correlation with suspicious activity.",
       "explanation": "Exfiltration over web services uses legitimate cloud platforms to avoid detection. In http.log, this appears as large uploads to known cloud storage domains. The correlation engine must detect large POST/PUT requests to cloud services and correlate with prior suspicious activity to distinguish malicious exfiltration from legitimate use.",
-      "related_techniques": ["T1041", "T1048.003", "T1071.001"]
+      "related_techniques": [
+        "T1041",
+        "T1048.003",
+        "T1071.001"
+      ]
     },
     {
       "mapping_id": "ZEK-T1048-001",
@@ -1634,7 +3170,7 @@
         "tactic": "Exfiltration"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1654,11 +3190,56 @@
         "Destination IP may be in suspicious geographic location or have poor reputation"
       ],
       "correlation_required": true,
-      "correlation_window": "600 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_h HAVING SUM(conn.orig_bytes) > 50000000 AND AVG(conn.resp_bytes) < 1000000 AND id.resp_p NOT IN known_legitimate_ports WITHIN 600 seconds. orig_bytes/resp_bytes ratio > 50 indicates exfiltration vs. bidirectional communication.",
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_h"
+        ],
+        "aggregations": {
+          "total_orig_bytes": {
+            "function": "sum",
+            "field": "conn.orig_bytes"
+          },
+          "total_resp_bytes": {
+            "function": "sum",
+            "field": "conn.resp_bytes"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_orig_bytes",
+            "operator": ">",
+            "value": 50000000
+          },
+          {
+            "metric": "total_resp_bytes",
+            "operator": "<",
+            "value": 1000000
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "resp_p not in known legitimate ports",
+              "weight": 1.1
+            },
+            {
+              "description": "orig_bytes/resp_bytes ratio > 50",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate large uploads, cloud backups, and data synchronization. Distinguished by destination reputation, port analysis, and host role context.",
       "explanation": "Alternative protocol exfiltration uses non-standard protocols or ports to transfer data. Zeek conn.log captures all connections regardless of port. Large outbound transfers on unusual ports with minimal return traffic provide behavioral evidence of exfiltration.",
-      "related_techniques": ["T1041", "T1048.003", "T1567", "T1095"]
+      "related_techniques": [
+        "T1041",
+        "T1048.003",
+        "T1567",
+        "T1095"
+      ]
     },
     {
       "mapping_id": "ZEK-T1039-001",
@@ -1670,7 +3251,7 @@
         "tactic": "Collection"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.60",
+      "confidence_score": 0.6,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1690,11 +3271,63 @@
         "Connection occurs after lateral movement or compromise indicators"
       ],
       "correlation_required": true,
-      "correlation_window": "600 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h, conn.id.resp_h HAVING conn.id.resp_p = 445 AND conn.resp_bytes > 50000000 AND duration > 120 WITHIN 600 seconds. Correlation with T1021.002 (SMB lateral movement) on same orig_h within 300 seconds increases confidence to 0.75.",
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "conn.id.orig_h",
+          "conn.id.resp_h"
+        ],
+        "aggregations": {
+          "total_resp_bytes": {
+            "function": "sum",
+            "field": "conn.resp_bytes"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_resp_bytes",
+            "operator": ">",
+            "value": 50000000
+          },
+          {
+            "metric": "avg_duration",
+            "operator": ">",
+            "value": 120
+          }
+        ],
+        "optional_conditions": [
+          {
+            "field": "conn.id.resp_p",
+            "operator": "==",
+            "value": 445
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Correlation with T1021.002 (SMB lateral movement) on same orig_h within 300 seconds",
+              "weight": 1.25
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate file server access, backup operations, and administrative file copies. This is a weak indicator without endpoint correlation.",
+      "false_positive_context": {
+        "admin_activity": true,
+        "monitoring_system": true
+      },
       "explanation": "Data collection from network shares may produce SMB connection patterns in conn.log: large downloads from file servers. Zeek does not parse SMB file operations in standard configurations, so this mapping relies on connection metadata. The correlation engine must link large SMB transfers to lateral movement indicators for meaningful detection.",
-      "related_techniques": ["T1021.002", "T1005", "T1041", "T1048"]
+      "related_techniques": [
+        "T1021.002",
+        "T1005",
+        "T1041",
+        "T1048"
+      ]
     },
     {
       "mapping_id": "ZEK-T1213-001",
@@ -1706,7 +3339,7 @@
         "tactic": "Collection"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.65",
+      "confidence_score": 0.65,
       "required_fields": [
         "http.id.orig_h",
         "http.host",
@@ -1725,11 +3358,71 @@
         "Method may be GET or POST with query parameters targeting data export"
       ],
       "correlation_required": true,
-      "correlation_window": "300 seconds",
-      "correlation_logic": "GROUP BY http.id.orig_h, http.host HAVING SUM(http.response_body_len) > 20000000 AND uri matches data-export patterns AND status_code = 200 WITHIN 300 seconds. Correlation with prior T1190 or T1071 on same orig_h increases confidence.",
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "http.id.orig_h",
+          "http.host"
+        ],
+        "aggregations": {
+          "total_response_body": {
+            "function": "sum",
+            "field": "http.response_body_len"
+          },
+          "request_count": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "total_response_body",
+            "operator": ">",
+            "value": 20000000
+          },
+          {
+            "metric": "request_count",
+            "operator": ">=",
+            "value": 1
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "pattern_match",
+            "field": "http.uri",
+            "patterns": [
+              "/api/data",
+              "/export",
+              "/download",
+              "/backup",
+              "/dump"
+            ]
+          },
+          {
+            "field": "http.status_code",
+            "operator": "==",
+            "value": 200
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Prior T1190 or T1071 on same orig_h",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legitimate data exports, backups, and administrative downloads. Context of source host and timing is critical.",
+      "false_positive_context": {
+        "admin_activity": true
+      },
       "explanation": "Data collection from web-based information repositories may appear in http.log as large downloads from application APIs or export endpoints. Zeek captures request and response sizes. The correlation engine must detect bulk data retrieval patterns and link them to compromise indicators.",
-      "related_techniques": ["T1190", "T1041", "T1567"]
+      "related_techniques": [
+        "T1190",
+        "T1041",
+        "T1567"
+      ]
     },
     {
       "mapping_id": "ZEK-T1071.002-001",
@@ -1741,13 +3434,14 @@
         "tactic": "Command and Control"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.72",
+      "confidence_score": 0.72,
       "required_fields": [
         "ftp.id.orig_h",
         "ftp.id.resp_h",
         "ftp.user",
         "ftp.command",
         "ftp.reply_code",
+        "ftp.file_size",
         "ftp.ts"
       ],
       "evidence_conditions": [
@@ -1758,14 +3452,53 @@
         "User credentials may be generic or suspicious"
       ],
       "correlation_required": true,
-      "correlation_window": "1800 seconds",
-      "correlation_logic": "GROUP BY ftp.id.orig_h, ftp.id.resp_h HAVING COUNT(*) >= 4 AND inter_connection_interval CV < 0.4 WITHIN 1800 seconds. FTP is rarely used for legitimate purposes in modern environments; regular FTP connections to external servers are suspicious.",
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "ftp.id.orig_h",
+          "ftp.id.resp_h"
+        ],
+        "aggregations": {
+          "connection_count": {
+            "function": "count"
+          },
+          "interval_cv": {
+            "function": "coefficient_of_variation",
+            "field": "ftp.ts"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "connection_count",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "metric": "interval_cv",
+            "operator": "<",
+            "value": 0.4
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Commands include STOR/RETR with small file sizes",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Legacy systems, some backup solutions, and specific industry applications still use FTP. Evaluate against known business requirements.",
       "explanation": "FTP may be used as a C2 channel in environments where HTTP/HTTPS is heavily monitored. Zeek ftp.log captures FTP session commands. Regular FTP connections to external servers with small file transfers may indicate C2 communication.",
-      "related_techniques": ["T1071.001", "T1105", "T1041"]
+      "related_techniques": [
+        "T1071.001",
+        "T1105",
+        "T1041"
+      ]
     },
     {
-      "mapping_id": "ZEK-T1592-001",
+      "mapping_id": "ZEK-T1592-002",
       "telemetry_source": "Zeek",
       "log_type": "conn.log",
       "attack_technique": {
@@ -1774,7 +3507,7 @@
         "tactic": "Reconnaissance"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.70",
+      "confidence_score": 0.7,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1782,6 +3515,7 @@
         "conn.proto",
         "conn.service",
         "conn.conn_state",
+        "conn.duration",
         "conn.ts"
       ],
       "evidence_conditions": [
@@ -1792,11 +3526,78 @@
         "Pattern suggests service version enumeration"
       ],
       "correlation_required": true,
-      "correlation_window": "120 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_h) >= 5 AND COUNT(DISTINCT conn.id.resp_p) >= 3 AND conn.id.resp_p IN (21, 23, 25, 110, 143, 3306, 5432) AND AVG(duration) < 1 WITHIN 120 seconds.",
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "unique_resp_ports": {
+            "function": "nunique",
+            "field": "conn.id.resp_p"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "metric": "unique_resp_ports",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "metric": "avg_duration",
+            "operator": "<",
+            "value": 1.0
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "field_in_set",
+            "field": "conn.id.resp_p",
+            "values": [
+              21,
+              23,
+              25,
+              110,
+              143,
+              3306,
+              5432
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Target ports match banner-grabbing services",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Network inventory tools and some monitoring systems perform service enumeration. Distinguished by source host role and scan pattern.",
+      "false_positive_context": {
+        "monitoring_system": true,
+        "asset_inventory_required": true
+      },
       "explanation": "Host information gathering involves identifying services and versions running on target systems. In conn.log, this appears as connections to banner-grabbing ports across multiple hosts with very short durations. The correlation engine detects service enumeration patterns.",
-      "related_techniques": ["T1046", "T1595.002", "T1018"]
+      "related_techniques": [
+        "T1046",
+        "T1595.002",
+        "T1018"
+      ]
     },
     {
       "mapping_id": "ZEK-T1496-001",
@@ -1808,7 +3609,7 @@
         "tactic": "Impact"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.75",
+      "confidence_score": 0.75,
       "required_fields": [
         "conn.id.orig_h",
         "conn.id.resp_h",
@@ -1828,11 +3629,64 @@
         "Multiple connections from same host to different mining pools"
       ],
       "correlation_required": true,
-      "correlation_window": "3600 seconds",
-      "correlation_logic": "GROUP BY conn.id.orig_h HAVING COUNT(DISTINCT conn.id.resp_h) >= 2 AND (conn.id.resp_p IN (3333, 45700, 45560, 14444, 7777, 9999) OR resp_h matches mining_pool_iocs) AND AVG(duration) > 3600 WITHIN 3600 seconds. Mining pool connection patterns are highly distinctive.",
+      "correlation_rule": {
+        "window_seconds": 3600,
+        "group_by": [
+          "conn.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_resp_hosts": {
+            "function": "nunique",
+            "field": "conn.id.resp_h"
+          },
+          "avg_duration": {
+            "function": "mean",
+            "field": "conn.duration"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "unique_resp_hosts",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "metric": "avg_duration",
+            "operator": ">",
+            "value": 3600
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "field_in_set",
+            "field": "conn.id.resp_p",
+            "values": [
+              3333,
+              45700,
+              45560,
+              14444,
+              7777,
+              9999
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "resp_h matches known mining pool IOCs",
+              "weight": 1.2
+            }
+          ]
+        }
+      },
       "false_positive_notes": "Some legitimate applications use similar ports. Mining pool IP/domain reputation is the strongest discriminator.",
       "explanation": "Cryptomining resource hijacking produces distinctive network patterns: long-duration connections to mining pools on specific ports with regular small data exchanges. Zeek conn.log captures these persistent connections. The correlation engine must detect connections to known mining infrastructure.",
-      "related_techniques": ["T1496", "T1071.001", "T1571"]
+      "related_techniques": [
+        "T1496",
+        "T1071.001",
+        "T1571"
+      ]
     },
     {
       "mapping_id": "ZEK-T1497-001",
@@ -1844,7 +3698,7 @@
         "tactic": "Defense Evasion"
       },
       "mapping_type": "behavioral",
-      "confidence_score": "0.55",
+      "confidence_score": 0.55,
       "required_fields": [
         "dns.id.orig_h",
         "dns.query",
@@ -1859,158 +3713,343 @@
         "Pattern suggests malware checking if running in analysis environment"
       ],
       "correlation_required": true,
-      "correlation_window": "60 seconds",
-      "correlation_logic": "GROUP BY dns.id.orig_h HAVING dns.query matches sandbox_domains OR (dns.query matches time_server_domains AND followed_by_geo_check) WITHIN 60 seconds. This is a weak indicator requiring endpoint correlation.",
+      "correlation_rule": {
+        "window_seconds": 60,
+        "group_by": [
+          "dns.id.orig_h"
+        ],
+        "aggregations": {
+          "query_count": {
+            "function": "count"
+          }
+        },
+        "conditions": [
+          {
+            "metric": "query_count",
+            "operator": ">=",
+            "value": 1
+          }
+        ],
+        "optional_conditions": [
+          {
+            "type": "pattern_match",
+            "field": "dns.query",
+            "patterns": [
+              "virustotal.com",
+              "joesecurity.org",
+              "any.run"
+            ]
+          }
+        ],
+        "scoring": {
+          "base_weight": 1.0
+        }
+      },
       "false_positive_notes": "Security researchers and administrators may query sandbox services. Low confidence reflects indirect evidence.",
       "explanation": "Malware may check for sandbox environments by querying known analysis services or performing time/location checks. Zeek dns.log can capture these queries. This is indirect evidence requiring correlation with endpoint behavior.",
-      "related_techniques": ["T1497.001", "T1497.002", "T1497.003"]
+      "related_techniques": [
+        "T1497.001",
+        "T1497.002",
+        "T1497.003"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1568.002-001",
-        "telemetry_source": "Zeek",
-        "log_type": "dns.log",
-        "attack_technique": {
-            "technique_id": "T1568.002",
-            "technique_name": "Dynamic Resolution: Domain Generation Algorithms",
-            "tactic": "Command and Control"
+      "mapping_id": "ZEK-T1568.002-001",
+      "telemetry_source": "Zeek",
+      "log_type": "dns.log",
+      "attack_technique": {
+        "technique_id": "T1568.002",
+        "technique_name": "Dynamic Resolution: Domain Generation Algorithms",
+        "tactic": "Command and Control"
+      },
+      "mapping_type": "behavioral",
+      "confidence_score": 0.9,
+      "required_fields": [
+        "dns.id.orig_h",
+        "dns.query",
+        "dns.qtype_name",
+        "dns.answers",
+        "dns.rcode",
+        "dns.ts"
+      ],
+      "evidence_conditions": [
+        "Single internal host generates queries for many unique domains within short time window",
+        "Queried domains contain high entropy subdomains or randomly generated structures",
+        "High ratio of failed DNS resolutions (NXDOMAIN responses)",
+        "Domain length and character distribution show algorithmic generation patterns",
+        "Repeated DNS queries indicate automated C2 resolution attempts"
+      ],
+      "correlation_required": true,
+      "correlation_rule": {
+        "window_seconds": 300,
+        "group_by": [
+          "dns.id.orig_h"
+        ],
+        "aggregations": {
+          "unique_queries": {
+            "function": "nunique",
+            "field": "dns.query"
+          },
+          "nxdomain_ratio": {
+            "function": "ratio",
+            "field": "dns.rcode",
+            "match_values": [
+              3
+            ]
+          },
+          "avg_domain_entropy": {
+            "function": "entropy",
+            "field": "dns.query"
+          }
         },
-        "mapping_type": "behavioral",
-        "confidence_score": "0.90",
-        "required_fields": [
-            "dns.id.orig_h",
-            "dns.query",
-            "dns.qtype_name",
-            "dns.answers",
-            "dns.rcode",
-            "dns.ts"
+        "conditions": [
+          {
+            "metric": "unique_queries",
+            "operator": ">=",
+            "value": 20
+          },
+          {
+            "metric": "nxdomain_ratio",
+            "operator": ">",
+            "value": 0.8
+          },
+          {
+            "metric": "avg_domain_entropy",
+            "operator": ">",
+            "value": 3.5
+          }
         ],
-        "evidence_conditions": [
-            "Single internal host generates queries for many unique domains within short time window",
-            "Queried domains contain high entropy subdomains or randomly generated structures",
-            "High ratio of failed DNS resolutions (NXDOMAIN responses)",
-            "Domain length and character distribution show algorithmic generation patterns",
-            "Repeated DNS queries indicate automated C2 resolution attempts"
-        ],
-        "correlation_required": true,
-        "correlation_window": "300 seconds",
-        "correlation_logic": "GROUP BY dns.id.orig_h HAVING COUNT(DISTINCT dns.query) >= 20 AND average(domain_entropy) > 3.5 AND NXDOMAIN_ratio > 0.8 WITHIN 300 seconds. Increase confidence when query intervals show periodic beaconing behavior.",
-        "false_positive_notes": "CDN providers and cloud services may generate random-looking hostnames. Domain reputation enrichment and known-good domain filtering are required.",
-        "explanation": "DGA malware generates large numbers of pseudo-random domains to locate C2 infrastructure. Zeek dns.log provides visibility into query volume, entropy, and DNS response behavior. Correlation between these features provides probabilistic detection.",
-        "related_techniques": [
-            "T1071.004",
-            "T1572",
-            "T1105"
-        ]
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Query intervals show periodic beaconing behavior",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
+      "false_positive_notes": "CDN providers and cloud services may generate random-looking hostnames. Domain reputation enrichment and known-good domain filtering are required.",
+      "explanation": "DGA malware generates large numbers of pseudo-random domains to locate C2 infrastructure. Zeek dns.log provides visibility into query volume, entropy, and DNS response behavior. Correlation between these features provides probabilistic detection.",
+      "related_techniques": [
+        "T1071.004",
+        "T1572",
+        "T1105"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1048.003-003",
-        "telemetry_source": "Zeek",
-        "log_type": "dns.log",
-        "attack_technique": {
-            "technique_id": "T1048.003",
-            "technique_name": "Exfiltration Over Unencrypted/Obfuscated Non-C2 Protocol",
-            "tactic": "Exfiltration"
+      "mapping_id": "ZEK-T1048.003-003",
+      "telemetry_source": "Zeek",
+      "log_type": "dns.log",
+      "attack_technique": {
+        "technique_id": "T1048.003",
+        "technique_name": "Exfiltration Over Unencrypted/Obfuscated Non-C2 Protocol",
+        "tactic": "Exfiltration"
+      },
+      "mapping_type": "behavioral",
+      "confidence_score": 0.89,
+      "required_fields": [
+        "dns.id.orig_h",
+        "dns.query",
+        "dns.qtype_name",
+        "dns.answers",
+        "dns.ts"
+      ],
+      "evidence_conditions": [
+        "Single internal host generates excessive DNS queries to one external domain",
+        "Query names contain encoded data patterns such as Base64 or hexadecimal strings",
+        "DNS query length is unusually large",
+        "Subdomains follow sequential chunking patterns",
+        "High query frequency maintained over time"
+      ],
+      "correlation_required": true,
+      "correlation_rule": {
+        "window_seconds": 600,
+        "group_by": [
+          "dns.id.orig_h",
+          "domain_suffix"
+        ],
+        "aggregations": {
+          "query_count": {
+            "function": "count"
+          },
+          "avg_query_length": {
+            "function": "mean",
+            "field": "dns.query",
+            "property": "length"
+          }
         },
-        "mapping_type": "behavioral",
-        "confidence_score": "0.89",
-        "required_fields": [
-            "dns.id.orig_h",
-            "dns.query",
-            "dns.qtype_name",
-            "dns.answers",
-            "dns.ts"
+        "conditions": [
+          {
+            "metric": "query_count",
+            "operator": ">=",
+            "value": 100
+          },
+          {
+            "metric": "avg_query_length",
+            "operator": ">",
+            "value": 80
+          }
         ],
-        "evidence_conditions": [
-            "Single internal host generates excessive DNS queries to one external domain",
-            "Query names contain encoded data patterns such as Base64 or hexadecimal strings",
-            "DNS query length is unusually large",
-            "Subdomains follow sequential chunking patterns",
-            "High query frequency maintained over time"
-        ],
-        "correlation_required": true,
-        "correlation_window": "600 seconds",
-        "correlation_logic": "GROUP BY dns.id.orig_h, domain_suffix(dns.query) HAVING COUNT(*) >= 100 AND average(query_length) > 80 AND encoded_pattern_ratio > threshold WITHIN 600 seconds.",
-        "false_positive_notes": "SPF, DKIM, and legitimate TXT queries may create abnormal DNS patterns. Encoding detection and query frequency are required.",
-        "explanation": "DNS tunneling and DNS-based exfiltration encode data inside DNS queries. Zeek can detect abnormal query size, frequency, and encoding characteristics.",
-        "related_techniques": [
-            "T1071.004",
-            "T1572",
-            "T1041"
-        ]
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Encoded pattern ratio exceeds threshold",
+              "weight": 1.15
+            }
+          ]
+        }
+      },
+      "false_positive_notes": "SPF, DKIM, and legitimate TXT queries may create abnormal DNS patterns. Encoding detection and query frequency are required.",
+      "explanation": "DNS tunneling and DNS-based exfiltration encode data inside DNS queries. Zeek can detect abnormal query size, frequency, and encoding characteristics.",
+      "related_techniques": [
+        "T1071.004",
+        "T1572",
+        "T1041"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1189-001",
-        "telemetry_source": "Zeek",
-        "log_type": "http.log",
-        "attack_technique": {
-            "technique_id": "T1189",
-            "technique_name": "Drive-by Compromise",
-            "tactic": "Initial Access"
+      "mapping_id": "ZEK-T1189-001",
+      "telemetry_source": "Zeek",
+      "log_type": [
+        "http.log",
+        "files.log"
+      ],
+      "attack_technique": {
+        "technique_id": "T1189",
+        "technique_name": "Drive-by Compromise",
+        "tactic": "Initial Access"
+      },
+      "mapping_type": "behavioral",
+      "confidence_score": 0.75,
+      "required_fields": [
+        "http.id.orig_h",
+        "http.host",
+        "http.uri",
+        "http.method",
+        "http.status_code",
+        "http.user_agent",
+        "files.filename",
+        "files.mime_type",
+        "files.md5",
+        "files.ts"
+      ],
+      "evidence_conditions": [
+        "Browser-like HTTP traffic from internal host to suspicious external domain",
+        "HTTP response delivers executable, script, or suspicious document file",
+        "Downloaded file has uncommon extension or suspicious MIME type",
+        "Domain reputation indicates malicious infrastructure"
+      ],
+      "correlation_required": true,
+      "correlation_rule": {
+        "window_seconds": 120,
+        "group_by": [
+          "http.id.orig_h"
+        ],
+        "aggregations": {
+          "request_count": {
+            "function": "count"
+          }
         },
-        "mapping_type": "behavioral",
-        "confidence_score": "0.75",
-        "required_fields": [
-            "http.id.orig_h",
-            "http.host",
-            "http.uri",
-            "http.method",
-            "http.status_code",
-            "http.user_agent",
-            "files.filename",
-            "files.mime_type",
-            "files.md5"
+        "conditions": [
+          {
+            "metric": "request_count",
+            "operator": ">=",
+            "value": 1
+          }
         ],
-        "evidence_conditions": [
-            "Browser-like HTTP traffic from internal host to suspicious external domain",
-            "HTTP response delivers executable, script, or suspicious document file",
-            "Downloaded file has uncommon extension or suspicious MIME type",
-            "Domain reputation indicates malicious infrastructure"
-        ],
-        "correlation_required": true,
-        "correlation_window": "120 seconds",
-        "correlation_logic": "HTTP browsing activity followed by suspicious file download from same host within 120 seconds. Increase confidence if file reputation is malicious or endpoint telemetry confirms execution.",
-        "false_positive_notes": "Software updates and legitimate downloads may create similar behavior.",
-        "explanation": "Zeek cannot confirm browser exploitation, but it can detect suspicious browsing followed by potentially malicious file delivery. Endpoint telemetry is required for confirmation.",
-        "related_techniques": [
-            "T1204",
-            "T1203",
-            "T1105"
-        ]
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "File reputation is malicious",
+              "weight": 1.2
+            },
+            {
+              "description": "Endpoint telemetry confirms execution",
+              "weight": 1.25
+            }
+          ]
+        }
+      },
+      "false_positive_notes": "Software updates and legitimate downloads may create similar behavior.",
+      "explanation": "Zeek cannot confirm browser exploitation, but it can detect suspicious browsing followed by potentially malicious file delivery. Endpoint telemetry is required for confirmation.",
+      "related_techniques": [
+        "T1204",
+        "T1203",
+        "T1105"
+      ]
     },
     {
-        "mapping_id": "ZEK-T1071.004-002",
-        "telemetry_source": "Zeek",
-        "log_type": "dns.log",
-        "attack_technique": {
-            "technique_id": "T1071.004",
-            "technique_name": "Application Layer Protocol: DNS",
-            "tactic": "Command and Control"
+      "mapping_id": "ZEK-T1071.004-003",
+      "telemetry_source": "Zeek",
+      "log_type": "dns.log",
+      "attack_technique": {
+        "technique_id": "T1071.004",
+        "technique_name": "Application Layer Protocol: DNS",
+        "tactic": "Command and Control"
+      },
+      "mapping_type": "behavioral",
+      "confidence_score": 0.87,
+      "required_fields": [
+        "dns.id.orig_h",
+        "dns.query",
+        "dns.answers",
+        "dns.rcode",
+        "dns.ts"
+      ],
+      "evidence_conditions": [
+        "Periodic DNS queries from one internal host to external domains",
+        "Consistent beacon interval with timing variation",
+        "Domains show high entropy or suspicious reputation",
+        "Resolved IP addresses change frequently"
+      ],
+      "correlation_required": true,
+      "correlation_rule": {
+        "window_seconds": 1800,
+        "group_by": [
+          "dns.id.orig_h",
+          "domain_suffix"
+        ],
+        "aggregations": {
+          "query_count": {
+            "function": "count"
+          },
+          "interval_cv": {
+            "function": "coefficient_of_variation",
+            "field": "dns.ts"
+          }
         },
-        "mapping_type": "behavioral",
-        "confidence_score": "0.87",
-        "required_fields": [
-            "dns.id.orig_h",
-            "dns.query",
-            "dns.answers",
-            "dns.rcode",
-            "dns.ts"
+        "conditions": [
+          {
+            "metric": "query_count",
+            "operator": ">=",
+            "value": 15
+          },
+          {
+            "metric": "interval_cv",
+            "operator": "<",
+            "value": 0.4
+          }
         ],
-        "evidence_conditions": [
-            "Periodic DNS queries from one internal host to external domains",
-            "Consistent beacon interval with timing variation",
-            "Domains show high entropy or suspicious reputation",
-            "Resolved IP addresses change frequently"
-        ],
-        "correlation_required": true,
-        "correlation_window": "1800 seconds",
-        "correlation_logic": "GROUP BY dns.id.orig_h,dns.query_domain HAVING query_count >= 15 AND beacon_interval_variance within expected jitter range WITHIN 1800 seconds.",
-        "false_positive_notes": "CDN traffic and cloud applications may generate periodic DNS queries.",
-        "explanation": "DNS is frequently abused as a C2 channel. Zeek provides query timing, domain behavior, and resolution information required for behavioral detection.",
-        "related_techniques": [
-            "T1568.002",
-            "T1572",
-            "T1105"
-        ]
+        "scoring": {
+          "base_weight": 1.0,
+          "supporting_conditions": [
+            {
+              "description": "Resolved IP addresses change frequently",
+              "weight": 1.1
+            }
+          ]
+        }
+      },
+      "false_positive_notes": "CDN traffic and cloud applications may generate periodic DNS queries.",
+      "explanation": "DNS is frequently abused as a C2 channel. Zeek provides query timing, domain behavior, and resolution information required for behavioral detection.",
+      "related_techniques": [
+        "T1568.002",
+        "T1572",
+        "T1105"
+      ]
     }
   ]
 }

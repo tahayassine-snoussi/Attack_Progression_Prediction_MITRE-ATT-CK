@@ -8,3 +8,5 @@ __pycache__/
 
 data/*
 data
+
+logs-extraction-decoding-saving.md
