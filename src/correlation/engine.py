@@ -1,3 +1,10 @@
-def correlate_zeek_events(events, correlation_rules) : 
+from correlationEngine import CorrelationEngine
 
-    return
+
+def correlate_zeek_events(events, correlation_rule):
+    engine = CorrelationEngine()
+
+    return engine.correlate(
+        events,
+        correlation_rule
+    )

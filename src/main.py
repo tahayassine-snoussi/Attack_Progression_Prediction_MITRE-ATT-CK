@@ -18,10 +18,7 @@ def main():
                 # =====================================
                 # 1. GET NEW BYTES
                 # =====================================
-
-                result = collector.collect_source(
-                    source
-                )
+                result = collector.collect_source(source)
 
                 if result is None:
                     continue
@@ -29,64 +26,38 @@ def main():
                 # =====================================
                 # 2. EXTRACT RESULT INFORMATION
                 # =====================================
-
                 data = result["data"]
                 log_type = result["log_type"]
 
                 # =====================================
                 # 3. DECODE
                 # =====================================
-
                 if source["source"] == "zeek":
-
-                    events = process_zeek_bytes(
-                        data,
-                        log_type
-                    )
+                    zeek_events = process_zeek_bytes(data, log_type)
 
                 elif source["source"] == "wazuh":
-
-                    events = process_wazuh_bytes(
-                        data,
-                        log_type
-                    )
+                    wazuh_events = process_wazuh_bytes(data, log_type)
 
                 # =====================================
                 # 4. STORE NORMALIZED EVENTS
                 # =====================================
-
-                event_store.store_events(
-                    events,
-                    log_type
-                )
-
-                print(
-                    f"[MAIN] Stored "
-                    f"{len(events)} events "
-                    f"from {log_type}"
-                )
+                if source["source"] == "zeek":
+                    event_store.store_events(zeek_events, log_type)
+                    print(f"[MAIN] Stored " f"{len(zeek_events)} events " f"from {log_type}")
+                elif source["source"] == "wazuh":
+                    event_store.store_events(wazuh_events, log_type)
+                    print(f"[MAIN] Stored " f"{len(wazuh_events)} events " f"from {log_type}")
 
                 # =====================================
+                
                 # 5. COMMIT OFFSET
                 # =====================================
-
-                collector.commit_offset(
-                    result["source_id"],
-                    result["new_offset"],
-                    result["inode"]
-                )
-
-                print(
-                    f"[MAIN] Offset committed: "
-                    f"{result['new_offset']}"
-                )
+                collector.commit_offset(result["source_id"], result["new_offset"], result["inode"])
+                print(f"[MAIN] Offset committed: " f"{result['new_offset']}")
 
             except Exception as error:
 
-                print(
-                    f"[{source['id']}] "
-                    f"ERROR: {error}"
-                )
+                print(f"[{source['id']}] " f"ERROR: {error}")
 
                 # IMPORTANT:
                 # Do NOT commit the offset here.
