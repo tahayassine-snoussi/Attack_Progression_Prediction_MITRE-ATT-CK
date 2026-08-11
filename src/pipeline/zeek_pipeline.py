@@ -36,7 +36,27 @@ def map_zeek_events(events):
         database = json.load(f)
         
         for e in enumerate(events) :
-              mappings = database[ database["log_type"] == e.log_type ] 
-              for mapping in mappings :
-                  if mapping["correlation_required"] : 
-                      result = correlate_zeek_events(e, mapping["correlation_rule"])
+            results  = []
+            mappings = database[ database["log_type"] == e.log_type ] 
+
+            correlation_mapping = mappings[ mappings["correlation_required"] == True ]
+            semantic_mapping = mappings[ mappings["correlation_required"] == False ]
+
+            for mapping in correlation_mapping :
+                # gets the needed logs for correlation and executes the correlation engine
+                result = correlate_zeek_events(e, mapping["correlation_rule"])
+                results.append(result)
+
+            results = semantically_map_events(e, semantic_mapping)
+
+    return results
+
+
+
+def semantically_map_events(event, semantic_mapping) : 
+    """
+    Maps the event to the normalized format based on the semantic mapping provided.
+    And ranked by the score.
+    """
+
+    return
