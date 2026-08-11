@@ -7,10 +7,7 @@ def process_wazuh_bytes(data: bytes, log_type: str):
 
     decoded_events = []
 
-    text = data.decode(
-        "utf-8",
-        errors="replace"
-    )
+    text = data.decode("utf-8", errors="replace")
 
     for line in text.splitlines():
 
@@ -23,22 +20,17 @@ def process_wazuh_bytes(data: bytes, log_type: str):
             raw_event = json.loads(line)
 
         except json.JSONDecodeError as error:
-
-            print(
-                f"[PIPELINE] Invalid JSON "
-                f"in {log_type}: {error}"
-            )
-
+            print(f"[PIPELINE] Invalid JSON in {log_type}: {error}")
             continue
 
-        decoded_event = decode_wazuh_event(
-            raw_event,
-            log_type
-        )
-
-        decoded_events.append(
-            decoded_event
-        )
+        decoded_event = decode_wazuh_event(raw_event, log_type)
+        decoded_events.append(decoded_event)
 
     return decoded_events
 
+
+
+def map_wazuh_events(evetns) : 
+    
+
+    return
