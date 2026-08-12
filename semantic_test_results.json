@@ -1,0 +1,272 @@
+[
+    {
+        "event": {
+            "telemetry_source": "Zeek",
+            "log_type": "ssh.log",
+            "timestamp": "2026-08-09T18:07:07.845+00:00",
+            "decoded_fields": {
+                "ssh.auth_success": true,
+                "ssh.client": "SSH-2.0-paramiko_5.0.0",
+                "ssh.direction": null,
+                "ssh.id.orig_h": "192.168.56.1",
+                "ssh.id.resp_h": "192.168.56.10",
+                "ssh.server": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.15",
+                "ssh.ts": "2026-08-09T18:07:07.845+00:00"
+            }
+        },
+        "matches": [
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1021.004-001",
+                "technique_id": "T1021.004",
+                "technique_name": "SSH",
+                "tactic": "Lateral Movement",
+                "confidence_score": 0.75,
+                "score": 0.75,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            },
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1078-001",
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access",
+                "confidence_score": 0.68,
+                "score": 0.68,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            }
+        ]
+    },
+    {
+        "event": {
+            "telemetry_source": "Zeek",
+            "log_type": "ssh.log",
+            "timestamp": "2026-08-09T18:19:14.905+00:00",
+            "decoded_fields": {
+                "ssh.auth_success": true,
+                "ssh.client": "SSH-2.0-paramiko_5.0.0",
+                "ssh.direction": null,
+                "ssh.id.orig_h": "192.168.56.1",
+                "ssh.id.resp_h": "192.168.56.10",
+                "ssh.server": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.15",
+                "ssh.ts": "2026-08-09T18:19:14.905+00:00"
+            }
+        },
+        "matches": [
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1021.004-001",
+                "technique_id": "T1021.004",
+                "technique_name": "SSH",
+                "tactic": "Lateral Movement",
+                "confidence_score": 0.75,
+                "score": 0.75,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            },
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1078-001",
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access",
+                "confidence_score": 0.68,
+                "score": 0.68,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            }
+        ]
+    },
+    {
+        "event": {
+            "telemetry_source": "Zeek",
+            "log_type": "ssh.log",
+            "timestamp": "2026-08-09T18:28:24.563+00:00",
+            "decoded_fields": {
+                "ssh.auth_success": true,
+                "ssh.client": "SSH-2.0-paramiko_5.0.0",
+                "ssh.direction": null,
+                "ssh.id.orig_h": "192.168.56.1",
+                "ssh.id.resp_h": "192.168.56.10",
+                "ssh.server": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.15",
+                "ssh.ts": "2026-08-09T18:28:24.563+00:00"
+            }
+        },
+        "matches": [
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1021.004-001",
+                "technique_id": "T1021.004",
+                "technique_name": "SSH",
+                "tactic": "Lateral Movement",
+                "confidence_score": 0.75,
+                "score": 0.75,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            },
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1078-001",
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access",
+                "confidence_score": 0.68,
+                "score": 0.68,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            }
+        ]
+    },
+    {
+        "event": {
+            "telemetry_source": "Zeek",
+            "log_type": "ssh.log",
+            "timestamp": "2026-08-09T18:53:08.196+00:00",
+            "decoded_fields": {
+                "ssh.auth_success": true,
+                "ssh.client": "SSH-2.0-paramiko_5.0.0",
+                "ssh.direction": null,
+                "ssh.id.orig_h": "192.168.56.1",
+                "ssh.id.resp_h": "192.168.56.10",
+                "ssh.server": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.15",
+                "ssh.ts": "2026-08-09T18:53:08.196+00:00"
+            }
+        },
+        "matches": [
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1021.004-001",
+                "technique_id": "T1021.004",
+                "technique_name": "SSH",
+                "tactic": "Lateral Movement",
+                "confidence_score": 0.75,
+                "score": 0.75,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            },
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1078-001",
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access",
+                "confidence_score": 0.68,
+                "score": 0.68,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            }
+        ]
+    },
+    {
+        "event": {
+            "telemetry_source": "Zeek",
+            "log_type": "ssh.log",
+            "timestamp": "2026-08-11T17:44:43.556+00:00",
+            "decoded_fields": {
+                "ssh.auth_success": true,
+                "ssh.client": "SSH-2.0-paramiko_5.0.0",
+                "ssh.direction": null,
+                "ssh.id.orig_h": "192.168.56.1",
+                "ssh.id.resp_h": "192.168.56.10",
+                "ssh.server": "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.15",
+                "ssh.ts": "2026-08-11T17:44:43.556+00:00"
+            }
+        },
+        "matches": [
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1021.004-001",
+                "technique_id": "T1021.004",
+                "technique_name": "SSH",
+                "tactic": "Lateral Movement",
+                "confidence_score": 0.75,
+                "score": 0.75,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            },
+            {
+                "matched": true,
+                "mapping_id": "ZEK-T1078-001",
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access",
+                "confidence_score": 0.68,
+                "score": 0.68,
+                "matched_conditions": [
+                    {
+                        "field": "ssh.auth_success",
+                        "operator": "==",
+                        "value": true
+                    }
+                ],
+                "context_required": true,
+                "reason": "semantic_conditions_matched_but_external_context_required"
+            }
+        ]
+    }
+]

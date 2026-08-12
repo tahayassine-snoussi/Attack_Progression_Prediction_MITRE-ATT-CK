@@ -27,7 +27,6 @@ class SemanticMatchResult:
     reason: str = None
 
     def to_dict(self):
-
         return asdict(self)
 
 
@@ -37,10 +36,7 @@ class SemanticMatchResult:
 
 class ZeekSemanticMappingEngine:
 
-    def __init__(
-        self,
-        mapping_path
-    ):
+    def __init__(self, mapping_path):
 
         self.mapping_path = mapping_path
 
@@ -50,9 +46,7 @@ class ZeekSemanticMappingEngine:
         self.index = defaultdict(list)
 
         self.load_database()
-
         self.build_indexes()
-
 
     # ========================================================
     # DATABASE
@@ -68,14 +62,11 @@ class ZeekSemanticMappingEngine:
 
             database = json.load(f)
 
-
         # Database is directly a list
         if isinstance(database, list):
 
             self.mappings = database
-
             return
-
 
         # Database wrapped in metadata
         if isinstance(database, dict):
@@ -87,11 +78,9 @@ class ZeekSemanticMappingEngine:
 
             return
 
-
         raise ValueError(
             "Invalid Zeek mapping database format"
         )
-
 
     # ========================================================
     # INDEX
@@ -117,24 +106,19 @@ class ZeekSemanticMappingEngine:
 
                 continue
 
-
             for log in log_types:
 
                 if log:
 
-                    self.index[
-                        log
-                    ].append(mapping)
-
+                    self.index[log].append(
+                        mapping
+                    )
 
     # ========================================================
     # CANDIDATES
     # ========================================================
 
-    def get_candidate_mappings(
-        self,
-        event
-    ):
+    def get_candidate_mappings(self, event):
 
         log_type = event.get(
             "log_type"
@@ -144,7 +128,6 @@ class ZeekSemanticMappingEngine:
             log_type,
             []
         )
-
 
     # ========================================================
     # REQUIRED FIELDS
@@ -166,6 +149,7 @@ class ZeekSemanticMappingEngine:
             []
         ):
 
+            # Field does not exist
             if required_field not in fields:
 
                 return False, (
@@ -173,15 +157,71 @@ class ZeekSemanticMappingEngine:
                     f"{required_field}"
                 )
 
+            # Field exists but has None
+            #
+            # IMPORTANT:
+            # Some Zeek fields can legitimately be null.
+            #
+            # Therefore we only reject None if the field
+            # is actually used by a semantic condition.
+            #
+            # This prevents fields such as ssh.direction
+            # from killing an otherwise valid semantic match.
+
             if fields[required_field] is None:
 
-                return False, (
-                    f"missing_required_field:"
-                    f"{required_field}"
+                semantic_conditions = mapping.get(
+                    "semantic_conditions",
+                    {}
                 )
+
+                if self.condition_requires_field(
+                    semantic_conditions,
+                    required_field
+                ):
+
+                    return False, (
+                        f"null_required_field:"
+                        f"{required_field}"
+                    )
 
         return True, None
 
+    # ========================================================
+    # CHECK WHETHER A CONDITION USES A FIELD
+    # ========================================================
+
+    def condition_requires_field(
+        self,
+        node,
+        field
+    ):
+
+        if not isinstance(node, dict):
+
+            return False
+
+        # Leaf condition
+        if "field" in node:
+
+            return node.get("field") == field
+
+        # Logic group
+        conditions = node.get(
+            "conditions",
+            []
+        )
+
+        for condition in conditions:
+
+            if self.condition_requires_field(
+                condition,
+                field
+            ):
+
+                return True
+
+        return False
 
     # ========================================================
     # LEAF CONDITION
@@ -205,7 +245,6 @@ class ZeekSemanticMappingEngine:
             "value"
         )
 
-
         # ----------------------------------------------------
         # Missing field
         # ----------------------------------------------------
@@ -228,43 +267,59 @@ class ZeekSemanticMappingEngine:
 
             return "null_field"
 
-
         actual = fields[field]
 
-
         # ----------------------------------------------------
-        # Operators
+        # Equality
         # ----------------------------------------------------
 
         if operator == "==":
 
             return actual == expected
 
+        # ----------------------------------------------------
+        # Not equal
+        # ----------------------------------------------------
 
         if operator == "!=":
 
             return actual != expected
 
+        # ----------------------------------------------------
+        # Greater than
+        # ----------------------------------------------------
 
         if operator == ">":
 
             return actual > expected
 
+        # ----------------------------------------------------
+        # Greater/equal
+        # ----------------------------------------------------
 
         if operator == ">=":
 
             return actual >= expected
 
+        # ----------------------------------------------------
+        # Less than
+        # ----------------------------------------------------
 
         if operator == "<":
 
             return actual < expected
 
+        # ----------------------------------------------------
+        # Less/equal
+        # ----------------------------------------------------
 
         if operator == "<=":
 
             return actual <= expected
 
+        # ----------------------------------------------------
+        # IN
+        # ----------------------------------------------------
 
         if operator == "in":
 
@@ -274,11 +329,15 @@ class ZeekSemanticMappingEngine:
             ):
 
                 raise ValueError(
-                    "'in' requires a list"
+                    "'in' operator requires "
+                    "a list, tuple, or set"
                 )
 
             return actual in expected
 
+        # ----------------------------------------------------
+        # CONTAINS
+        # ----------------------------------------------------
 
         if operator == "contains":
 
@@ -291,6 +350,9 @@ class ZeekSemanticMappingEngine:
 
             return str(expected) in actual
 
+        # ----------------------------------------------------
+        # STARTSWITH
+        # ----------------------------------------------------
 
         if operator == "startswith":
 
@@ -305,6 +367,9 @@ class ZeekSemanticMappingEngine:
                 str(expected)
             )
 
+        # ----------------------------------------------------
+        # ENDSWITH
+        # ----------------------------------------------------
 
         if operator == "endswith":
 
@@ -319,23 +384,17 @@ class ZeekSemanticMappingEngine:
                 str(expected)
             )
 
+        # ----------------------------------------------------
+        # IS NULL
+        # ----------------------------------------------------
 
         if operator == "is_null":
 
-            # Field exists and is not null.
-            #
-            # Therefore:
-            #
-            # expected=False → True
-            # expected=True  → False
-
             return expected is False
-
 
         raise ValueError(
             f"Unsupported operator: {operator}"
         )
-
 
     # ========================================================
     # RECURSIVE CONDITIONS
@@ -352,6 +411,9 @@ class ZeekSemanticMappingEngine:
 
             matched_conditions = []
 
+        if not isinstance(node, dict):
+
+            return False
 
         # ----------------------------------------------------
         # Logic group
@@ -368,9 +430,7 @@ class ZeekSemanticMappingEngine:
                 []
             )
 
-
             results = []
-
 
             for child in children:
 
@@ -384,12 +444,15 @@ class ZeekSemanticMappingEngine:
                     result
                 )
 
-
             # ------------------------------------------------
             # AND
             # ------------------------------------------------
 
             if logic == "AND":
+
+                if not results:
+
+                    return False
 
                 if any(
                     result is False
@@ -398,7 +461,6 @@ class ZeekSemanticMappingEngine:
 
                     return False
 
-
                 if any(
                     result == "null_field"
                     for result in results
@@ -406,9 +468,7 @@ class ZeekSemanticMappingEngine:
 
                     return False
 
-
                 return True
-
 
             # ------------------------------------------------
             # OR
@@ -423,14 +483,11 @@ class ZeekSemanticMappingEngine:
 
                     return True
 
-
                 return False
-
 
             raise ValueError(
                 f"Unsupported logic: {logic}"
             )
-
 
         # ----------------------------------------------------
         # Leaf
@@ -441,16 +498,13 @@ class ZeekSemanticMappingEngine:
             fields
         )
 
-
         if result is True:
 
             matched_conditions.append(
                 node
             )
 
-
         return result
-
 
     # ========================================================
     # EXTERNAL CONTEXT
@@ -463,18 +517,20 @@ class ZeekSemanticMappingEngine:
         context_provider
     ):
 
+        # No external context configuration
         if not external_context:
 
             return True
-
 
         required = external_context.get(
             "required",
             False
         )
 
+        # ----------------------------------------------------
+        # Context required but provider unavailable
+        # ----------------------------------------------------
 
-        # Required context but no provider
         if context_provider is None:
 
             if required:
@@ -483,6 +539,9 @@ class ZeekSemanticMappingEngine:
 
             return True
 
+        # ----------------------------------------------------
+        # Evaluate context conditions
+        # ----------------------------------------------------
 
         for condition in external_context.get(
             "conditions",
@@ -501,17 +560,14 @@ class ZeekSemanticMappingEngine:
                 "value"
             )
 
-
             actual = context_provider.resolve(
                 context_key,
                 event
             )
 
-
             if actual is None:
 
                 return False
-
 
             if operator == "==":
 
@@ -519,20 +575,17 @@ class ZeekSemanticMappingEngine:
 
                     return False
 
-
             elif operator == "!=":
 
                 if actual == expected:
 
                     return False
 
-
             elif operator == "in":
 
                 if actual not in expected:
 
                     return False
-
 
             else:
 
@@ -541,9 +594,7 @@ class ZeekSemanticMappingEngine:
                     f"context operator: {operator}"
                 )
 
-
         return True
-
 
     # ========================================================
     # MATCH ONE MAPPING
@@ -570,7 +621,6 @@ class ZeekSemanticMappingEngine:
                 reason="correlation_required"
             )
 
-
         # ----------------------------------------------------
         # Required fields
         # ----------------------------------------------------
@@ -582,14 +632,12 @@ class ZeekSemanticMappingEngine:
             )
         )
 
-
         if not valid:
 
             return SemanticMatchResult(
                 matched=False,
                 reason=reason
             )
-
 
         # ----------------------------------------------------
         # Semantic conditions
@@ -600,11 +648,9 @@ class ZeekSemanticMappingEngine:
             {}
         )
 
-
         semantic_conditions = mapping.get(
             "semantic_conditions"
         )
-
 
         if not semantic_conditions:
 
@@ -613,9 +659,7 @@ class ZeekSemanticMappingEngine:
                 reason="no_semantic_conditions"
             )
 
-
         matched_conditions = []
-
 
         semantic_result = (
             self.evaluate_conditions(
@@ -625,14 +669,12 @@ class ZeekSemanticMappingEngine:
             )
         )
 
-
         if semantic_result is not True:
 
             return SemanticMatchResult(
                 matched=False,
                 reason="semantic_conditions_failed"
             )
-
 
         # ----------------------------------------------------
         # External context
@@ -642,37 +684,69 @@ class ZeekSemanticMappingEngine:
             "external_context"
         )
 
+        context_result = (
+            self.evaluate_external_context(
+                event,
+                external_context,
+                context_provider
+            )
+        )
 
-        if external_context:
+        # Context required but unavailable
+        if context_result == "context_required":
 
-            context_result = (
-                self.evaluate_external_context(
-                    event,
-                    external_context,
-                    context_provider
+            technique = mapping.get(
+                "attack_technique",
+                {}
+            )
+
+            confidence = self.to_float(
+                mapping.get(
+                    "confidence_score"
                 )
             )
 
+            return SemanticMatchResult(
 
-            if context_result == "context_required":
+                matched=True,
 
-                return SemanticMatchResult(
-                    matched=False,
-                    context_required=True,
-                    reason=(
-                        "external_context_required"
-                        "_but_unavailable"
-                    )
+                mapping_id=mapping.get(
+                    "mapping_id"
+                ),
+
+                technique_id=technique.get(
+                    "technique_id"
+                ),
+
+                technique_name=technique.get(
+                    "technique_name"
+                ),
+
+                tactic=technique.get(
+                    "tactic"
+                ),
+
+                confidence_score=confidence,
+
+                score=confidence,
+
+                matched_conditions=matched_conditions,
+
+                context_required=True,
+
+                reason=(
+                    "semantic_conditions_matched_"
+                    "but_external_context_required"
                 )
+            )
 
+        # Context exists but failed
+        if context_result is False:
 
-            if context_result is False:
-
-                return SemanticMatchResult(
-                    matched=False,
-                    reason="external_context_failed"
-                )
-
+            return SemanticMatchResult(
+                matched=False,
+                reason="external_context_failed"
+            )
 
         # ----------------------------------------------------
         # Successful match
@@ -683,13 +757,11 @@ class ZeekSemanticMappingEngine:
             {}
         )
 
-
         confidence = self.to_float(
             mapping.get(
                 "confidence_score"
             )
         )
-
 
         return SemanticMatchResult(
 
@@ -717,9 +789,10 @@ class ZeekSemanticMappingEngine:
 
             matched_conditions=matched_conditions,
 
+            context_required=False,
+
             reason="all_conditions_met"
         )
-
 
     # ========================================================
     # MAP ONE EVENT
@@ -731,15 +804,11 @@ class ZeekSemanticMappingEngine:
         context_provider=None
     ):
 
-        candidates = (
-            self.get_candidate_mappings(
-                event
-            )
-        )
-
-
         results = []
 
+        candidates = self.get_candidate_mappings(
+            event
+        )
 
         for mapping in candidates:
 
@@ -749,29 +818,31 @@ class ZeekSemanticMappingEngine:
                 context_provider
             )
 
+            # ------------------------------------------------
+            # IMPORTANT
+            #
+            # We keep:
+            #
+            # matched=True
+            # context_required=True
+            #
+            # because the semantic evidence matched,
+            # but external context is still needed.
+            # ------------------------------------------------
 
-            if not result.matched:
+            if result.matched:
 
-                continue
-
-
-            results.append(
-                result
-            )
-
+                results.append(
+                    result
+                )
 
         # Highest confidence first
-
         results.sort(
-            key=lambda x: (
-                x.confidence_score
-            ),
+            key=lambda result: result.score,
             reverse=True
         )
 
-
         return results
-
 
     # ========================================================
     # MAP MANY EVENTS
@@ -785,14 +856,12 @@ class ZeekSemanticMappingEngine:
 
         results = []
 
-
         for event in events:
 
             matches = self.map_event(
                 event,
                 context_provider
             )
-
 
             results.append({
 
@@ -805,9 +874,7 @@ class ZeekSemanticMappingEngine:
 
             })
 
-
         return results
-
 
     # ========================================================
     # HELPER
