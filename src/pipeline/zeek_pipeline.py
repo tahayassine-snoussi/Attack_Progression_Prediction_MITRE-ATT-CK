@@ -2,7 +2,11 @@ import json
 
 from correlation.engine import correlate_zeek_events
 from decoder.decoder_engine import decode_zeek_event
+from semantic_zeek_mapping_engine import (ZeekSemanticMappingEngine)
 
+semantic_engine = ZeekSemanticMappingEngine(
+    "zeek_mappingDB.json"
+)
 
 def process_zeek_bytes(data: bytes, log_type: str):
 
@@ -29,34 +33,58 @@ def process_zeek_bytes(data: bytes, log_type: str):
 
     return decoded_events
 
-
-def map_zeek_events(events):
-
-    with open( "zeek_mappingDB.json", "r", encoding="utf-8") as f:
+def load_zeek_mapping_database(path="zeek_mappingDB.json"):
+    with open(path, "r", encoding="utf-8") as f:
         database = json.load(f)
-        
-        for e in enumerate(events) :
-            results  = []
-            mappings = database[ database["log_type"] == e.log_type ] 
 
-            correlation_mapping = mappings[ mappings["correlation_required"] == True ]
-            semantic_mapping = mappings[ mappings["correlation_required"] == False ]
+    # If your database is directly a list of mappings
+    if isinstance(database, list):
+        return database
 
-            for mapping in correlation_mapping :
-                # gets the needed logs for correlation and executes the correlation engine
-                result = correlate_zeek_events(e, mapping["correlation_rule"])
-                results.append(result)
+    # If you later wrap it:
+    #
+    # {
+    #     "database_metadata": {...},
+    #     "mappings": [...]
+    # }
+    #
+    if isinstance(database, dict):
+        return database.get("mappings", [])
 
-            results = semantically_map_events(e, semantic_mapping)
+    raise ValueError(
+        "Invalid Zeek mapping database format"
+    )
 
-    return results
+def map_zeek_events(
+    events,
+    semantic_engine,
+    correlation_engine=None,
+    context_provider=None
+):
+
+    semantic_results = semantic_engine.map_events(
+        events,
+        context_provider
+    )
 
 
+    correlation_results = []
 
-def semantically_map_events(event, semantic_mapping) : 
-    """
-    Maps the event to the normalized format based on the semantic mapping provided.
-    And ranked by the score.
-    """
 
-    return
+    if correlation_engine is not None:
+
+        correlation_results = (
+            correlation_engine.correlate(
+                events
+            )
+        )
+
+
+    return {
+
+        "semantic_results":
+            semantic_results,
+
+        "correlation_results":
+            correlation_results
+    }

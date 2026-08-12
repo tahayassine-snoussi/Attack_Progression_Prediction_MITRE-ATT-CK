@@ -1,6 +1,8 @@
+import csv
 import json
-
 from decoder.decoder_engine import decode_wazuh_event
+from wazuh_mapping_engine import WazuhMappingEngine
+
 
 
 def process_wazuh_bytes(data: bytes, log_type: str):
@@ -29,8 +31,9 @@ def process_wazuh_bytes(data: bytes, log_type: str):
     return decoded_events
 
 
+def map_wazuh_events(events):
 
-def map_wazuh_events(evetns) : 
-    
+    engine = WazuhMappingEngine("mapping_dataset.csv")
+    return engine.map_events(events)
 
-    return
+
