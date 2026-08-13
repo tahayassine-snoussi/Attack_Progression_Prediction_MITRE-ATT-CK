@@ -4,39 +4,39 @@
         "inode": 800966
     },
     "zeek_dns": {
-        "offset": 50412,
-        "inode": 800739
+        "offset": 238778,
+        "inode": 801668
     },
     "zeek_files": {
-        "offset": 478,
-        "inode": 800528
+        "offset": 17168,
+        "inode": 801222
     },
     "zeek_http": {
-        "offset": 482,
-        "inode": 800553
+        "offset": 14003,
+        "inode": 801232
     },
     "zeek_notice": {
-        "offset": 210,
-        "inode": 790312
+        "offset": 420,
+        "inode": 800887
     },
     "zeek_ssh": {
-        "offset": 484,
-        "inode": 788400
+        "offset": 1389,
+        "inode": 801202
     },
     "zeek_ssl": {
         "offset": 554,
         "inode": 800299
     },
     "zeek_weird": {
-        "offset": 215,
-        "inode": 800798
+        "offset": 1283,
+        "inode": 800239
     },
     "wazuh_alerts": {
-        "offset": 2188382,
-        "inode": 798820
+        "offset": 668716,
+        "inode": 799730
     },
     "wazuh_archives": {
-        "offset": 19195775,
-        "inode": 798813
+        "offset": 27348131,
+        "inode": 799707
     }
 }

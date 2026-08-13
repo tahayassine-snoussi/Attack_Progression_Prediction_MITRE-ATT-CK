@@ -74,9 +74,9 @@ class CorrelationEngine:
         "==",
         "!=",
         "in",
+        "not_in",
         "is_null",
     }
-
     # ============================================================
     # PUBLIC API
     # ============================================================
@@ -415,10 +415,7 @@ class CorrelationEngine:
         if not events:
             return []
 
-        windows = []
-
-        current_window = []
-        window_start = None
+        timestamped_events = []
 
         for event in events:
 
@@ -426,39 +423,61 @@ class CorrelationEngine:
                 event.get("timestamp")
             )
 
-            # ----------------------------------------------------
-            # Events without timestamps cannot participate in
-            # temporal correlation.
-            # ----------------------------------------------------
-
             if event_time is None:
                 continue
 
-            if window_start is None:
+            timestamped_events.append(
+                (
+                    event_time,
+                    event
+                )
+            )
 
-                window_start = event_time
-                current_window = [event]
+        timestamped_events.sort(
+            key=lambda item: item[0]
+        )
 
-                continue
+        windows = []
 
-            elapsed = (
-                event_time - window_start
-            ).total_seconds()
+        # --------------------------------------------------------
+        # Sliding window.
+        #
+        # Every event can become the beginning of a correlation
+        # window. This avoids losing detections at arbitrary
+        # window boundaries.
+        # --------------------------------------------------------
 
-            if elapsed <= window_seconds:
+        for index, (start_time, start_event) in enumerate(
+            timestamped_events
+        ):
 
-                current_window.append(event)
+            current_window = [
+                start_event
+            ]
 
-            else:
+            for later_time, later_event in timestamped_events[
+                index + 1:
+            ]:
 
-                if current_window:
-                    windows.append(current_window)
+                elapsed = (
+                    later_time - start_time
+                ).total_seconds()
 
-                current_window = [event]
-                window_start = event_time
+                if elapsed <= window_seconds:
 
-        if current_window:
-            windows.append(current_window)
+                    current_window.append(
+                        later_event
+                    )
+
+                else:
+
+                    break
+
+            if len(current_window) > 0:
+
+                windows.append(
+                    current_window
+                )
 
         return windows
 

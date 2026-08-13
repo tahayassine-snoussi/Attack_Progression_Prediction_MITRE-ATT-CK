@@ -1,5 +1,9 @@
 from logs_extraction.collector import Collector
-from pipeline.zeek_pipeline import process_zeek_bytes, map_zeek_events
+from pipeline.zeek_pipeline import (
+    process_zeek_bytes,
+    map_zeek_events,
+    semantic_engine
+)
 from pipeline.wazuh_pipeline import process_wazuh_bytes, map_wazuh_events
 from storage.event_store import EventStore
 
@@ -34,8 +38,7 @@ def main():
                 # =====================================
                 if source["source"] == "zeek":
                     zeek_events = process_zeek_bytes(data, log_type)
-                    mapped_zeek_events = map_zeek_events(zeek_events)
-                    
+                    mapped_zeek_events = map_zeek_events(zeek_events, semantic_engine)                    
                 elif source["source"] == "wazuh":
                     wazuh_events = process_wazuh_bytes(data, log_type)
                     mapped_wazuh_events = map_wazuh_events(wazuh_events)

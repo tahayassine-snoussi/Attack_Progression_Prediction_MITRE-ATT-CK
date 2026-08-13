@@ -3232,6 +3232,11 @@
         ]
     },
     
+
+
+
+
+
     {
         "mapping_id": "ZEK-T1590.001-001",
         "telemetry_source": "Zeek",
@@ -3252,14 +3257,14 @@
             "dns.ts"
         ],
         "evidence_conditions": [
-            "DNS queries for MX, NS, SOA, TXT records for target domain",
-            "Queries originate from non-DNS-server internal host",
-            "Multiple record types queried for same domain in sequence",
+            "DNS queries for MX, NS, SOA, or TXT records for a target domain",
+            "Queries originate from a non-DNS-server internal host",
+            "Multiple record types queried for the same domain in sequence",
             "Queries for subdomains or wildcard patterns"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Email servers, mail clients, and legitimate applications query MX records. DNS resolvers query NS records. Context of originating host is critical.",
-        "explanation": "DNS reconnaissance for domain properties involves querying non-standard record types (MX, NS, SOA, TXT) to map infrastructure. Zeek dns.log captures qtype_name directly. A single query for these record types from a non-infrastructure host provides direct evidence of reconnaissance, though confidence is moderate due to legitimate use cases.",
+        "false_positive_notes": "Email servers, mail clients, and legitimate applications query MX records. DNS resolvers query NS records. The role of the originating host is important for distinguishing reconnaissance from legitimate DNS activity.",
+        "explanation": "DNS reconnaissance for domain properties involves querying MX, NS, SOA, and TXT records to identify domain infrastructure. Zeek dns.log directly exposes qtype_name, allowing these queries to be detected at the event level.",
         "related_techniques": [
             "T1590.002",
             "T1596.001",
@@ -3289,12 +3294,17 @@
             "required": true,
             "conditions": [
                 {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
                     "context": "source_host.role",
                     "operator": "!=",
                     "value": "dns_server"
                 }
             ],
-            "notes": "Evidence condition 'Queries originate from non-DNS-server internal host' requires asset inventory identifying DNS servers. Evidence condition 'Multiple record types queried for same domain in sequence' requires temporal correlation across multiple events and cannot be evaluated from a single event."
+            "notes": "Source host location and role require asset inventory or network context. Temporal behavior involving multiple record types requires correlation across DNS events."
         }
     },
     {
@@ -3316,13 +3326,13 @@
             "dns.ts"
         ],
         "evidence_conditions": [
-            "PTR queries (reverse DNS) for internal IP ranges",
-            "Queries for internal domain names from non-standard hosts",
-            "Queries for network time protocol (NTP) or internal DNS servers"
+            "PTR queries for internal IP ranges",
+            "Queries for internal domain names from non-infrastructure hosts",
+            "Queries targeting internal DNS or NTP infrastructure"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Many applications and services perform reverse DNS lookups. Confidence is intentionally moderate to reflect high false positive potential without additional context.",
-        "explanation": "Network configuration discovery may involve reverse DNS lookups to map internal network topology. Zeek dns.log captures PTR queries. A single PTR query for internal space from a non-infrastructure host provides direct but weak evidence, as reverse lookups are common.",
+        "false_positive_notes": "Applications and services commonly perform reverse DNS lookups. Confidence is moderate because a single PTR query is weak evidence without additional context.",
+        "explanation": "Network configuration discovery may involve reverse DNS queries used to identify internal hosts and infrastructure. Zeek dns.log captures PTR queries and their target domains.",
         "related_techniques": [
             "T1018",
             "T1049",
@@ -3347,6 +3357,11 @@
             "required": true,
             "conditions": [
                 {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
                     "context": "source_host.role",
                     "operator": "!=",
                     "value": "infrastructure_server"
@@ -3361,7 +3376,7 @@
                     ]
                 }
             ],
-            "notes": "Evidence conditions 'Queries for internal domain names from non-standard hosts' and 'Queries for NTP or internal DNS servers' require external asset/context databases to classify hosts, domains, and services. 'PTR queries for internal IP ranges' requires network boundary definitions not present in the Zeek event."
+            "notes": "Host classification and query target classification require external asset and network context. Internal IP range membership may also require network boundary configuration."
         }
     },
     {
@@ -3384,14 +3399,14 @@
             "notice.ts"
         ],
         "evidence_conditions": [
-            "Zeek notice generated for known exploit attempt",
-            "Notice types: HTTP::SQL_Injection, HTTP::Shellshock, HTTP::APTSimulator, Traceroute::Detected",
-            "Source IP is external, destination is internal web server",
+            "Zeek notice generated for a known exploit attempt",
+            "Notice indicates HTTP::SQL_Injection, HTTP::Shellshock, HTTP::APTSimulator, or another exploit-related category",
+            "Source is external and destination is an internal web server",
             "Notice message contains exploit-specific indicators"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Zeek notice framework is signature-based and may have false positives for complex injection attacks. Verify against application logs and endpoint telemetry.",
-        "explanation": "Zeek's notice.log generates alerts for specific attack signatures detected in network traffic. When notice.note indicates HTTP::SQL_Injection, HTTP::Shellshock, or similar exploit categories targeting a public-facing web application, this constitutes direct evidence of T1190. The probabilistic engine should weight notice.log entries heavily due to Zeek's built-in detection logic.",
+        "false_positive_notes": "Zeek notice detection can produce false positives for complex application behavior. Verification with application and endpoint telemetry is recommended.",
+        "explanation": "Exploit-related Zeek notices provide strong network evidence of an attempted exploitation of a public-facing application.",
         "related_techniques": [
             "T1595.002",
             "T1505.003",
@@ -3426,17 +3441,22 @@
             "required": true,
             "conditions": [
                 {
-                    "context": "notice.src.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "external"
                 },
                 {
-                    "context": "notice.dst.role",
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.role",
                     "operator": "==",
                     "value": "web_server"
                 }
             ],
-            "notes": "Evidence conditions 'Source IP is external, destination is internal web server' require network boundary and asset inventory context not available in the Zeek notice event. 'Notice message contains exploit-specific indicators' is documentation for analyst review; the semantic condition uses the structured notice.note field."
+            "notes": "Source and destination network location require network boundary context. Destination role requires asset inventory."
         }
     },
     {
@@ -3461,19 +3481,36 @@
             "http.ts"
         ],
         "evidence_conditions": [
-            "HTTP requests containing exploit patterns in URI: SQL injection syntax (', UNION, SELECT, DROP), path traversal (../, ..%2f), command injection (;|, &&, $(), backticks)",
-            "Unusual HTTP methods for target endpoint (PUT, DELETE, PATCH to static resources)",
-            "Large request body to endpoints not expecting uploads",
-            "Status code 500 (Internal Server Error) following suspicious request suggests successful exploitation",
-            "User-Agent may be missing, generic, or attacker-specific"
+            "HTTP request contains SQL injection, path traversal, or command injection patterns",
+            "Unusual HTTP methods such as PUT, DELETE, or PATCH",
+            "Large request body",
+            "HTTP 500 response following suspicious request",
+            "Suspicious or missing user agent"
         ],
         "correlation_required": false,
         "external_context": {
-            "required": false,
-            "notes": "Evidence condition 'Unusual HTTP methods for target endpoint (PUT, DELETE, PATCH to static resources)' loses the 'to static resources' constraint because endpoint classification is not available in the event. Evidence condition 'Large request body to endpoints not expecting uploads' cannot be evaluated without endpoint inventory and request body threshold definitions. The semantic condition for PUT/DELETE/PATCH is broad and may generate false positives."
+            "required": true,
+            "conditions": [
+                {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "external"
+                },
+                {
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.role",
+                    "operator": "==",
+                    "value": "web_server"
+                }
+            ],
+            "notes": "Public-facing application classification requires network and asset context. Endpoint classification is not available directly from http.log."
         },
-        "false_positive_notes": "Legitimate API usage, web application testing, and some content management systems may use PUT/DELETE. SQL-like strings in URIs can occur in search functionality. Context of endpoint and application type is critical.",
-        "explanation": "Web application exploitation often produces detectable patterns in http.log: malicious payloads in URIs or request bodies, unusual HTTP methods, and server error responses indicating successful exploitation. The correlation engine should match URI patterns against known exploit signatures and watch for 500 status codes as exploitation success indicators.",
+        "false_positive_notes": "Legitimate APIs, web application testing, search functionality, and content management systems may produce similar patterns.",
+        "explanation": "HTTP exploitation attempts can be detected through suspicious URI patterns, HTTP methods, and server error responses. External-to-internal traffic targeting a known web server increases confidence.",
         "related_techniques": [
             "T1595.002",
             "T1505.003",
@@ -3540,11 +3577,6 @@
                 {
                     "field": "http.uri",
                     "operator": "contains",
-                    "value": ";|"
-                },
-                {
-                    "field": "http.uri",
-                    "operator": "contains",
                     "value": "&&"
                 },
                 {
@@ -3570,11 +3602,6 @@
                     "field": "http.status_code",
                     "operator": "==",
                     "value": 500
-                },
-                {
-                    "field": "http.user_agent",
-                    "operator": "is_null",
-                    "value": null
                 }
             ]
         }
@@ -3599,18 +3626,34 @@
             "weird.ts"
         ],
         "evidence_conditions": [
-            "Protocol anomalies in HTTP parsing: bad_HTTP_request, invalid_http_verb, line_terminated_with_single_CR",
-            "Oversized HTTP headers or request bodies",
-            "Malformed SSL/TLS handshake preceding HTTP request",
-            "Weird events targeting web server ports (80, 443, 8080, 8443)"
+            "HTTP protocol anomaly detected",
+            "Malformed HTTP request or invalid HTTP verb",
+            "Weird event targets a web server port"
         ],
         "correlation_required": false,
         "external_context": {
-            "required": false,
-            "notes": "Evidence conditions 'Oversized HTTP headers or request bodies' and 'Malformed SSL/TLS handshake preceding HTTP request' cannot be evaluated from a single weird.log event. 'Oversized' lacks a defined threshold. 'Malformed SSL/TLS handshake preceding HTTP request' requires correlation with ssl.log or conn.log events outside the current event scope."
+            "required": true,
+            "conditions": [
+                {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "external"
+                },
+                {
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.role",
+                    "operator": "==",
+                    "value": "web_server"
+                }
+            ],
+            "notes": "Source and destination locations and destination server role require external context."
         },
-        "false_positive_notes": "Broken clients, misconfigured proxies, and some mobile applications generate protocol anomalies. Evaluate weird.name against known exploit-related anomalies.",
-        "explanation": "Exploitation attempts may cause protocol-level anomalies detectable by Zeek's protocol analyzers. weird.log captures parsing failures, malformed requests, and other deviations from expected protocol behavior. When these anomalies target web application ports, they may indicate exploitation attempts or payload delivery.",
+        "false_positive_notes": "Broken clients, proxies, and malformed legitimate requests can generate protocol anomalies.",
+        "explanation": "Protocol anomalies targeting an internal web server from an external source may indicate exploitation attempts.",
         "related_techniques": [
             "T1190",
             "T1210",
@@ -3663,18 +3706,17 @@
             "conn.ts"
         ],
         "evidence_conditions": [
-            "External IP address (orig_h) connects to internal host on remote access port",
-            "Common remote access ports: 22 (SSH), 3389 (RDP), 5900 (VNC), 5985/5986 (WinRM)",
-            "Connection state SF (normal establishment and termination) or S1 (established, not terminated)",
-            "Duration > 60 seconds suggests interactive session",
-            "Service field matches expected protocol (ssh, ssl, rdp)"
+            "External source connects to internal host on a remote access port",
+            "Remote access ports include SSH, RDP, VNC, and WinRM",
+            "Connection is established",
+            "Duration exceeds 60 seconds"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Legitimate remote administration, VPN users, and third-party support access. Confidence increases if source IP is unknown, access is outside business hours, or correlates with failed authentication attempts.",
+        "false_positive_notes": "Legitimate remote administration, VPN access, and third-party support are common.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "External remote services provide initial access vectors. Zeek conn.log captures all remote access connections. A single connection from an external IP to an internal host on a remote access port with established state and significant duration provides direct but moderate-confidence evidence, as remote access is often legitimate.",
+        "explanation": "External remote services can provide an initial access path. External-to-internal connections on remote administration ports provide direct network evidence.",
         "related_techniques": [
             "T1021.001",
             "T1021.004",
@@ -3723,17 +3765,17 @@
             "required": true,
             "conditions": [
                 {
-                    "context": "conn.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "external"
                 },
                 {
-                    "context": "conn.id.resp_h.location",
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "internal"
                 }
             ],
-            "notes": "Evidence condition 'External IP address (orig_h) connects to internal host on remote access port' requires network boundary definitions (internal vs. external IP ranges) not present in the Zeek conn.log event."
+            "notes": "Internal/external classification requires network boundary configuration."
         }
     },
     {
@@ -3756,43 +3798,48 @@
             "ssh.ts"
         ],
         "evidence_conditions": [
-            "Successful SSH authentication (auth_success = T) from external IP",
-            "Source IP is not from known VPN or administrative IP range",
-            "Connection to internal server from unexpected geographic location",
-            "May follow brute force or password spraying pattern"
+            "Successful SSH authentication",
+            "Source is external",
+            "Source is not a known VPN or administrative host",
+            "Source location is unexpected"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "ssh.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "external"
                 },
                 {
-                    "context": "ssh.id.orig_h.category",
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "source_host.category",
                     "operator": "!=",
                     "value": "vpn_gateway"
                 },
                 {
-                    "context": "ssh.id.orig_h.category",
+                    "context": "source_host.category",
                     "operator": "!=",
                     "value": "administrative_host"
                 },
                 {
-                    "context": "ssh.id.orig_h.geolocation",
+                    "context": "source_host.geolocation_status",
                     "operator": "!=",
                     "value": "expected"
                 }
             ],
-            "notes": "Evidence conditions 'Source IP is not from known VPN or administrative IP range' and 'Connection to internal server from unexpected geographic location' require external asset inventory and geolocation context. 'May follow brute force or password spraying pattern' requires temporal correlation with prior authentication failure events."
+            "notes": "VPN, administrative-host, and geolocation classification require external context. Brute-force history requires temporal correlation."
         },
-        "false_positive_notes": "Remote workers, VPN users, and third-party contractors may legitimately access systems externally. Context of source IP, time, and user role is essential.",
+        "false_positive_notes": "Remote workers, VPN users, and third-party contractors may legitimately authenticate externally.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "Valid account compromise often results in successful authentication from unexpected sources. Zeek ssh.log captures auth_success and source IP. A successful SSH login from an external, non-administrative IP provides direct evidence of potential account compromise. Correlation with prior brute force attempts strongly indicates successful credential compromise.",
+        "explanation": "A successful SSH authentication from an unexpected external source can indicate use of compromised valid credentials.",
         "related_techniques": [
             "T1110",
             "T1110.001",
@@ -3833,39 +3880,38 @@
             "conn.ts"
         ],
         "evidence_conditions": [
-            "RDP connection (port 3389) from external IP to internal host",
-            "Connection state SF or S1 indicating successful session",
-            "Duration > 300 seconds suggesting interactive login",
-            "Source IP is not from known administrative range",
-            "Significant byte transfer indicating active session"
+            "RDP connection from external source to internal host",
+            "Connection is established",
+            "Duration exceeds 300 seconds",
+            "Source is not a known administrative host"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "conn.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "external"
                 },
                 {
-                    "context": "conn.id.resp_h.location",
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "internal"
                 },
                 {
-                    "context": "conn.id.orig_h.category",
+                    "context": "source_host.category",
                     "operator": "!=",
                     "value": "administrative_host"
                 }
             ],
-            "notes": "Evidence conditions 'RDP connection (port 3389) from external IP to internal host' and 'Source IP is not from known administrative range' require network boundary and asset inventory context. 'Significant byte transfer indicating active session' lacks a defined threshold for 'significant' and cannot be evaluated deterministically."
+            "notes": "Network boundaries and administrative host classification require external context."
         },
-        "false_positive_notes": "Remote desktop access for administration, help desk, and remote workers is common. Context of source IP and time is critical.",
+        "false_positive_notes": "Remote desktop administration and remote workers commonly generate this traffic.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "RDP access with valid compromised credentials appears in conn.log as sustained connections to port 3389 from external sources. Zeek does not capture authentication success for RDP directly, but connection state and duration indicate successful sessions. This mapping requires endpoint correlation for strong confidence.",
+        "explanation": "A sustained external RDP connection to an internal host may indicate use of valid compromised credentials, although Zeek cannot directly prove successful RDP authentication.",
         "related_techniques": [
             "T1021.001",
             "T1133",
@@ -3917,24 +3963,24 @@
             "http.status_code",
             "http.request_body_len",
             "http.user_agent",
-            "http.filename",
+            "http.ts",
             "files.mime_type",
             "files.filename",
             "files.ts"
         ],
         "evidence_conditions": [
-            "HTTP POST/PUT request to web application with file upload",
-            "Uploaded file has executable or script extension: .jsp, .jspx, .war, .php, .php3, .php4, .php5, .phtml, .asp, .aspx, .ashx, .exe, .sh, .pl, .py",
-            "Upload endpoint is not a legitimate file upload functionality",
-            "Status code 200 OK following upload suggests successful placement",
-            "MIME type mismatch (e.g., application/x-dosexec labeled as image/jpeg)"
+            "HTTP POST or PUT request uploads a file",
+            "Uploaded file has a script or executable extension",
+            "Upload endpoint is not a known legitimate upload endpoint",
+            "Upload succeeds",
+            "Filename extension and MIME type are inconsistent"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Legitimate file uploads to content management systems, document repositories, and development environments. Validate against known upload endpoints and file type policies.",
+        "false_positive_notes": "Legitimate CMS uploads, document repositories, and development systems can upload executable-looking files.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "Web shell installation typically involves uploading a script or executable file to a web server via HTTP POST/PUT. Zeek http.log captures the upload method, URI, and filename. When the uploaded file has a script extension (.jsp, .php, .asp) or executable type, and the endpoint is not a known upload functionality, this provides direct evidence of potential web shell placement.",
+        "explanation": "Uploading a server-side script to a web application can indicate web shell placement. Zeek can observe the HTTP request and transferred file metadata.",
         "related_techniques": [
             "T1190",
             "T1105",
@@ -4039,8 +4085,20 @@
             ]
         },
         "external_context": {
-            "required": false,
-            "notes": "Evidence condition 'Upload endpoint is not a legitimate file upload functionality' requires endpoint/application inventory context not available in the Zeek event. Evidence condition 'MIME type mismatch (e.g., application/x-dosexec labeled as image/jpeg)' requires comparing filename extension to MIME type, which is not supported by the current operator set; this would require a composite operator or post-processing."
+            "required": true,
+            "conditions": [
+                {
+                    "context": "destination_host.role",
+                    "operator": "==",
+                    "value": "web_server"
+                },
+                {
+                    "context": "destination_host.upload_endpoint",
+                    "operator": "!=",
+                    "value": "legitimate"
+                }
+            ],
+            "notes": "Web-server classification and upload endpoint legitimacy require application and asset inventory context."
         }
     },
     {
@@ -4070,30 +4128,33 @@
             "files.ts"
         ],
         "evidence_conditions": [
-            "Internal host downloads executable, script, archive, or tool-related files through HTTP",
-            "HTTP GET request retrieves suspicious file extensions such as .ps1, .exe, .dll, .bat, .cmd, .vbs, .zip",
-            "HTTP response status is 200 OK",
-            "Downloaded file is identified by files.log metadata",
-            "Source host is external or previously unseen",
-            "File transfer is followed by execution telemetry from endpoint sources"
+            "Internal host downloads an executable, script, archive, or tool",
+            "Downloaded file has a suspicious extension",
+            "HTTP response is 200",
+            "File transfer is confirmed by files.log"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "http.id.resp_h.location",
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "external"
                 }
             ],
-            "notes": "Evidence conditions 'Source host is external or previously unseen' and 'File transfer is followed by execution telemetry from endpoint sources' require external context (network boundary definitions and endpoint telemetry correlation). 'Internal host downloads' requires network boundary context to determine if id.orig_h is internal."
+            "notes": "Internal/external network classification requires network boundary context. Execution requires endpoint telemetry and is not inferred from the download alone."
         },
-        "false_positive_notes": "Legitimate software updates, package managers, browser downloads, and enterprise deployment tools may generate similar behavior. Validate source reputation and destination domain.",
+        "false_positive_notes": "Software updates, package managers, browser downloads, and enterprise deployment systems can produce similar transfers.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "Zeek can directly observe file transfers but cannot observe execution. A downloaded PowerShell script or executable represents potential tool transfer. Execution techniques such as PowerShell or Command Shell must be confirmed using endpoint telemetry.",
+        "explanation": "Zeek can observe file transfers but cannot determine whether the downloaded tool was subsequently executed.",
         "related_techniques": [
             "T1059.001",
             "T1059.003",
@@ -4177,26 +4238,30 @@
             "files.ts"
         ],
         "evidence_conditions": [
-            "Download of executable file from web (source = 'HTTP')",
-            "MIME type: application/x-dosexec, application/x-executable, application/x-msdownload",
-            "File extension: .exe, .dll, .scr, .com",
-            "Destination is internal workstation (not server)",
-            "File hash can be checked against threat intelligence"
+            "Executable file downloaded through HTTP",
+            "MIME type indicates executable content",
+            "File extension is executable",
+            "Destination is an internal workstation"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "files.rx_hosts.role",
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.role",
                     "operator": "==",
                     "value": "workstation"
                 }
             ],
-            "notes": "Evidence condition 'Destination is internal workstation (not server)' requires asset inventory context to classify hosts. 'File hash can be checked against threat intelligence' requires external threat intelligence context."
+            "notes": "Destination host classification requires asset inventory. Threat-intelligence hash checking is external enrichment rather than an event-level condition."
         },
-        "false_positive_notes": "Legitimate software downloads, updates, and installers. Verify against software inventory and code signing. Hash reputation checks reduce false positives.",
-        "explanation": "Client exploitation often involves delivering malicious executables via web download. Zeek files.log captures file metadata including MIME type, filename, and hash. An executable downloaded from HTTP to an internal workstation provides direct evidence of potential client exploitation or malware delivery.",
+        "false_positive_notes": "Legitimate software downloads, installers, and updates can match these conditions.",
+        "explanation": "Executable files transferred to internal workstations can provide evidence of possible client-side exploitation or malware delivery.",
         "related_techniques": [
             "T1105",
             "T1059",
@@ -4274,15 +4339,33 @@
             "files.ts"
         ],
         "evidence_conditions": [
-            "HTTP download of potentially malicious file following web browsing",
-            "File types: .exe, .dll, .js, .vbs, .ps1, .zip, .rar, .iso",
-            "Download from suspicious or compromised domain",
-            "Referrer indicates user clicked link (e.g., from email web client, search engine)",
-            "User-Agent matches browser (indicates user-driven download)"
+            "Browser downloads potentially executable content",
+            "Referrer is present",
+            "User-Agent indicates browser activity",
+            "Downloaded file has an executable or script extension"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Legitimate software downloads, email attachments opened via webmail, and user-initiated file transfers. Domain reputation and file hash analysis reduce false positives.",
-        "explanation": "User execution involves a user voluntarily running malicious code, often after clicking a link. Zeek http.log can detect the download event that precedes execution. While Zeek cannot observe the actual execution, the download of executable files from suspicious domains via browser user-agents provides indirect evidence of potential user execution.",
+        "external_context": {
+            "required": true,
+            "conditions": [
+                {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.reputation",
+                    "operator": "in",
+                    "value": [
+                        "suspicious",
+                        "compromised"
+                    ]
+                }
+            ],
+            "notes": "Domain reputation requires threat-intelligence or reputation enrichment. Actual user execution cannot be established from Zeek HTTP telemetry alone."
+        },
+        "false_positive_notes": "Legitimate downloads and user-initiated file transfers are common.",
+        "explanation": "Zeek can observe a suspicious file download that may precede user execution, but cannot directly prove that the user executed the file.",
         "related_techniques": [
             "T1566.001",
             "T1566.002",
@@ -4358,20 +4441,6 @@
                     ]
                 }
             ]
-        },
-        "external_context": {
-            "required": true,
-            "conditions": [
-                {
-                    "context": "http.host.reputation",
-                    "operator": "in",
-                    "value": [
-                        "suspicious",
-                        "compromised"
-                    ]
-                }
-            ],
-            "notes": "Evidence condition 'Download from suspicious or compromised domain' requires external threat intelligence or domain reputation context. 'Referrer indicates user clicked link' cannot be reliably determined from the referrer string alone without knowing the referring application type (email client, search engine, etc.). The semantic condition checks only that a referrer is present (not null), which is a weak proxy."
         }
     },
     {
@@ -4400,29 +4469,33 @@
             "files.ts"
         ],
         "evidence_conditions": [
-            "HTTP download of command scripts such as .bat, .cmd, .vbs, .js, or .wsf files",
-            "Download originates from external or suspicious internal server",
-            "HTTP response status code 200",
-            "File metadata confirms script file transfer",
-            "Endpoint telemetry may later confirm script execution"
+            "HTTP download of command scripts",
+            "Download originates from an external server",
+            "HTTP response is 200",
+            "File metadata confirms script transfer"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "http.id.resp_h.location",
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "external"
                 }
             ],
-            "notes": "Evidence condition 'Download originates from external or suspicious internal server' requires network boundary context to classify hosts as external vs. internal, and asset inventory to identify suspicious internal servers. 'Endpoint telemetry may later confirm script execution' requires endpoint telemetry correlation."
+            "notes": "Network location classification requires external network context."
         },
-        "false_positive_notes": "Administrative scripts, software deployment systems, and internal automation frameworks may legitimately transfer scripts.",
+        "false_positive_notes": "Administrative scripts, software deployment systems, and automation frameworks may legitimately transfer scripts.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "Zeek detects the movement of script files but cannot confirm Windows Command Shell execution. The execution technique T1059.003 should be assigned only after endpoint telemetry confirms interpreter execution.",
+        "explanation": "Zeek detects transfer of script files but cannot confirm their execution.",
         "related_techniques": [
             "T1059.003",
             "T1059.001",
@@ -4498,18 +4571,38 @@
             "conn.ts"
         ],
         "evidence_conditions": [
-            "Connection to port 3389 (RDP) between internal hosts",
-            "Connection state SF or S1 indicating established session",
-            "Duration > 60 seconds suggesting interactive session",
-            "Significant byte transfer in both directions (interactive usage)",
-            "Source host is not typical RDP client (workstation connecting to server, or server to server)"
+            "RDP connection between internal hosts",
+            "Established RDP session",
+            "Duration exceeds 60 seconds",
+            "Significant bidirectional traffic"
         ],
         "correlation_required": false,
-        "false_positive_notes": "Legitimate remote administration, help desk access, and server management. Confidence increases if source is compromised, access is unusual for user role, or occurs outside business hours.",
+        "external_context": {
+            "required": true,
+            "conditions": [
+                {
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "source_host.role",
+                    "operator": "!=",
+                    "value": "typical_rdp_client"
+                }
+            ],
+            "notes": "Internal host classification and typical RDP client role require asset inventory."
+        },
+        "false_positive_notes": "Legitimate remote administration and help desk activity can produce this pattern.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "RDP lateral movement appears in conn.log as connections to port 3389 between internal hosts. Zeek captures the connection metadata. Direct mapping is possible but confidence is moderate because RDP is legitimate. Contextual factors (source host role, timing, user behavior) must elevate confidence.",
+        "explanation": "RDP between internal hosts can represent lateral movement. Source and destination host context helps distinguish administrative activity from anomalous movement.",
         "related_techniques": [
             "T1021.002",
             "T1021.004",
@@ -4538,27 +4631,6 @@
                     "value": 60
                 }
             ]
-        },
-        "external_context": {
-            "required": true,
-            "conditions": [
-                {
-                    "context": "conn.id.orig_h.location",
-                    "operator": "==",
-                    "value": "internal"
-                },
-                {
-                    "context": "conn.id.resp_h.location",
-                    "operator": "==",
-                    "value": "internal"
-                },
-                {
-                    "context": "conn.id.orig_h.role",
-                    "operator": "!=",
-                    "value": "typical_rdp_client"
-                }
-            ],
-            "notes": "Evidence conditions 'Connection to port 3389 (RDP) between internal hosts' requires network boundary context. 'Source host is not typical RDP client' requires asset inventory context. 'Significant byte transfer in both directions' lacks defined thresholds for 'significant' and cannot be evaluated deterministically."
         }
     },
     {
@@ -4583,38 +4655,38 @@
             "conn.ts"
         ],
         "evidence_conditions": [
-            "Connection to port 445 (SMB) between internal hosts",
-            "Connection state SF indicating successful SMB session",
-            "Source is workstation connecting to multiple servers (unusual pattern)",
-            "Connection to ADMIN$ or C$ shares (inferred from SMB protocol analysis if available)"
+            "SMB connection between internal hosts",
+            "Connection is established",
+            "Source is a workstation",
+            "Source connects to administrative servers"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "conn.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "internal"
                 },
                 {
-                    "context": "conn.id.resp_h.location",
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "internal"
                 },
                 {
-                    "context": "conn.id.orig_h.role",
+                    "context": "source_host.role",
                     "operator": "==",
                     "value": "workstation"
                 }
             ],
-            "notes": "Evidence conditions 'Connection to port 445 (SMB) between internal hosts' requires network boundary context. 'Source is workstation connecting to multiple servers' requires behavioral correlation across multiple events. 'Connection to ADMIN$ or C$ shares' requires SMB protocol parsing (smb_files.log) not available in conn.log."
+            "notes": "Host locations and source role require asset inventory. SMB share names require SMB protocol telemetry and are not available from conn.log alone."
         },
-        "false_positive_notes": "File server access, print services, and legitimate administrative file sharing. Distinguished by source host role and number of targets accessed.",
+        "false_positive_notes": "Normal file-server access and administrative activity can produce SMB connections.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "SMB lateral movement uses Windows admin shares (ADMIN$, C$, IPC$). Zeek conn.log captures SMB connections on port 445. While Zeek does not parse SMB share names in standard configurations, the connection pattern itself provides evidence. Direct mapping is possible but requires behavioral correlation to distinguish lateral movement from legitimate use.",
+        "explanation": "SMB connections on port 445 provide network evidence associated with Windows lateral movement, but conn.log alone cannot prove access to ADMIN$ or C$ shares.",
         "related_techniques": [
             "T1021.001",
             "T1003",
@@ -4658,38 +4730,37 @@
             "ssh.ts"
         ],
         "evidence_conditions": [
-            "SSH connection between internal hosts (lateral, not inbound)",
-            "auth_success = T (successful authentication)",
-            "Source host is not typical SSH client (Windows host SSHing to Linux server)",
-            "Connection followed by additional SSH connections to other internal hosts"
+            "Successful SSH authentication between internal hosts",
+            "Source host is not a typical SSH client",
+            "Source subsequently connects to additional internal hosts"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "ssh.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "internal"
                 },
                 {
-                    "context": "ssh.id.resp_h.location",
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "internal"
                 },
                 {
-                    "context": "ssh.id.orig_h.role",
+                    "context": "source_host.role",
                     "operator": "!=",
                     "value": "typical_ssh_client"
                 }
             ],
-            "notes": "Evidence conditions 'SSH connection between internal hosts (lateral, not inbound)' requires network boundary context. 'Source host is not typical SSH client' requires asset inventory context. 'Connection followed by additional SSH connections to other internal hosts' requires behavioral correlation across multiple events."
+            "notes": "Host locations and source role require asset inventory. Subsequent connections require temporal correlation."
         },
-        "false_positive_notes": "Legitimate administration, automation scripts, and developer access. Distinguished by host roles and authentication patterns.",
+        "false_positive_notes": "Legitimate administration, automation, and developer access may generate successful internal SSH sessions.",
         "false_positive_context": {
             "admin_activity": true
         },
-        "explanation": "SSH lateral movement appears in ssh.log as successful SSH connections between internal hosts. Zeek captures auth_success, which is critical for distinguishing successful lateral movement from failed attempts. Direct mapping is strong when combined with host role context.",
+        "explanation": "Successful SSH authentication between internal hosts is consistent with lateral movement, especially when the source host is not normally used for SSH administration.",
         "related_techniques": [
             "T1021.001",
             "T1021.002",
@@ -4731,19 +4802,19 @@
             "conn.ts"
         ],
         "evidence_conditions": [
-            "Known application protocol detected on unusual port (e.g., HTTP on port 8080 is common, but HTTP on port 53 is suspicious)",
-            "Service field indicates HTTP but port is not 80/443/8080/8443",
-            "Service field indicates SSH but port is not 22",
-            "Service field indicates DNS but port is not 53",
-            "Sustained connection with regular byte transfer suggesting C2 channel"
+            "Known application protocol detected on an unusual port",
+            "HTTP detected outside common HTTP ports",
+            "SSH detected outside port 22",
+            "DNS detected outside port 53"
         ],
         "correlation_required": false,
         "external_context": {
             "required": false,
-            "notes": "Evidence condition 'Sustained connection with regular byte transfer suggesting C2 channel' cannot be evaluated deterministically because 'sustained' and 'regular byte transfer' lack defined thresholds. The semantic conditions capture the protocol/port mismatch aspect only."
+            "conditions": [],
+            "notes": "Protocol and port mismatch can be evaluated directly from conn.log. Destination reputation or sustained C2 behavior may be added later through enrichment or correlation."
         },
-        "false_positive_notes": "Some legitimate services use non-standard ports (SSH on 2222, HTTP on 8080). The mapping excludes commonly used alternative ports. Context of destination IP and domain reputation is important.",
-        "explanation": "Attackers may run C2 protocols on non-standard ports to evade detection. Zeek's service field identifies the application protocol regardless of port. A direct mapping exists when Zeek detects HTTP, SSH, DNS, or SSL on unusual ports with sustained connections.",
+        "false_positive_notes": "Legitimate services may use non-standard ports.",
+        "explanation": "Attackers can use non-standard ports to hide application protocols. Zeek's service identification allows protocol/port mismatches to be detected.",
         "related_techniques": [
             "T1071.001",
             "T1071.004",
@@ -4763,23 +4834,13 @@
                         },
                         {
                             "field": "conn.id.resp_p",
-                            "operator": "!=",
-                            "value": 80
-                        },
-                        {
-                            "field": "conn.id.resp_p",
-                            "operator": "!=",
-                            "value": 443
-                        },
-                        {
-                            "field": "conn.id.resp_p",
-                            "operator": "!=",
-                            "value": 8080
-                        },
-                        {
-                            "field": "conn.id.resp_p",
-                            "operator": "!=",
-                            "value": 8443
+                            "operator": "not_in",
+                            "value": [
+                                80,
+                                443,
+                                8080,
+                                8443
+                            ]
                         }
                     ]
                 },
@@ -4832,6 +4893,7 @@
         "confidence_score": 0.88,
         "required_fields": [
             "http.id.orig_h",
+            "http.id.resp_h",
             "http.host",
             "http.uri",
             "http.method",
@@ -4844,27 +4906,30 @@
             "files.ts"
         ],
         "evidence_conditions": [
-            "HTTP download (GET request with 200 OK) of executable or script file from external host",
-            "File extensions: .exe, .dll, .ps1, .bat, .cmd, .vbs, .js, .sh, .py, .jar, .elf",
-            "MIME types: application/x-dosexec, application/x-executable, application/octet-stream",
-            "Response body length matches executable file size (>10KB typically)",
-            "Download occurs after suspicious activity (exploit, C2 beacon)",
-            "User-Agent may be generic or attacker-specific"
+            "HTTP GET downloads an executable or script",
+            "HTTP response is 200",
+            "Downloaded file is larger than 10 KB",
+            "File extension or MIME type indicates executable content"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "http.id.resp_h.location",
+                    "context": "source_host.location",
+                    "operator": "==",
+                    "value": "internal"
+                },
+                {
+                    "context": "destination_host.location",
                     "operator": "==",
                     "value": "external"
                 }
             ],
-            "notes": "Evidence conditions 'HTTP download of executable or script file from external host' requires network boundary context. 'Download occurs after suspicious activity' requires temporal correlation with prior events. 'User-Agent may be generic or attacker-specific' cannot be evaluated without a defined list of generic/attacker-specific user-agent strings."
+            "notes": "Network location requires network boundary context. Suspicious activity preceding the transfer requires temporal correlation."
         },
-        "false_positive_notes": "Legitimate software downloads, updates, and open-source tool downloads. Hash reputation checking and domain verification reduce false positives.",
-        "explanation": "Ingress tool transfer involves downloading tools or malware to a compromised host. Zeek http.log and files.log capture file downloads with metadata. Direct mapping is strong when executable files are downloaded from external sources to internal hosts, especially when correlated with prior exploitation or C2 activity.",
+        "false_positive_notes": "Legitimate software downloads and updates can produce similar traffic.",
+        "explanation": "HTTP downloads of executable or script content from external hosts can indicate ingress tool transfer.",
         "related_techniques": [
             "T1190",
             "T1071.001",
@@ -4994,31 +5059,30 @@
             "ftp.ts"
         ],
         "evidence_conditions": [
-            "FTP RETR (download) command retrieving executable or script file",
-            "File name has executable or script extension",
-            "Reply code 226 indicates successful transfer",
-            "Transfer from external FTP server to internal host",
-            "File size is consistent with tool/malware size (>10KB)"
+            "FTP RETR command downloads an executable or script",
+            "Transfer succeeds with reply code 226",
+            "File is larger than 10 KB",
+            "Transfer is from an external FTP server"
         ],
         "correlation_required": false,
         "external_context": {
             "required": true,
             "conditions": [
                 {
-                    "context": "ftp.id.resp_h.location",
-                    "operator": "==",
-                    "value": "external"
-                },
-                {
-                    "context": "ftp.id.orig_h.location",
+                    "context": "source_host.location",
                     "operator": "==",
                     "value": "internal"
+                },
+                {
+                    "context": "destination_host.location",
+                    "operator": "==",
+                    "value": "external"
                 }
             ],
-            "notes": "Evidence condition 'Transfer from external FTP server to internal host' requires network boundary context not available in the Zeek ftp.log event."
+            "notes": "Network location requires network boundary context."
         },
-        "false_positive_notes": "Legitimate FTP downloads of software, patches, and data files. File extension and source server reputation help distinguish malicious transfers.",
-        "explanation": "FTP may be used for tool transfer in environments where HTTP is monitored. Zeek ftp.log captures FTP commands and file transfers. A RETR command downloading an executable from an external FTP server provides direct evidence of ingress tool transfer.",
+        "false_positive_notes": "Legitimate FTP software and data transfers may produce similar events.",
+        "explanation": "FTP RETR commands downloading executable or script files from external servers provide evidence of ingress tool transfer.",
         "related_techniques": [
             "T1071.002",
             "T1059",
