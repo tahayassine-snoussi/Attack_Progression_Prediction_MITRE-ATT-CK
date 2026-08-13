@@ -10,3 +10,6 @@ data/*
 data
 
 logs-extraction-decoding-saving.md
+
+src/logs_extraction/state/*
+src/logs_extraction/state
