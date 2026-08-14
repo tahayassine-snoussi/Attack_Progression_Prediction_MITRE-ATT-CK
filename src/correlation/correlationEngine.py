@@ -2,50 +2,37 @@ from __future__ import annotations
 
 import math
 import ipaddress
+
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from statistics import mean, stdev
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 class CorrelationEngine:
     """
     Generic declarative correlation engine for Zeek telemetry.
 
-    The engine does NOT know about MITRE ATT&CK techniques.
+    The engine does NOT know about MITRE ATT&CK.
 
     It receives:
+
         - events
         - correlation_rule
 
     The correlation rule defines:
+
         - time window
         - grouping
         - aggregations
         - conditions
         - optional state condition
         - scoring
-
-    Expected event structure:
-
-    {
-        "telemetry_source": "Zeek",
-        "log_type": "conn.log",
-        "timestamp": "2026-08-09T18:00:00.985+00:00",
-        "decoded_fields": {
-            "conn.id.orig_h": "192.168.56.20",
-            "conn.id.resp_h": "192.168.56.30",
-            "conn.id.resp_p": 445,
-            "conn.conn_state": "S0",
-            "conn.duration": 0.12,
-            "conn.ts": "2026-08-09T18:00:00.985+00:00"
-        }
-    }
     """
 
-    # ============================================================
+    # ========================================================
     # SUPPORTED AGGREGATIONS
-    # ============================================================
+    # ========================================================
 
     SUPPORTED_AGGREGATIONS = {
         "count",
@@ -62,9 +49,9 @@ class CorrelationEngine:
         "subnet_density",
     }
 
-    # ============================================================
+    # ========================================================
     # SUPPORTED OPERATORS
-    # ============================================================
+    # ========================================================
 
     SUPPORTED_OPERATORS = {
         ">",
@@ -77,9 +64,10 @@ class CorrelationEngine:
         "not_in",
         "is_null",
     }
-    # ============================================================
+
+    # ========================================================
     # PUBLIC API
-    # ============================================================
+    # ========================================================
 
     def correlate(
         self,
@@ -98,113 +86,100 @@ class CorrelationEngine:
             }
 
         # --------------------------------------------------------
-        # 1. Sort events by timestamp
+        # IMPORTANT:
+        #
+        # Temporal grouping has already been performed by
+        # ZeekCorrelationPipeline.
+        #
+        # Therefore this method evaluates the supplied events
+        # as ONE correlation group.
         # --------------------------------------------------------
 
-        events = sorted(
+        grouped_events = self.group_events(
             events,
-            key=lambda event: self.parse_timestamp(
-                event.get("timestamp")
-            ) or datetime.min
-        )
-
-        # --------------------------------------------------------
-        # 2. Apply correlation windows
-        # --------------------------------------------------------
-        #
-        # A correlation rule such as:
-        #
-        #     window_seconds: 60
-        #
-        # means events should be evaluated together only when
-        # they belong to a 60-second temporal window.
-        #
-        # This creates independent windows instead of correlating
-        # the entire input file.
-        # --------------------------------------------------------
-
-        windows = self.create_time_windows(
-            events,
-            validated_rule["window_seconds"]
+            validated_rule["group_by"]
         )
 
         results = []
 
-        # --------------------------------------------------------
-        # 3. Evaluate every temporal window
-        # --------------------------------------------------------
+        for group_key, group_events in grouped_events.items():
 
-        for window_events in windows:
-
-            if not window_events:
-                continue
-
-            # ----------------------------------------------------
-            # 4. Group events according to group_by
-            # ----------------------------------------------------
-
-            grouped_events = self.group_events(
-                window_events,
-                validated_rule["group_by"]
+            metrics = self.calculate_metrics(
+                group_events,
+                validated_rule["aggregations"]
             )
 
-            # ----------------------------------------------------
-            # 5. Evaluate each group
-            # ----------------------------------------------------
-
-            for group_key, group_events in grouped_events.items():
-
-                metrics = self.calculate_metrics(
-                    group_events,
-                    validated_rule["aggregations"]
-                )
-
-                condition_results = self.evaluate_conditions(
+            condition_results = (
+                self.evaluate_conditions(
                     metrics,
                     validated_rule["conditions"]
                 )
+            )
 
-                state_result = self.evaluate_state_condition(
+            state_result = (
+                self.evaluate_state_condition(
                     group_events,
-                    validated_rule.get("state_condition")
-                )
-
-                detected = self.evaluate_detection(
-                    condition_results,
-                    state_result
-                )
-
-                if detected:
-
-                    score = self.calculate_score(
-                        validated_rule,
-                        condition_results,
-                        state_result
+                    validated_rule.get(
+                        "state_condition"
                     )
+                )
+            )
 
-                    results.append({
-                        "group": group_key,
-                        "metrics": metrics,
-                        "conditions": condition_results,
-                        "state_condition": state_result,
-                        "score": score
-                    })
+            detected = self.evaluate_detection(
+                condition_results,
+                state_result
+            )
+
+            if not detected:
+                continue
+
+            score = self.calculate_score(
+                validated_rule,
+                condition_results,
+                state_result
+            )
+
+            results.append({
+
+                "group": group_key,
+
+                "metrics": metrics,
+
+                "conditions":
+                    condition_results,
+
+                "state_condition":
+                    state_result,
+
+                "score":
+                    score
+
+            })
 
         return {
-            "detected": bool(results),
-            "results": results
+
+            "detected":
+                bool(results),
+
+            "results":
+                results
+
         }
 
-    # ============================================================
+    # ========================================================
     # VALIDATION
-    # ============================================================
+    # ========================================================
 
     def validate_rule(
         self,
         correlation_rule: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    ):
 
-        if not isinstance(correlation_rule, dict):
+        if not isinstance(
+            correlation_rule,
+            dict
+        ):
+
             raise TypeError(
                 "correlation_rule must be a dictionary"
             )
@@ -219,19 +194,27 @@ class CorrelationEngine:
         for field in required_fields:
 
             if field not in correlation_rule:
+
                 raise ValueError(
-                    f"Missing correlation rule field: {field}"
+                    f"Missing correlation rule field: "
+                    f"{field}"
                 )
 
         if not isinstance(
-            correlation_rule["window_seconds"],
+            correlation_rule[
+                "window_seconds"
+            ],
             (int, float)
         ):
+
             raise TypeError(
                 "window_seconds must be numeric"
             )
 
-        if correlation_rule["window_seconds"] <= 0:
+        if correlation_rule[
+            "window_seconds"
+        ] <= 0:
+
             raise ValueError(
                 "window_seconds must be greater than zero"
             )
@@ -240,6 +223,7 @@ class CorrelationEngine:
             correlation_rule["group_by"],
             list
         ):
+
             raise TypeError(
                 "group_by must be a list"
             )
@@ -248,6 +232,7 @@ class CorrelationEngine:
             correlation_rule["aggregations"],
             dict
         ):
+
             raise TypeError(
                 "aggregations must be a dictionary"
             )
@@ -256,77 +241,112 @@ class CorrelationEngine:
             correlation_rule["conditions"],
             list
         ):
+
             raise TypeError(
                 "conditions must be a list"
             )
 
-        # --------------------------------------------------------
+        # ----------------------------------------------------
         # Validate aggregations
-        # --------------------------------------------------------
+        # ----------------------------------------------------
 
-        for metric_name, aggregation in (
-            correlation_rule["aggregations"].items()
-        ):
+        for (
+            metric_name,
+            aggregation
+        ) in correlation_rule[
+            "aggregations"
+        ].items():
 
-            if not isinstance(aggregation, dict):
+            if not isinstance(
+                aggregation,
+                dict
+            ):
+
                 raise TypeError(
                     f"Aggregation '{metric_name}' "
                     f"must be a dictionary"
                 )
 
-            function = aggregation.get("function")
+            function = aggregation.get(
+                "function"
+            )
 
-            if function not in self.SUPPORTED_AGGREGATIONS:
+            if function not in (
+                self.SUPPORTED_AGGREGATIONS
+            ):
+
                 raise ValueError(
-                    f"Unsupported aggregation '{function}' "
-                    f"for metric '{metric_name}'"
+                    f"Unsupported aggregation "
+                    f"'{function}' for metric "
+                    f"'{metric_name}'"
                 )
 
-            if function not in {
-                "count",
-                "rate"
-            } and "field" not in aggregation:
+            if (
+                function not in {
+                    "count",
+                    "rate"
+                }
+                and
+                "field" not in aggregation
+            ):
 
                 raise ValueError(
                     f"Aggregation '{metric_name}' "
                     f"requires a field"
                 )
 
-        # --------------------------------------------------------
+        # ----------------------------------------------------
         # Validate conditions
-        # --------------------------------------------------------
+        # ----------------------------------------------------
 
-        for condition in correlation_rule["conditions"]:
+        for condition in correlation_rule[
+            "conditions"
+        ]:
 
             if "metric" not in condition:
+
                 raise ValueError(
                     "Condition must contain 'metric'"
                 )
 
             if "operator" not in condition:
+
                 raise ValueError(
                     "Condition must contain 'operator'"
                 )
 
-            operator = condition["operator"]
+            operator = condition[
+                "operator"
+            ]
 
-            if operator not in self.SUPPORTED_OPERATORS:
+            if operator not in (
+                self.SUPPORTED_OPERATORS
+            ):
+
                 raise ValueError(
-                    f"Unsupported operator: {operator}"
+                    f"Unsupported operator: "
+                    f"{operator}"
                 )
 
-            if operator != "is_null" and "value" not in condition:
+            if (
+                operator != "is_null"
+                and
+                "value" not in condition
+            ):
+
                 raise ValueError(
                     f"Condition using '{operator}' "
                     f"requires a value"
                 )
 
-        # --------------------------------------------------------
+        # ----------------------------------------------------
         # Validate state condition
-        # --------------------------------------------------------
+        # ----------------------------------------------------
 
-        state_condition = correlation_rule.get(
-            "state_condition"
+        state_condition = (
+            correlation_rule.get(
+                "state_condition"
+            )
         )
 
         if state_condition:
@@ -342,23 +362,31 @@ class CorrelationEngine:
             for field in required:
 
                 if field not in state_condition:
+
                     raise ValueError(
-                        f"State condition missing '{field}'"
+                        f"State condition missing "
+                        f"'{field}'"
                     )
 
             if (
-                state_condition["aggregation"]
+                state_condition[
+                    "aggregation"
+                ]
                 not in self.SUPPORTED_AGGREGATIONS
             ):
+
                 raise ValueError(
                     "Unsupported state aggregation: "
                     f"{state_condition['aggregation']}"
                 )
 
             if (
-                state_condition["operator"]
+                state_condition[
+                    "operator"
+                ]
                 not in self.SUPPORTED_OPERATORS
             ):
+
                 raise ValueError(
                     "Unsupported state operator: "
                     f"{state_condition['operator']}"
@@ -366,51 +394,109 @@ class CorrelationEngine:
 
         return correlation_rule
 
-    # ============================================================
+    # ========================================================
     # TIMESTAMP HANDLING
-    # ============================================================
+    # ========================================================
 
     def parse_timestamp(
         self,
         timestamp: Any
-    ) -> datetime | None:
+    ):
 
         if timestamp is None:
             return None
 
-        if isinstance(timestamp, datetime):
-            return timestamp
+        if isinstance(
+            timestamp,
+            datetime
+        ):
 
-        if isinstance(timestamp, (int, float)):
-            return datetime.fromtimestamp(
-                float(timestamp)
+            if timestamp.tzinfo is None:
+
+                return timestamp.replace(
+                    tzinfo=timezone.utc
+                )
+
+            return timestamp.astimezone(
+                timezone.utc
             )
 
-        if isinstance(timestamp, str):
+        if isinstance(
+            timestamp,
+            (int, float)
+        ):
+
+            return datetime.fromtimestamp(
+                float(timestamp),
+                tz=timezone.utc
+            )
+
+        if isinstance(
+            timestamp,
+            str
+        ):
 
             timestamp = timestamp.strip()
 
+            if not timestamp:
+                return None
+
+            # ------------------------------------------------
+            # Numeric string
+            # ------------------------------------------------
+
             try:
-                return datetime.fromisoformat(
+
+                return datetime.fromtimestamp(
+                    float(timestamp),
+                    tz=timezone.utc
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+
+                pass
+
+            # ------------------------------------------------
+            # ISO timestamp
+            # ------------------------------------------------
+
+            try:
+
+                parsed = datetime.fromisoformat(
                     timestamp.replace(
                         "Z",
                         "+00:00"
                     )
                 )
+
+                if parsed.tzinfo is None:
+
+                    parsed = parsed.replace(
+                        tzinfo=timezone.utc
+                    )
+
+                return parsed.astimezone(
+                    timezone.utc
+                )
+
             except ValueError:
+
                 return None
 
         return None
 
-    # ============================================================
+    # ========================================================
     # TIME WINDOWS
-    # ============================================================
+    # ========================================================
 
     def create_time_windows(
         self,
         events: List[Dict[str, Any]],
         window_seconds: float
-    ) -> List[List[Dict[str, Any]]]:
+    ):
 
         if not events:
             return []
@@ -439,15 +525,14 @@ class CorrelationEngine:
 
         windows = []
 
-        # --------------------------------------------------------
-        # Sliding window.
-        #
-        # Every event can become the beginning of a correlation
-        # window. This avoids losing detections at arbitrary
-        # window boundaries.
-        # --------------------------------------------------------
+        # ----------------------------------------------------
+        # Sliding window
+        # ----------------------------------------------------
 
-        for index, (start_time, start_event) in enumerate(
+        for index, (
+            start_time,
+            start_event
+        ) in enumerate(
             timestamped_events
         ):
 
@@ -455,12 +540,15 @@ class CorrelationEngine:
                 start_event
             ]
 
-            for later_time, later_event in timestamped_events[
-                index + 1:
-            ]:
+            for later_time, later_event in (
+                timestamped_events[
+                    index + 1:
+                ]
+            ):
 
                 elapsed = (
-                    later_time - start_time
+                    later_time
+                    - start_time
                 ).total_seconds()
 
                 if elapsed <= window_seconds:
@@ -473,89 +561,73 @@ class CorrelationEngine:
 
                     break
 
-            if len(current_window) > 0:
-
-                windows.append(
-                    current_window
-                )
+            windows.append(
+                current_window
+            )
 
         return windows
 
-    # ============================================================
+    # ========================================================
     # FIELD EXTRACTION
-    # ============================================================
+    # ========================================================
 
     def get_field(
         self,
         event: Dict[str, Any],
         field: str
-    ) -> Any:
-
-        """
-        Supports your normalized structure:
-
-        event["decoded_fields"]["conn.id.orig_h"]
-
-        It also supports nested dictionaries as a fallback.
-        """
+    ):
 
         decoded_fields = event.get(
             "decoded_fields",
             {}
         )
 
-        # --------------------------------------------------------
-        # First try exact normalized field name.
-        # --------------------------------------------------------
+        # ----------------------------------------------------
+        # Exact normalized field
+        # ----------------------------------------------------
 
         if field in decoded_fields:
-            return decoded_fields[field]
 
-        # --------------------------------------------------------
-        # Fallback for nested structures.
-        #
-        # Example:
-        #
-        # field = "conn.id.orig_h"
-        #
-        # {
-        #     "conn": {
-        #         "id": {
-        #             "orig_h": "..."
-        #         }
-        #     }
-        # }
-        # --------------------------------------------------------
+            return decoded_fields[
+                field
+            ]
+
+        # ----------------------------------------------------
+        # Nested fallback
+        # ----------------------------------------------------
 
         current = decoded_fields
 
         for part in field.split("."):
 
-            if not isinstance(current, dict):
+            if not isinstance(
+                current,
+                dict
+            ):
+
                 return None
 
             if part not in current:
+
                 return None
 
-            current = current[part]
+            current = current[
+                part
+            ]
 
         return current
 
-    # ============================================================
+    # ========================================================
     # GROUPING
-    # ============================================================
+    # ========================================================
 
     def group_events(
         self,
         events: List[Dict[str, Any]],
         group_by: List[str]
-    ) -> Dict[Tuple[Any, ...], List[Dict[str, Any]]]:
+    ):
 
         grouped = defaultdict(list)
-
-        # --------------------------------------------------------
-        # No grouping means one global group.
-        # --------------------------------------------------------
 
         if not group_by:
 
@@ -573,41 +645,52 @@ class CorrelationEngine:
                 for field in group_by
             )
 
-            grouped[group_key].append(event)
+            grouped[
+                group_key
+            ].append(
+                event
+            )
 
         return grouped
 
-    # ============================================================
-    # METRIC CALCULATION
-    # ============================================================
+    # ========================================================
+    # METRICS
+    # ========================================================
 
     def calculate_metrics(
         self,
-        events: List[Dict[str, Any]],
-        aggregations: Dict[str, Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        events,
+        aggregations
+    ):
 
         metrics = {}
 
-        for metric_name, specification in aggregations.items():
+        for (
+            metric_name,
+            specification
+        ) in aggregations.items():
 
-            function_name = specification["function"]
+            function_name = specification[
+                "function"
+            ]
 
             function = getattr(
                 self,
                 f"aggregate_{function_name}"
             )
 
-            metrics[metric_name] = function(
+            metrics[
+                metric_name
+            ] = function(
                 events,
                 specification
             )
 
         return metrics
 
-    # ============================================================
-    # BASIC AGGREGATIONS
-    # ============================================================
+    # ========================================================
+    # COUNT
+    # ========================================================
 
     def aggregate_count(
         self,
@@ -617,16 +700,25 @@ class CorrelationEngine:
 
         return len(events)
 
+    # ========================================================
+    # NUNIQUE
+    # ========================================================
+
     def aggregate_nunique(
         self,
         events,
         specification
     ):
 
-        field = specification["field"]
+        field = specification[
+            "field"
+        ]
 
         values = [
-            self.get_field(event, field)
+            self.get_field(
+                event,
+                field
+            )
             for event in events
         ]
 
@@ -636,7 +728,13 @@ class CorrelationEngine:
             if value is not None
         ]
 
-        return len(set(values))
+        return len(
+            set(values)
+        )
+
+    # ========================================================
+    # MEAN
+    # ========================================================
 
     def aggregate_mean(
         self,
@@ -654,6 +752,10 @@ class CorrelationEngine:
 
         return mean(values)
 
+    # ========================================================
+    # SUM
+    # ========================================================
+
     def aggregate_sum(
         self,
         events,
@@ -669,6 +771,10 @@ class CorrelationEngine:
             return 0
 
         return sum(values)
+
+    # ========================================================
+    # MIN
+    # ========================================================
 
     def aggregate_min(
         self,
@@ -686,6 +792,10 @@ class CorrelationEngine:
 
         return min(values)
 
+    # ========================================================
+    # MAX
+    # ========================================================
+
     def aggregate_max(
         self,
         events,
@@ -702,9 +812,9 @@ class CorrelationEngine:
 
         return max(values)
 
-    # ============================================================
+    # ========================================================
     # RATIO
-    # ============================================================
+    # ========================================================
 
     def aggregate_ratio(
         self,
@@ -712,24 +822,9 @@ class CorrelationEngine:
         specification
     ):
 
-        """
-        Ratio of events whose field value matches one of
-        the supplied 'values'.
-
-        Example:
-
-        {
-            "function": "ratio",
-            "field": "conn.conn_state",
-            "values": ["S0", "REJ"]
-        }
-
-        Returns:
-
-            matching events / total events
-        """
-
-        field = specification["field"]
+        field = specification[
+            "field"
+        ]
 
         values = specification.get(
             "values",
@@ -749,13 +844,14 @@ class CorrelationEngine:
             )
 
             if value in values:
+
                 matching += 1
 
         return matching / len(events)
 
-    # ============================================================
+    # ========================================================
     # STANDARD DEVIATION
-    # ============================================================
+    # ========================================================
 
     def aggregate_standard_deviation(
         self,
@@ -773,9 +869,9 @@ class CorrelationEngine:
 
         return stdev(values)
 
-    # ============================================================
+    # ========================================================
     # COEFFICIENT OF VARIATION
-    # ============================================================
+    # ========================================================
 
     def aggregate_coefficient_of_variation(
         self,
@@ -796,13 +892,13 @@ class CorrelationEngine:
         if average == 0:
             return 0.0
 
-        deviation = stdev(values)
+        return stdev(values) / abs(
+            average
+        )
 
-        return deviation / abs(average)
-
-    # ============================================================
+    # ========================================================
     # ENTROPY
-    # ============================================================
+    # ========================================================
 
     def aggregate_entropy(
         self,
@@ -810,10 +906,15 @@ class CorrelationEngine:
         specification
     ):
 
-        field = specification["field"]
+        field = specification[
+            "field"
+        ]
 
         values = [
-            self.get_field(event, field)
+            self.get_field(
+                event,
+                field
+            )
             for event in events
         ]
 
@@ -829,6 +930,7 @@ class CorrelationEngine:
         counts = defaultdict(int)
 
         for value in values:
+
             counts[value] += 1
 
         total = len(values)
@@ -837,41 +939,29 @@ class CorrelationEngine:
 
         for count in counts.values():
 
-            probability = count / total
+            probability = (
+                count / total
+            )
 
             entropy -= (
-                probability *
-                math.log2(probability)
+                probability
+                *
+                math.log2(
+                    probability
+                )
             )
 
         return entropy
 
-    # ============================================================
+    # ========================================================
     # RATE
-    # ============================================================
+    # ========================================================
 
     def aggregate_rate(
         self,
         events,
         specification
     ):
-
-        """
-        Number of events per second.
-
-        The correlation window is normally supplied as:
-
-        {
-            "window_seconds": 60
-        }
-
-        and this aggregation can optionally override it with:
-
-        {
-            "function": "rate",
-            "window_seconds": 60
-        }
-        """
 
         if not events:
             return 0.0
@@ -881,16 +971,23 @@ class CorrelationEngine:
         )
 
         if window_seconds is None:
-            return float(len(events))
+
+            return float(
+                len(events)
+            )
 
         if window_seconds <= 0:
             return 0.0
 
-        return len(events) / window_seconds
+        return (
+            len(events)
+            /
+            window_seconds
+        )
 
-    # ============================================================
+    # ========================================================
     # SUBNET DENSITY
-    # ============================================================
+    # ========================================================
 
     def aggregate_subnet_density(
         self,
@@ -898,30 +995,19 @@ class CorrelationEngine:
         specification
     ):
 
-        """
-        Measures the proportion of unique observed IPs inside
-        the specified subnet.
+        field = specification[
+            "field"
+        ]
 
-        Example:
-
-        {
-            "function": "subnet_density",
-            "field": "conn.id.resp_h",
-            "subnet": "192.168.56.0/24"
-        }
-
-        Result:
-
-            unique observed IPs / usable addresses in subnet
-        """
-
-        field = specification["field"]
-
-        subnet = specification.get("subnet")
+        subnet = specification.get(
+            "subnet"
+        )
 
         if not subnet:
+
             raise ValueError(
-                "subnet_density requires 'subnet'"
+                "subnet_density requires "
+                "'subnet'"
             )
 
         network = ipaddress.ip_network(
@@ -948,21 +1034,29 @@ class CorrelationEngine:
                 )
 
                 if ip in network:
+
                     observed.add(ip)
 
             except ValueError:
+
                 continue
 
-        total_addresses = network.num_addresses
+        total_addresses = (
+            network.num_addresses
+        )
 
         if total_addresses == 0:
             return 0.0
 
-        return len(observed) / total_addresses
+        return (
+            len(observed)
+            /
+            total_addresses
+        )
 
-    # ============================================================
-    # NUMERIC FIELD EXTRACTION
-    # ============================================================
+    # ========================================================
+    # NUMERIC VALUES
+    # ========================================================
 
     def numeric_values(
         self,
@@ -992,31 +1086,36 @@ class CorrelationEngine:
                 TypeError,
                 ValueError
             ):
+
                 continue
 
         return values
 
-    # ============================================================
-    # CONDITION EVALUATION
-    # ============================================================
+    # ========================================================
+    # CONDITIONS
+    # ========================================================
 
     def evaluate_conditions(
         self,
-        metrics: Dict[str, Any],
-        conditions: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        metrics,
+        conditions
+    ):
 
         results = []
 
         for condition in conditions:
 
-            metric_name = condition["metric"]
+            metric_name = condition[
+                "metric"
+            ]
 
             actual_value = metrics.get(
                 metric_name
             )
 
-            operator = condition["operator"]
+            operator = condition[
+                "operator"
+            ]
 
             expected_value = condition.get(
                 "value"
@@ -1029,52 +1128,71 @@ class CorrelationEngine:
             )
 
             results.append({
+
                 "metric": metric_name,
+
                 "actual": actual_value,
+
                 "operator": operator,
+
                 "expected": expected_value,
+
                 "matched": matched
+
             })
 
         return {
+
             "all_matched": all(
                 result["matched"]
                 for result in results
             ),
+
             "results": results
+
         }
 
-    # ============================================================
+    # ========================================================
     # STATE CONDITION
-    # ============================================================
+    # ========================================================
 
     def evaluate_state_condition(
         self,
         events,
         state_condition
-    ) -> Dict[str, Any] | None:
+    ):
 
         if not state_condition:
             return None
 
-        field = state_condition["field"]
+        field = state_condition[
+            "field"
+        ]
 
-        allowed_values = state_condition["values"]
+        allowed_values = state_condition[
+            "values"
+        ]
 
-        aggregation = state_condition["aggregation"]
+        aggregation = state_condition[
+            "aggregation"
+        ]
 
-        operator = state_condition["operator"]
+        operator = state_condition[
+            "operator"
+        ]
 
-        expected = state_condition["value"]
-
-        # --------------------------------------------------------
-        # State condition is essentially a specialized aggregation.
-        # --------------------------------------------------------
+        expected = state_condition[
+            "value"
+        ]
 
         specification = {
+
             "function": aggregation,
+
             "field": field,
+
             "values": allowed_values
+
         }
 
         function = getattr(
@@ -1094,25 +1212,33 @@ class CorrelationEngine:
         )
 
         return {
+
             "field": field,
+
             "values": allowed_values,
+
             "aggregation": aggregation,
+
             "actual": actual,
+
             "operator": operator,
+
             "expected": expected,
+
             "matched": matched
+
         }
 
-    # ============================================================
-    # OPERATOR EVALUATION
-    # ============================================================
+    # ========================================================
+    # COMPARE
+    # ========================================================
 
     def compare(
         self,
-        actual: Any,
-        operator: str,
-        expected: Any
-    ) -> bool:
+        actual,
+        operator,
+        expected
+    ):
 
         if operator == "is_null":
 
@@ -1150,45 +1276,40 @@ class CorrelationEngine:
             if operator == "in":
                 return actual in expected
 
+            if operator == "not_in":
+                return actual not in expected
+
         except (
             TypeError,
             ValueError
         ):
+
             return False
 
         raise ValueError(
-            f"Unsupported operator: {operator}"
+            f"Unsupported operator: "
+            f"{operator}"
         )
 
-    # ============================================================
+    # ========================================================
     # DETECTION LOGIC
-    # ============================================================
+    # ========================================================
 
     def evaluate_detection(
         self,
         condition_results,
         state_result
-    ) -> bool:
+    ):
 
-        # --------------------------------------------------------
-        # All normal conditions must match.
-        # --------------------------------------------------------
-
-        conditions_match = condition_results[
-            "all_matched"
-        ]
-
-        # --------------------------------------------------------
-        # If no state condition exists, normal conditions are
-        # sufficient.
-        # --------------------------------------------------------
+        conditions_match = (
+            condition_results[
+                "all_matched"
+            ]
+        )
 
         if state_result is None:
-            return conditions_match
 
-        # --------------------------------------------------------
-        # If state condition exists, both must match.
-        # --------------------------------------------------------
+            return conditions_match
 
         return (
             conditions_match
@@ -1196,9 +1317,9 @@ class CorrelationEngine:
             state_result["matched"]
         )
 
-    # ============================================================
+    # ========================================================
     # SCORING
-    # ============================================================
+    # ========================================================
 
     def calculate_score(
         self,
@@ -1229,6 +1350,7 @@ class CorrelationEngine:
             and
             state_result["matched"]
         ):
+
             score *= state_weight
 
         return score

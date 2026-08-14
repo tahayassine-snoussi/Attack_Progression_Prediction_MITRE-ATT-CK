@@ -6,30 +6,17 @@ from .semantic_zeek_mapping_engine import (
     ZeekSemanticMappingEngine
 )
 
-from correlation.correlationEngine import (
-    CorrelationEngine
-)
-
-from correlation.correlation_helpers import (
-    get_needed_logs
+from correlation.zeek_correlation import (
+    ZeekCorrelationPipeline
 )
 
 
 # ============================================================
-# LOAD SEMANTIC ENGINE ONCE
+# SEMANTIC DATABASE
 # ============================================================
 
-semantic_engine = ZeekSemanticMappingEngine(
-    "zeek_mappingDB.json"
-)
-
-
-# ============================================================
-# LOAD DATABASE
-# ============================================================
-
-def load_zeek_mapping_database(
-    path="zeek_mappingDB.json"
+def load_zeek_semantic_mapping_database(
+    path="zeek_semantic_mappingDB.json"
 ):
 
     with open(
@@ -40,11 +27,17 @@ def load_zeek_mapping_database(
 
         database = json.load(f)
 
-    if isinstance(database, list):
+    if isinstance(
+        database,
+        list
+    ):
 
         return database
 
-    if isinstance(database, dict):
+    if isinstance(
+        database,
+        dict
+    ):
 
         return database.get(
             "mappings",
@@ -52,12 +45,81 @@ def load_zeek_mapping_database(
         )
 
     raise ValueError(
-        "Invalid Zeek mapping database format"
+        "Invalid Zeek semantic mapping database format"
     )
 
 
 # ============================================================
-# PROCESS ZEek BYTES
+# CORRELATION DATABASE
+# ============================================================
+
+def load_zeek_correlation_mapping_database(
+    path="zeek_correlation_mappingDB.json"
+):
+
+    with open(
+        path,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        database = json.load(f)
+
+    if isinstance(
+        database,
+        list
+    ):
+
+        return database
+
+    if isinstance(
+        database,
+        dict
+    ):
+
+        return database.get(
+            "mappings",
+            []
+        )
+
+    raise ValueError(
+        "Invalid Zeek correlation mapping database format"
+    )
+
+
+# ============================================================
+# LOAD SEMANTIC ENGINE
+# ============================================================
+
+semantic_engine = ZeekSemanticMappingEngine(
+    "zeek_semantic_mappingDB.json"
+)
+
+
+# ============================================================
+# LOAD CORRELATION MAPPINGS
+# ============================================================
+
+correlation_mappings = (
+    load_zeek_correlation_mapping_database(
+        "zeek_correlation_mappingDB.json"
+    )
+)
+
+
+# ============================================================
+# LOAD CORRELATION PIPELINE
+# ============================================================
+
+correlation_pipeline = (
+    ZeekCorrelationPipeline(
+        correlation_mappings
+    )
+)
+
+
+# ============================================================
+# PROCESS ZEEK BYTES
 # ============================================================
 
 def process_zeek_bytes(
@@ -107,7 +169,7 @@ def process_zeek_bytes(
 
 
 # ============================================================
-# SEMANTIC LOGGING
+# SEMANTIC MAPPING
 # ============================================================
 
 def print_semantic_mapping(
@@ -150,7 +212,10 @@ def print_semantic_mapping(
 
     print()
     print("=" * 80)
-    print("[ZEEK → MITRE ATT&CK] SEMANTIC MATCH")
+    print(
+        "[ZEEK → MITRE ATT&CK] "
+        "SEMANTIC MATCH"
+    )
     print("=" * 80)
 
     print(
@@ -158,28 +223,34 @@ def print_semantic_mapping(
     )
 
     print(
-        f"Log type  : {event.get('log_type')}"
+        f"Log type   : "
+        f"{event.get('log_type')}"
     )
 
     print(
-        f"Timestamp : {event.get('timestamp')}"
+        f"Timestamp  : "
+        f"{event.get('timestamp')}"
     )
 
     print(
-        f"Technique : "
-        f"{technique_id} - {technique_name}"
+        f"Technique  : "
+        f"{technique_id} - "
+        f"{technique_name}"
     )
 
     print(
-        f"Tactic    : {tactic}"
+        f"Tactic     : "
+        f"{tactic}"
     )
 
     print(
-        f"Confidence: {confidence:.4f}"
+        f"Confidence : "
+        f"{confidence:.4f}"
     )
 
     print(
-        f"Score     : {score:.4f}"
+        f"Score      : "
+        f"{score:.4f}"
     )
 
     if matched_conditions:
@@ -201,13 +272,15 @@ def print_semantic_mapping(
 # CORRELATION LOGGING
 # ============================================================
 
-def print_correlation_mapping(
-    event,
-    mapping,
-    correlation_result
+def print_correlation_detection(
+    detection
 ):
 
-    technique = mapping.get(
+    mapping_id = detection.get(
+        "mapping_id"
+    )
+
+    technique = detection.get(
         "attack_technique",
         {}
     )
@@ -224,29 +297,32 @@ def print_correlation_mapping(
         "tactic"
     )
 
-    mapping_id = mapping.get(
-        "mapping_id"
-    )
-
     confidence = float(
-        mapping.get(
+        detection.get(
             "confidence_score",
             0.0
         )
     )
 
-    correlation_rule = mapping.get(
-        "correlation_rule",
-        {}
+    group_key = detection.get(
+        "group_key"
     )
 
-    window_seconds = correlation_rule.get(
-        "window_seconds"
+    time_group_id = detection.get(
+        "time_group_id"
+    )
+
+    correlation_result = detection.get(
+        "correlation_result",
+        {}
     )
 
     print()
     print("=" * 80)
-    print("[ZEEK → MITRE ATT&CK] CORRELATION MATCH")
+    print(
+        "[ZEEK → MITRE ATT&CK] "
+        "CORRELATION DETECTED"
+    )
     print("=" * 80)
 
     print(
@@ -254,28 +330,29 @@ def print_correlation_mapping(
     )
 
     print(
-        f"Log type  : {mapping.get('log_type')}"
+        f"Technique  : "
+        f"{technique_id} - "
+        f"{technique_name}"
     )
 
     print(
-        f"Trigger   : {event.get('timestamp')}"
+        f"Tactic     : "
+        f"{tactic}"
     )
 
     print(
-        f"Technique : "
-        f"{technique_id} - {technique_name}"
+        f"Confidence : "
+        f"{confidence:.4f}"
     )
 
     print(
-        f"Tactic    : {tactic}"
+        f"Time group : "
+        f"{time_group_id}"
     )
 
     print(
-        f"Base conf.: {confidence:.4f}"
-    )
-
-    print(
-        f"Window    : {window_seconds} seconds"
+        f"Group key  : "
+        f"{group_key}"
     )
 
     for index, result in enumerate(
@@ -287,17 +364,13 @@ def print_correlation_mapping(
     ):
 
         print()
+
         print(
             f"Correlation result #{index}"
         )
 
         print(
-            f"  Group : "
-            f"{result.get('group')}"
-        )
-
-        print(
-            f"  Score : "
+            f"  Score: "
             f"{result.get('score')}"
         )
 
@@ -323,58 +396,33 @@ def print_correlation_mapping(
             {}
         )
 
-        condition_results = conditions.get(
+        for condition in conditions.get(
             "results",
             []
-        )
-
-        if condition_results:
+        ):
 
             print(
-                "  Conditions:"
-            )
-
-            for condition in condition_results:
-
-                print(
-                    f"    {condition.get('metric')} "
-                    f"{condition.get('operator')} "
-                    f"{condition.get('expected')} "
-                    f"→ actual={condition.get('actual')} "
-                    f"matched={condition.get('matched')}"
-                )
-
-        state = result.get(
-            "state_condition"
-        )
-
-        if state:
-
-            print(
-                "  State condition:"
-            )
-
-            print(
-                f"    {state}"
+                f"  {condition.get('metric')} "
+                f"{condition.get('operator')} "
+                f"{condition.get('expected')} "
+                f"→ actual="
+                f"{condition.get('actual')} "
+                f"matched="
+                f"{condition.get('matched')}"
             )
 
     print("=" * 80)
 
 
 # ============================================================
-# MAP ZEEK EVENTS
+# MAP ZEEK EVENTS SEMANTICALLY
 # ============================================================
 
 def map_zeek_events(
     events,
     semantic_engine,
-    correlation_engine=None,
     context_provider=None
 ):
-
-    # ========================================================
-    # 1. SEMANTIC MAPPING
-    # ========================================================
 
     semantic_results = (
         semantic_engine.map_events(
@@ -382,10 +430,6 @@ def map_zeek_events(
             context_provider
         )
     )
-
-    # --------------------------------------------------------
-    # PRINT ONLY SUCCESSFUL SEMANTIC MATCHES
-    # --------------------------------------------------------
 
     for item in semantic_results:
 
@@ -405,171 +449,30 @@ def map_zeek_events(
                 match
             )
 
-    # ========================================================
-    # 2. LOAD CORRELATION MAPPINGS
-    # ========================================================
-
-    mappings = semantic_engine.mappings
-
-    correlation_results = []
-
-    # ========================================================
-    # 3. CORRELATION
-    # ========================================================
-
-    for mapping in mappings:
-
-        if not mapping.get(
-            "correlation_required",
-            False
-        ):
-
-            continue
-
-        correlation_rule = mapping.get(
-            "correlation_rule"
-        )
-
-        if not correlation_rule:
-
-            continue
-
-        target_log_type = mapping.get(
-            "log_type"
-        )
-
-        if isinstance(
-            target_log_type,
-            str
-        ):
-
-            target_log_types = {
-                target_log_type
-            }
-
-        elif isinstance(
-            target_log_type,
-            list
-        ):
-
-            target_log_types = set(
-                target_log_type
-            )
-
-        else:
-
-            continue
-
-        # ----------------------------------------------------
-        # Only use events belonging to this mapping.
-        # ----------------------------------------------------
-
-        candidate_events = [
-
-            event
-
-            for event in events
-
-            if event.get(
-                "log_type"
-            ) in target_log_types
-        ]
-
-        if not candidate_events:
-
-            continue
-
-        # ----------------------------------------------------
-        # Every event can be a correlation trigger.
-        #
-        # get_needed_logs() extracts the events around that
-        # trigger using correlation_rule.window_seconds.
-        # ----------------------------------------------------
-
-        mapping_detected = False
-
-        for trigger_event in candidate_events:
-
-            needed_events = get_needed_logs(
-                trigger_event,
-                candidate_events,
-                mapping
-            )
-
-            if not needed_events:
-
-                continue
-
-            engine = (
-                correlation_engine
-                if correlation_engine is not None
-                else CorrelationEngine()
-            )
-
-            result = engine.correlate(
-                needed_events,
-                correlation_rule
-            )
-
-            # ------------------------------------------------
-            # NOTHING DETECTED:
-            # SILENTLY CONTINUE
-            # ------------------------------------------------
-
-            if not result.get(
-                "detected",
-                False
-            ):
-
-                continue
-
-            # ------------------------------------------------
-            # CORRELATION DETECTED
-            # ------------------------------------------------
-
-            correlation_results.append({
-
-                "mapping_id":
-                    mapping.get(
-                        "mapping_id"
-                    ),
-
-                "event":
-                    trigger_event,
-
-                "mapping":
-                    mapping,
-
-                "correlation":
-                    result
-            })
-
-            print_correlation_mapping(
-                trigger_event,
-                mapping,
-                result
-            )
-
-            mapping_detected = True
-
-            # ------------------------------------------------
-            # We already detected this mapping.
-            #
-            # Do not print the same correlation repeatedly
-            # for every trigger event.
-            # ------------------------------------------------
-
-            break
-
-    # ========================================================
-    # FINAL RESULT
-    # ========================================================
-
     return {
-
         "semantic_results":
-            semantic_results,
-
-        "correlation_results":
-            correlation_results
+            semantic_results
     }
+
+
+# ============================================================
+# CORRELATION
+# ============================================================
+
+def detect_correlation(
+    events
+):
+
+    detections = (
+        correlation_pipeline.process(
+            events
+        )
+    )
+
+    for detection in detections:
+
+        print_correlation_detection(
+            detection
+        )
+
+    return detections
