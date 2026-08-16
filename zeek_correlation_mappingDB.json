@@ -245,7 +245,7 @@
                 "subnet_density": {
                     "function": "subnet_density",
                     "field": "conn.id.resp_h",
-                    "prefix_length": 24
+                    "subnet": "192.168.56.0/24"
                 }
             },
             "conditions": [
