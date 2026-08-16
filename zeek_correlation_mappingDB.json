@@ -2908,7 +2908,7 @@
                 {
                     "metric": "query_count",
                     "operator": ">=",
-                    "value": 10
+                    "value": 20
                 }
             ],
             "optional_conditions": [
@@ -3206,12 +3206,12 @@
                 {
                     "metric": "query_count",
                     "operator": ">=",
-                    "value": 15
+                    "value": 20
                 },
                 {
                     "metric": "interval_cv",
                     "operator": "<",
-                    "value": 0.4
+                    "value": 0.6
                 }
             ],
             "scoring": {
