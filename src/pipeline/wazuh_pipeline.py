@@ -176,7 +176,7 @@ def process_wazuh_bytes(
 
 def map_wazuh_events(
     events,
-    mapping_path="wazuh_mappingDB_lab.csv"
+    mapping_path="wazuh_mappingDB.json"
 ):
 
     if not events:
@@ -225,7 +225,7 @@ def map_wazuh_events(
 def process_and_map_wazuh_bytes(
     data: bytes,
     log_type: str,
-    mapping_path="wazuh_mappingDB_lab.csv"
+    mapping_path="wazuh_mappingDB.json"
 ):
 
     # ---------------------------------------------------------

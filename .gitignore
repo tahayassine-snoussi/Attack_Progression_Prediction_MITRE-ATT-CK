@@ -13,3 +13,13 @@ logs-extraction-decoding-saving.md
 
 src/logs_extraction/state/*
 src/logs_extraction/state
+
+src/mapping_dataset/test.ipynb
+
+src/logs_extraction/state/offsets.json
+
+semantic_test_results.json
+
+untitled.ipynb
+
+wazuh_mappingDB_lab.csv

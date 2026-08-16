@@ -1,0 +1,1953 @@
+{
+    "database_metadata": {
+        "name": "Wazuh-to-MITRE ATT&CK Semantic Mapping Database",
+        "version": "1.0.0",
+        "description": "Event-level semantic mapping database translating Wazuh telemetry (alerts.json / archives.json) into MITRE ATT&CK techniques for adversary simulation labs. Purely declarative, correlation-free, and noise-restricted.",
+        "correlation_rule_format": "structured",
+        "correlation_rule_version": "1.0",
+        "total_mappings": 25,
+        "last_updated": "2026-08-16",
+        "telemetry_source": "Wazuh",
+        "log_types": [
+            "archives.json",
+            "alerts.json"
+        ],
+        "field_access_notation": "dot-notation",
+        "supported_logic_operators": [
+            "AND",
+            "OR"
+        ],
+        "supported_comparison_operators": [
+            "==",
+            "!=",
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "in",
+            "not_in",
+            "contains",
+            "startswith",
+            "endswith"
+        ],
+        "supported_aggregation_functions": [],
+        "correlation_policy": {
+            "correlation_required_globally": false,
+            "time_window_support": false,
+            "behavioral_aggregation": false,
+            "event_level_only": true,
+            "note": "All mappings are pure event-level semantic matches. No time windows, no sequence correlation, no stateful tracking."
+        },
+        "confidence_score_rubric": {
+            "0.85-0.95": "Very strong signal (e.g., LSASS access, /etc/shadow read, web shell file creation)",
+            "0.70-0.84": "Good signal but possible admin activity (e.g., sudo by non-admin, RDP from new IP)",
+            "0.50-0.69": "Moderate signal, likely needs future correlation (e.g., whoami by service account)"
+        },
+        "lab_environment": {
+            "network": "VMnet host-only, subnet 192.168.56.0/24",
+            "attacker": "Kali Linux VM at 192.168.56.40 (static)",
+            "victim_web_server": "Ubuntu Server (Apache2 + Tomcat9)",
+            "victim_ad_server": "Windows Server 2019 (Domain Controller)",
+            "siem_network": "Ubuntu VM running Wazuh Manager + Zeek"
+        },
+        "telemetry_pipeline": {
+            "input_sources": [
+                "alerts.json",
+                "archives.json"
+            ],
+            "normalization_target": "decoded_fields dictionary",
+            "key_fields": [
+                "decoder.name",
+                "rule.id",
+                "rule.description",
+                "rule.groups",
+                "rule.mitre.id",
+                "data.audit.command",
+                "data.audit.exe",
+                "data.audit.type",
+                "data.audit.key",
+                "data.status",
+                "data.srcip",
+                "data.user_agent",
+                "full_log",
+                "location"
+            ]
+        },
+        "noise_avoidance_rules": [
+            "NO mappings for normal server maintenance: dpkg, apt, systemctl restart, normal cron from root, routine SSH admin logins.",
+            "Inherently noisy techniques (whoami, uname, ls) MUST be restricted to attacker IP 192.168.56.40, service accounts (www-data, tomcat, apache), or Wazuh suspicious rule groups.",
+            "Apache logs ONLY map attack patterns: SQL injection strings, scanner user-agents, suspicious HTTP methods, or paths like /manager/html, /wp-admin, /.env, ending in .jsp or .php when combined with POST.",
+            "Generic process creation (Event ID 4688, auditd EXECVE) is NOT mapped unless the command/executable is specifically tied to the technique.",
+            "correlation_required must ALWAYS be false. No time windows, no aggregations, no behavioral correlation.",
+            "confidence_score must reflect real discriminative power using the defined rubric."
+        ],
+        "mapping_structure": {
+            "mapping_id_format": "WAZ-{technique_id}-NNN",
+            "required_top_level_keys": [
+                "mapping_id",
+                "telemetry_source",
+                "log_type",
+                "attack_technique",
+                "mapping_type",
+                "confidence_score",
+                "required_fields",
+                "evidence_conditions",
+                "correlation_required",
+                "false_positive_notes",
+                "explanation",
+                "related_techniques",
+                "semantic_conditions"
+            ],
+            "attack_technique_subschema": {
+                "technique_id": "MITRE technique ID (e.g., T1003.001)",
+                "technique_name": "Exact MITRE ATT&CK Technique Name",
+                "tactic": "Exact MITRE Tactic Name"
+            },
+            "semantic_conditions_subschema": {
+                "logic": "AND or OR",
+                "conditions": "Array of condition objects or nested logic blocks",
+                "condition_object": {
+                    "field": "dot.notation.path relative to decoded_fields",
+                    "operator": "One of the supported comparison operators",
+                    "value": "string, number, boolean, or array (for 'in' operator)"
+                },
+                "nesting_rule": "For OR logic inside an AND block, nest a sub-object with 'logic':'OR' and its own 'conditions' array."
+            },
+            "required_fields_rule": "Must include every top-level field used in semantic_conditions."
+        },
+        "schema_notes": [
+            "All mappings are declarative, machine-readable, and SQL-free.",
+            "The semantic evaluator consumes semantic_conditions directly using dot-notation field access.",
+            "Field names preserve original Wazuh decoded_fields naming (decoder.name, data.audit.command, etc.).",
+            "Nested OR blocks are supported inside top-level AND logic for complex multi-signal matching.",
+            "confidence_score represents mapping discriminative strength, not runtime detection confidence.",
+            "related_techniques provides ATT&CK navigation links for multi-step attack chain analysis.",
+            "evidence_conditions are human-readable descriptions of what telemetry artifact indicates the technique.",
+            "false_positive_notes document legitimate activity that could trigger the mapping and how to triage."
+        ],
+        "attack_coverage_summary": {
+            "Reconnaissance": [
+                "T1595.002"
+            ],
+            "Initial_Access": [
+                "T1190",
+                "T1078"
+            ],
+            "Execution": [
+                "T1059.001",
+                "T1059.004",
+                "T1059",
+                "T1204.002"
+            ],
+            "Persistence": [
+                "T1505.003",
+                "T1547.001",
+                "T1053.005",
+                "T1543.003"
+            ],
+            "Privilege_Escalation": [
+                "T1548.003"
+            ],
+            "Defense_Evasion": [
+                "T1027"
+            ],
+            "Credential_Access": [
+                "T1110",
+                "T1110.003",
+                "T1003.001",
+                "T1003.008"
+            ],
+            "Discovery": [
+                "T1087.002",
+                "T1069.002",
+                "T1033",
+                "T1018"
+            ],
+            "Lateral_Movement": [
+                "T1021.001",
+                "T1021.002",
+                "T1021.004"
+            ],
+            "Command_and_Control": [
+                "T1105"
+            ]
+        },
+        "mapping_functions": {
+            "semantic_match": {
+                "description": "Evaluates a single decoded event against a mapping's semantic_conditions tree.",
+                "inputs": [
+                    "decoded_fields (dict)",
+                    "mapping (object)"
+                ],
+                "output": "Boolean (match / no-match)",
+                "logic": "Recursive tree evaluation. Each node is either a condition leaf (field, operator, value) or a logic node (logic, conditions[])."
+            },
+            "field_resolver": {
+                "description": "Resolves dot-notation paths inside decoded_fields.",
+                "examples": {
+                    "decoder.name": "decoded_fields['decoder']['name']",
+                    "data.audit.command": "decoded_fields['data']['audit']['command']",
+                    "rule.groups": "decoded_fields['rule']['groups']"
+                },
+                "null_handling": "If any segment in the path is missing, the field is treated as null and the condition evaluates to False."
+            },
+            "operator_evaluator": {
+                "description": "Applies the operator between the resolved field value and the condition value.",
+                "operator_matrix": {
+                    "==": "Exact equality (string or number)",
+                    "!=": "Exact inequality",
+                    ">": "Numeric greater-than",
+                    ">=": "Numeric greater-than-or-equal",
+                    "<": "Numeric less-than",
+                    "<=": "Numeric less-than-or-equal",
+                    "in": "Field value is a member of the provided array",
+                    "not_in": "Field value is NOT a member of the provided array",
+                    "contains": "Substring match (case-sensitive or case-insensitive depending on engine config)",
+                    "startswith": "String prefix match",
+                    "endswith": "String suffix match"
+                }
+            },
+            "required_fields_guard": {
+                "description": "Pre-evaluation filter. If any path in required_fields is absent from decoded_fields, the mapping is skipped entirely.",
+                "purpose": "Avoids null-reference errors and short-circuits irrelevant mappings."
+            },
+            "confidence_scorer": {
+                "description": "Returns the static confidence_score from the mapping metadata. Not dynamically computed at runtime.",
+                "use_case": "Downstream prioritization and alert severity tuning."
+            }
+        }
+    },
+    "mappings": [
+        {
+            "mapping_id": "WAZ-T1595.002-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1595.002",
+                "technique_name": "Active Scanning: Vulnerability Scanning",
+                "tactic": "Reconnaissance"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.88,
+            "required_fields": [
+                "decoder.name",
+                "data.user_agent",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Apache access log shows known vulnerability scanner User-Agent",
+                "Raw log contains masscan reference indicating port scanning activity"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Legitimate security audits may use similar tools. Restrict to attacker subnet 192.168.56.0/24 or validate against authorized scanning windows.",
+            "explanation": "Scanner user-agents like Nikto, SQLMap, Nessus, or OpenVAS in Apache logs indicate automated vulnerability scanning against the lab web server.",
+            "related_techniques": [
+                "T1190",
+                "T1046"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "apache-accesslog"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.user_agent",
+                                "operator": "contains",
+                                "value": "Nikto"
+                            },
+                            {
+                                "field": "data.user_agent",
+                                "operator": "contains",
+                                "value": "SQLMap"
+                            },
+                            {
+                                "field": "data.user_agent",
+                                "operator": "contains",
+                                "value": "Nessus"
+                            },
+                            {
+                                "field": "data.user_agent",
+                                "operator": "contains",
+                                "value": "OpenVAS"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "masscan"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1190-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1190",
+                "technique_name": "Exploit Public-Facing Application",
+                "tactic": "Initial Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.82,
+            "required_fields": [
+                "decoder.name",
+                "data.status",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "HTTP status 403 or 500 combined with SQL injection patterns in URL",
+                "Access to Tomcat manager or path traversal attempts observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Application errors may produce 500 status codes legitimately. The presence of SQLi strings or manager paths confirms malicious intent.",
+            "explanation": "SQL injection payloads, path traversal, or brute-force attempts against Tomcat manager indicate exploitation of public-facing applications.",
+            "related_techniques": [
+                "T1505.003",
+                "T1190"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "apache-accesslog"
+                    },
+                    {
+                        "field": "data.status",
+                        "operator": "in",
+                        "value": [
+                            "403",
+                            "500"
+                        ]
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "'"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "UNION"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "SELECT"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "../"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "cmd"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "/manager/html"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1505.003-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1505.003",
+                "technique_name": "Server Software Component: Web Shell",
+                "tactic": "Persistence"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.92,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Syscheck detects new .jsp, .php, or .war files in web application directories",
+                "Apache POST requests to known web shell filenames"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Developers may legitimately deploy .war files or .php scripts. Context of vulnerability exploitation preceding the file creation confirms malicious web shell.",
+            "explanation": "Web shells uploaded to Tomcat or Apache directories provide persistent remote access and are commonly placed via exploited manager interfaces.",
+            "related_techniques": [
+                "T1190",
+                "T1505.003"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "syscheck"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": ".jsp"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": ".php"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": ".war"
+                                    }
+                                ]
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "/var/www"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "/opt/tomcat"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "/usr/share/tomcat9/webapps"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "apache-accesslog"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "POST"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "shell.jsp"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "cmd.jsp"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "backdoor.php"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1059.001-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1059.001",
+                "technique_name": "Command and Scripting Interpreter: PowerShell",
+                "tactic": "Execution"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.9,
+            "required_fields": [
+                "decoder.name",
+                "full_log",
+                "data.audit.command"
+            ],
+            "evidence_conditions": [
+                "PowerShell executed with encoded command flag -enc",
+                "Execution policy bypass or known malicious cmdlets like Invoke-Mimikatz observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "System administrators use PowerShell legitimately. Encoded commands, bypass flags, and credential dumping cmdlets are high-confidence malicious indicators.",
+            "explanation": "PowerShell with encoded commands, execution policy bypass, or known malicious cmdlets is a primary execution vector in Windows post-exploitation.",
+            "related_techniques": [
+                "T1059",
+                "T1027",
+                "T1003.001"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "powershell"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "-enc"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "-ep bypass"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Invoke-"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "DownloadString"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1059.004-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1059.004",
+                "technique_name": "Command and Scripting Interpreter: Unix Shell",
+                "tactic": "Execution"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.75,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.type",
+                "data.audit.exe",
+                "data.audit.command",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Auditd EXECVE event shows bash or sh execution",
+                "Execution originates from attacker IP or runs under compromised service account"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators legitimately use bash and sh. Restricting to attacker IP or service accounts eliminates routine maintenance noise.",
+            "explanation": "Bash or shell execution on the Ubuntu server from the attacker IP or via compromised web service accounts indicates post-exploitation command execution.",
+            "related_techniques": [
+                "T1059",
+                "T1190"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "auditd"
+                    },
+                    {
+                        "field": "data.audit.type",
+                        "operator": "==",
+                        "value": "EXECVE"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.audit.exe",
+                                "operator": "in",
+                                "value": [
+                                    "/bin/bash",
+                                    "/bin/sh",
+                                    "/usr/bin/bash"
+                                ]
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "in",
+                                "value": [
+                                    "bash",
+                                    "sh"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "www-data"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "tomcat"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1059-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1059",
+                "technique_name": "Command and Scripting Interpreter",
+                "tactic": "Execution"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.78,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Windows Event Channel shows execution of cmd.exe",
+                "Wscript.exe, cscript.exe, or mshta.exe execution observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Batch files and scripts run legitimately in enterprise environments. Context of lateral movement or credential compromise confirms malicious use.",
+            "explanation": "Non-PowerShell Windows scripting interpreters like cmd.exe, wscript, cscript, and mshta are commonly used by attackers for execution and payload delivery.",
+            "related_techniques": [
+                "T1059.001",
+                "T1204.002"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "cmd.exe"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "wscript.exe"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "cscript.exe"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "mshta.exe"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1110-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1110",
+                "technique_name": "Brute Force",
+                "tactic": "Credential Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.88,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "rule.id"
+            ],
+            "evidence_conditions": [
+                "Multiple SSH authentication failures from single source",
+                "Windows Event ID 4625 indicates failed logon attempt"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Users with forgotten passwords may trigger SSH failures. Windows 4625 events may occur during normal operations. Focus on attacker subnet.",
+            "explanation": "Repeated failed authentication attempts against SSH or Windows SMB indicate brute force password guessing in the lab environment.",
+            "related_techniques": [
+                "T1110.003",
+                "T1078",
+                "T1021.004"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "sshd"
+                            },
+                            {
+                                "field": "rule.groups",
+                                "operator": "contains",
+                                "value": "authentication_failed"
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "field": "rule.id",
+                                "operator": "==",
+                                "value": "4625"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1110.003-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1110.003",
+                "technique_name": "Brute Force: Password Spraying",
+                "tactic": "Credential Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.85,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "SSH authentication failures containing invalid user string",
+                "Same password attempted across multiple non-existent or valid usernames"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Legitimate users with typos may trigger invalid user messages. Volume and pattern distinguish spraying from isolated mistakes.",
+            "explanation": "SSH failures with invalid user indicate the attacker is spraying a common password across multiple usernames against the Ubuntu server.",
+            "related_techniques": [
+                "T1110",
+                "T1078",
+                "T1021.004"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "sshd"
+                    },
+                    {
+                        "field": "rule.groups",
+                        "operator": "contains",
+                        "value": "authentication_failed"
+                    },
+                    {
+                        "field": "full_log",
+                        "operator": "contains",
+                        "value": "invalid user"
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1078-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.84,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "rule.id",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Successful SSH authentication from attacker IP after brute force",
+                "Windows Event ID 4624 with Logon Type 10 indicating remote interactive logon"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may legitimately RDP or SSH from the same subnet. Validate against known admin workstations and time-of-day patterns.",
+            "explanation": "Successful authentication from the attacker IP following brute force indicates compromised valid credentials are being used for access.",
+            "related_techniques": [
+                "T1110",
+                "T1021.001",
+                "T1021.004"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "sshd"
+                            },
+                            {
+                                "field": "rule.groups",
+                                "operator": "contains",
+                                "value": "authentication_success"
+                            },
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "field": "rule.id",
+                                "operator": "==",
+                                "value": "4624"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Logon Type: 10"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1003.001-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1003.001",
+                "technique_name": "OS Credential Dumping: LSASS Memory",
+                "tactic": "Credential Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.94,
+            "required_fields": [
+                "decoder.name",
+                "full_log",
+                "data.audit.command"
+            ],
+            "evidence_conditions": [
+                "Windows Event Channel shows LSASS process access",
+                "Mimikatz, sekurlsa, or procdump execution observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Some security tools legitimately access LSASS. The presence of Mimikatz or procdump targeting LSASS is definitive malicious activity.",
+            "explanation": "Access to LSASS memory or execution of Mimikatz/procdump on the Windows AD server indicates credential dumping activity.",
+            "related_techniques": [
+                "T1003",
+                "T1059.001",
+                "T1078"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "lsass.exe"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "mimikatz"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "sekurlsa"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "procdump"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1003.008-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1003.008",
+                "technique_name": "OS Credential Dumping: /etc/passwd and /etc/shadow",
+                "tactic": "Credential Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.92,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command"
+            ],
+            "evidence_conditions": [
+                "Auditd log shows read access to /etc/shadow or /etc/passwd",
+                "Command executed by non-system user or attacker IP"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "System administrators may legitimately view these files. Restrict to attacker IP or service accounts to reduce noise.",
+            "explanation": "Reading /etc/shadow or /etc/passwd is a direct indicator of credential dumping on Linux systems, commonly performed after initial access.",
+            "related_techniques": [
+                "T1003",
+                "T1078"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "auditd"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "/etc/shadow"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "/etc/passwd"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "cat /etc"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1548.003-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1548.003",
+                "technique_name": "Abuse Elevation Control Mechanism: Sudo and Sudo Caching",
+                "tactic": "Privilege Escalation"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.72,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Auditd shows sudo command execution",
+                "Execution by attacker IP or compromised service account"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators frequently use sudo legitimately. Restricting to attacker IP or compromised service accounts reduces false positives.",
+            "explanation": "Sudo usage from the attacker IP or by web service accounts indicates privilege escalation attempts on the compromised Ubuntu server.",
+            "related_techniques": [
+                "T1078",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "auditd"
+                    },
+                    {
+                        "field": "data.audit.command",
+                        "operator": "==",
+                        "value": "sudo"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "www-data"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "tomcat"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1021.001-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1021.001",
+                "technique_name": "Remote Services: Remote Desktop Protocol",
+                "tactic": "Lateral Movement"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.9,
+            "required_fields": [
+                "decoder.name",
+                "rule.id",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Windows Event ID 4624 with Logon Type 10",
+                "Source IP matches attacker Kali VM"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may legitimately RDP into servers. The attacker IP 192.168.56.40 is not a known admin workstation in this lab.",
+            "explanation": "RDP logon events from the attacker IP indicate lateral movement to the Windows AD server after credential compromise.",
+            "related_techniques": [
+                "T1078",
+                "T1021.002"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "field": "rule.id",
+                        "operator": "==",
+                        "value": "4624"
+                    },
+                    {
+                        "field": "full_log",
+                        "operator": "contains",
+                        "value": "Logon Type: 10"
+                    },
+                    {
+                        "field": "data.srcip",
+                        "operator": "==",
+                        "value": "192.168.56.40"
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1021.002-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1021.002",
+                "technique_name": "Remote Services: SMB/Windows Admin Shares",
+                "tactic": "Lateral Movement"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.86,
+            "required_fields": [
+                "decoder.name",
+                "rule.id",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Windows Event ID 5140 indicates network share access",
+                "References to psexec, ADMIN$, or C$ admin shares observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Legitimate administrative tools may access admin shares. psexec usage or ADMIN$ access from non-admin systems is suspicious.",
+            "explanation": "SMB admin share access or psexec usage indicates lateral movement via Windows administrative shares in the lab domain.",
+            "related_techniques": [
+                "T1021.001",
+                "T1078",
+                "T1547.001"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "rule.id",
+                                "operator": "==",
+                                "value": "5140"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "psexec"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "ADMIN$"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "C$"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1021.004-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1021.004",
+                "technique_name": "Remote Services: SSH",
+                "tactic": "Lateral Movement"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.88,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "data.srcip"
+            ],
+            "evidence_conditions": [
+                "Successful SSH authentication from attacker IP",
+                "Follows brute force pattern against Ubuntu server"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may SSH from the lab subnet. The attacker IP 192.168.56.40 is the Kali VM and not an authorized admin host.",
+            "explanation": "Successful SSH from the attacker IP after brute force indicates lateral movement and persistent access to the Ubuntu web server.",
+            "related_techniques": [
+                "T1078",
+                "T1110",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "sshd"
+                    },
+                    {
+                        "field": "rule.groups",
+                        "operator": "contains",
+                        "value": "authentication_success"
+                    },
+                    {
+                        "field": "data.srcip",
+                        "operator": "==",
+                        "value": "192.168.56.40"
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1105-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1105",
+                "technique_name": "Ingress Tool Transfer",
+                "tactic": "Command and Control"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.8,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Linux wget or curl downloads script or executable files",
+                "Windows certutil, bitsadmin, or Invoke-WebRequest observed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "System updates and legitimate downloads may use these tools. The target file extensions and suspicious destinations confirm tool transfer.",
+            "explanation": "Downloading scripts or executables via wget, curl, certutil, or bitsadmin indicates attackers are staging tools on compromised hosts.",
+            "related_techniques": [
+                "T1059",
+                "T1204.002"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "auditd"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "in",
+                                "value": [
+                                    "wget",
+                                    "curl"
+                                ]
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "data.audit.command",
+                                        "operator": "contains",
+                                        "value": ".sh"
+                                    },
+                                    {
+                                        "field": "data.audit.command",
+                                        "operator": "contains",
+                                        "value": ".py"
+                                    },
+                                    {
+                                        "field": "data.audit.command",
+                                        "operator": "contains",
+                                        "value": ".elf"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "certutil"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "bitsadmin"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "Invoke-WebRequest"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1027-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1027",
+                "technique_name": "Obfuscated Files or Information",
+                "tactic": "Defense Evasion"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.85,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Base64 encoded commands in Linux auditd logs",
+                "PowerShell -enc, FromBase64String, or bxor obfuscation in Windows events"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Base64 is used legitimately in many contexts. Combined with suspicious command structure or execution context confirms evasion intent.",
+            "explanation": "Base64 encoding and PowerShell obfuscation are common defense evasion techniques used to hide malicious command content from detection.",
+            "related_techniques": [
+                "T1059.001",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "auditd"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "base64"
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "-enc"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "FromBase64String"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "bxor"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1204.002-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1204.002",
+                "technique_name": "User Execution: Malicious File",
+                "tactic": "Execution"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.8,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "data.audit.exe",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Execution from /tmp directory on Linux via bash or sh",
+                "Execution from C:\\Users or Windows Temp directories"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Applications and installers may legitimately run from temp directories. Correlation with prior exploitation or unknown file hashes confirms malicious execution.",
+            "explanation": "Payload execution from temporary or public directories is a common post-exploitation pattern for running staged malicious files.",
+            "related_techniques": [
+                "T1105",
+                "T1059",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "auditd"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "contains",
+                                "value": "/tmp/"
+                            },
+                            {
+                                "field": "data.audit.exe",
+                                "operator": "in",
+                                "value": [
+                                    "/bin/bash",
+                                    "/bin/sh"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "C:\\Users\\"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "C:\\Windows\\Temp"
+                                    },
+                                    {
+                                        "field": "full_log",
+                                        "operator": "contains",
+                                        "value": "Public\\Downloads"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1547.001-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1547.001",
+                "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys",
+                "tactic": "Persistence"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.88,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Registry modifications to Run or RunOnce keys",
+                "Changes under CurrentVersion or HKEY_CURRENT_USER hives"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Software installers may legitimately add run keys. Unauthorized modifications outside of change management indicate persistence.",
+            "explanation": "Modifications to Windows Run or RunOnce registry keys establish persistence by executing malicious code on user logon or system boot.",
+            "related_techniques": [
+                "T1543.003",
+                "T1053.005"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Run"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "RunOnce"
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "CurrentVersion"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "HKEY_CURRENT_USER"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1053.005-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1053.005",
+                "technique_name": "Scheduled Task/Job: Cron",
+                "tactic": "Persistence"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.82,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Auditd shows crontab or cron command execution",
+                "Syscheck detects new files in /etc/cron.d"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "System maintenance and legitimate applications use cron. Unauthorized cron entries or modifications by non-admin users indicate persistence.",
+            "explanation": "Cron job creation or modification on the Ubuntu server establishes scheduled execution for maintaining attacker access.",
+            "related_techniques": [
+                "T1547.001",
+                "T1543.003"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "auditd"
+                            },
+                            {
+                                "logic": "OR",
+                                "conditions": [
+                                    {
+                                        "field": "data.audit.command",
+                                        "operator": "in",
+                                        "value": [
+                                            "crontab",
+                                            "cron"
+                                        ]
+                                    },
+                                    {
+                                        "field": "data.audit.command",
+                                        "operator": "contains",
+                                        "value": "/etc/cron"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "syscheck"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "/etc/cron.d"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1543.003-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1543.003",
+                "technique_name": "Create or Modify System Process: Windows Service",
+                "tactic": "Persistence"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.85,
+            "required_fields": [
+                "decoder.name",
+                "rule.id",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Windows Event ID 7045 or 4697 indicates new service creation",
+                "Command line shows sc create or service registration"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Software installations legitimately create services. Services created outside of authorized deployment tools or with suspicious binary paths are malicious.",
+            "explanation": "Creation of a new Windows service establishes persistence by ensuring malicious payload execution on system startup.",
+            "related_techniques": [
+                "T1547.001",
+                "T1053.005"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "rule.id",
+                                "operator": "in",
+                                "value": [
+                                    "7045",
+                                    "4697"
+                                ]
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "service"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "sc create"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1087.002-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1087.002",
+                "technique_name": "Account Discovery: Domain Account",
+                "tactic": "Discovery"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.82,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "net user /domain command execution observed",
+                "dsquery user or Get-ADUser cmdlets executed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may query domain users legitimately. Execution from compromised accounts or outside of normal admin activity is suspicious.",
+            "explanation": "Domain account discovery via net user, dsquery, or PowerShell cmdlets indicates reconnaissance after compromising the Windows AD server.",
+            "related_techniques": [
+                "T1069.002",
+                "T1087.001"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "net user"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "dsquery user"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Get-ADUser"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1069.002-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1069.002",
+                "technique_name": "Permission Groups Discovery: Domain Groups",
+                "tactic": "Discovery"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.82,
+            "required_fields": [
+                "decoder.name",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "net group /domain command execution observed",
+                "dsquery group or Get-ADGroup cmdlets executed"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may query domain groups legitimately. Execution from compromised accounts or unexpected hosts is suspicious.",
+            "explanation": "Domain group discovery via net group, dsquery, or PowerShell cmdlets indicates reconnaissance to identify privileged groups for targeting.",
+            "related_techniques": [
+                "T1087.002",
+                "T1069.001"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "net group"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "dsquery group"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Get-ADGroup"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1033-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1033",
+                "technique_name": "System Owner/User Discovery",
+                "tactic": "Discovery"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.55,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "whoami, who, id, or w command executed via auditd",
+                "Execution by attacker IP or compromised service account"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "These commands are extremely common in normal operations. Without restriction to attacker IP or service accounts, this mapping would be unusably noisy.",
+            "explanation": "User discovery commands executed by the attacker IP or web service accounts indicate post-exploitation reconnaissance on the Linux server.",
+            "related_techniques": [
+                "T1087.001",
+                "T1018"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "auditd"
+                    },
+                    {
+                        "field": "data.audit.command",
+                        "operator": "in",
+                        "value": [
+                            "whoami",
+                            "who",
+                            "id",
+                            "w"
+                        ]
+                    },
+                    {
+                        "logic": "OR",
+                        "conditions": [
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "www-data"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "tomcat"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1018-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1018",
+                "technique_name": "Remote System Discovery",
+                "tactic": "Discovery"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.6,
+            "required_fields": [
+                "decoder.name",
+                "data.audit.command",
+                "data.srcip"
+            ],
+            "evidence_conditions": [
+                "ping, traceroute, or tracepath executed via auditd",
+                "Source IP is the attacker Kali VM"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators use ping and traceroute for troubleshooting. Restricting to the attacker IP eliminates legitimate network diagnostics.",
+            "explanation": "Network discovery commands from the attacker IP indicate active reconnaissance to identify live hosts within the lab subnet.",
+            "related_techniques": [
+                "T1033",
+                "T1046"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "auditd"
+                    },
+                    {
+                        "field": "data.audit.command",
+                        "operator": "in",
+                        "value": [
+                            "ping",
+                            "traceroute",
+                            "tracepath"
+                        ]
+                    },
+                    {
+                        "field": "data.srcip",
+                        "operator": "==",
+                        "value": "192.168.56.40"
+                    }
+                ]
+            }
+        }
+    ]
+}
