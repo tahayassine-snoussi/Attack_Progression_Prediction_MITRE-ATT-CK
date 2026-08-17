@@ -553,94 +553,7 @@
                 ]
             }
         },
-        {
-            "mapping_id": "WAZ-T1059.004-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1059.004",
-                "technique_name": "Command and Scripting Interpreter: Unix Shell",
-                "tactic": "Execution"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.75,
-            "required_fields": [
-                "decoder.name",
-                "data.audit.type",
-                "data.audit.exe",
-                "data.audit.command",
-                "data.srcip",
-                "full_log"
-            ],
-            "evidence_conditions": [
-                "Auditd EXECVE event shows bash or sh execution",
-                "Execution originates from attacker IP or runs under compromised service account"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "Administrators legitimately use bash and sh. Restricting to attacker IP or service accounts eliminates routine maintenance noise.",
-            "explanation": "Bash or shell execution on the Ubuntu server from the attacker IP or via compromised web service accounts indicates post-exploitation command execution.",
-            "related_techniques": [
-                "T1059",
-                "T1190"
-            ],
-            "semantic_conditions": {
-                "logic": "AND",
-                "conditions": [
-                    {
-                        "field": "decoder.name",
-                        "operator": "==",
-                        "value": "auditd"
-                    },
-                    {
-                        "field": "data.audit.type",
-                        "operator": "==",
-                        "value": "EXECVE"
-                    },
-                    {
-                        "logic": "OR",
-                        "conditions": [
-                            {
-                                "field": "data.audit.exe",
-                                "operator": "in",
-                                "value": [
-                                    "/bin/bash",
-                                    "/bin/sh",
-                                    "/usr/bin/bash"
-                                ]
-                            },
-                            {
-                                "field": "data.audit.command",
-                                "operator": "in",
-                                "value": [
-                                    "bash",
-                                    "sh"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "logic": "OR",
-                        "conditions": [
-                            {
-                                "field": "data.srcip",
-                                "operator": "==",
-                                "value": "192.168.56.40"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "www-data"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "tomcat"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
+
         {
             "mapping_id": "WAZ-T1059-001",
             "telemetry_source": "Wazuh",
@@ -817,82 +730,6 @@
             }
         },
         {
-            "mapping_id": "WAZ-T1078-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1078",
-                "technique_name": "Valid Accounts",
-                "tactic": "Initial Access"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.84,
-            "required_fields": [
-                "decoder.name",
-                "rule.groups",
-                "rule.id",
-                "data.srcip",
-                "full_log"
-            ],
-            "evidence_conditions": [
-                "Successful SSH authentication from attacker IP after brute force",
-                "Windows Event ID 4624 with Logon Type 10 indicating remote interactive logon"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "Administrators may legitimately RDP or SSH from the same subnet. Validate against known admin workstations and time-of-day patterns.",
-            "explanation": "Successful authentication from the attacker IP following brute force indicates compromised valid credentials are being used for access.",
-            "related_techniques": [
-                "T1110",
-                "T1021.001",
-                "T1021.004"
-            ],
-            "semantic_conditions": {
-                "logic": "OR",
-                "conditions": [
-                    {
-                        "logic": "AND",
-                        "conditions": [
-                            {
-                                "field": "decoder.name",
-                                "operator": "==",
-                                "value": "sshd"
-                            },
-                            {
-                                "field": "rule.groups",
-                                "operator": "contains",
-                                "value": "authentication_success"
-                            },
-                            {
-                                "field": "data.srcip",
-                                "operator": "==",
-                                "value": "192.168.56.40"
-                            }
-                        ]
-                    },
-                    {
-                        "logic": "AND",
-                        "conditions": [
-                            {
-                                "field": "decoder.name",
-                                "operator": "==",
-                                "value": "windows_eventchannel"
-                            },
-                            {
-                                "field": "rule.id",
-                                "operator": "==",
-                                "value": "4624"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "Logon Type: 10"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
             "mapping_id": "WAZ-T1003.001-001",
             "telemetry_source": "Wazuh",
             "log_type": "archives.json",
@@ -1014,124 +851,6 @@
             }
         },
         {
-            "mapping_id": "WAZ-T1548.003-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1548.003",
-                "technique_name": "Abuse Elevation Control Mechanism: Sudo and Sudo Caching",
-                "tactic": "Privilege Escalation"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.72,
-            "required_fields": [
-                "decoder.name",
-                "data.audit.command",
-                "data.srcip",
-                "full_log"
-            ],
-            "evidence_conditions": [
-                "Auditd shows sudo command execution",
-                "Execution by attacker IP or compromised service account"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "Administrators frequently use sudo legitimately. Restricting to attacker IP or compromised service accounts reduces false positives.",
-            "explanation": "Sudo usage from the attacker IP or by web service accounts indicates privilege escalation attempts on the compromised Ubuntu server.",
-            "related_techniques": [
-                "T1078",
-                "T1059.004"
-            ],
-            "semantic_conditions": {
-                "logic": "AND",
-                "conditions": [
-                    {
-                        "field": "decoder.name",
-                        "operator": "==",
-                        "value": "auditd"
-                    },
-                    {
-                        "field": "data.audit.command",
-                        "operator": "==",
-                        "value": "sudo"
-                    },
-                    {
-                        "logic": "OR",
-                        "conditions": [
-                            {
-                                "field": "data.srcip",
-                                "operator": "==",
-                                "value": "192.168.56.40"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "www-data"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "tomcat"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "mapping_id": "WAZ-T1021.001-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1021.001",
-                "technique_name": "Remote Services: Remote Desktop Protocol",
-                "tactic": "Lateral Movement"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.9,
-            "required_fields": [
-                "decoder.name",
-                "rule.id",
-                "data.srcip",
-                "full_log"
-            ],
-            "evidence_conditions": [
-                "Windows Event ID 4624 with Logon Type 10",
-                "Source IP matches attacker Kali VM"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "Administrators may legitimately RDP into servers. The attacker IP 192.168.56.40 is not a known admin workstation in this lab.",
-            "explanation": "RDP logon events from the attacker IP indicate lateral movement to the Windows AD server after credential compromise.",
-            "related_techniques": [
-                "T1078",
-                "T1021.002"
-            ],
-            "semantic_conditions": {
-                "logic": "AND",
-                "conditions": [
-                    {
-                        "field": "decoder.name",
-                        "operator": "==",
-                        "value": "windows_eventchannel"
-                    },
-                    {
-                        "field": "rule.id",
-                        "operator": "==",
-                        "value": "4624"
-                    },
-                    {
-                        "field": "full_log",
-                        "operator": "contains",
-                        "value": "Logon Type: 10"
-                    },
-                    {
-                        "field": "data.srcip",
-                        "operator": "==",
-                        "value": "192.168.56.40"
-                    }
-                ]
-            }
-        },
-        {
             "mapping_id": "WAZ-T1021.002-001",
             "telemetry_source": "Wazuh",
             "log_type": "archives.json",
@@ -1191,55 +910,6 @@
                                 "value": "C$"
                             }
                         ]
-                    }
-                ]
-            }
-        },
-        {
-            "mapping_id": "WAZ-T1021.004-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1021.004",
-                "technique_name": "Remote Services: SSH",
-                "tactic": "Lateral Movement"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.88,
-            "required_fields": [
-                "decoder.name",
-                "rule.groups",
-                "data.srcip"
-            ],
-            "evidence_conditions": [
-                "Successful SSH authentication from attacker IP",
-                "Follows brute force pattern against Ubuntu server"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "Administrators may SSH from the lab subnet. The attacker IP 192.168.56.40 is the Kali VM and not an authorized admin host.",
-            "explanation": "Successful SSH from the attacker IP after brute force indicates lateral movement and persistent access to the Ubuntu web server.",
-            "related_techniques": [
-                "T1078",
-                "T1110",
-                "T1059.004"
-            ],
-            "semantic_conditions": {
-                "logic": "AND",
-                "conditions": [
-                    {
-                        "field": "decoder.name",
-                        "operator": "==",
-                        "value": "sshd"
-                    },
-                    {
-                        "field": "rule.groups",
-                        "operator": "contains",
-                        "value": "authentication_success"
-                    },
-                    {
-                        "field": "data.srcip",
-                        "operator": "==",
-                        "value": "192.168.56.40"
                     }
                 ]
             }
@@ -1828,75 +1498,14 @@
                 ]
             }
         },
-        {
-            "mapping_id": "WAZ-T1033-001",
-            "telemetry_source": "Wazuh",
-            "log_type": "archives.json",
-            "attack_technique": {
-                "technique_id": "T1033",
-                "technique_name": "System Owner/User Discovery",
-                "tactic": "Discovery"
-            },
-            "mapping_type": "direct",
-            "confidence_score": 0.55,
-            "required_fields": [
-                "decoder.name",
-                "data.audit.command",
-                "data.srcip",
-                "full_log"
-            ],
-            "evidence_conditions": [
-                "whoami, who, id, or w command executed via auditd",
-                "Execution by attacker IP or compromised service account"
-            ],
-            "correlation_required": false,
-            "false_positive_notes": "These commands are extremely common in normal operations. Without restriction to attacker IP or service accounts, this mapping would be unusably noisy.",
-            "explanation": "User discovery commands executed by the attacker IP or web service accounts indicate post-exploitation reconnaissance on the Linux server.",
-            "related_techniques": [
-                "T1087.001",
-                "T1018"
-            ],
-            "semantic_conditions": {
-                "logic": "AND",
-                "conditions": [
-                    {
-                        "field": "decoder.name",
-                        "operator": "==",
-                        "value": "auditd"
-                    },
-                    {
-                        "field": "data.audit.command",
-                        "operator": "in",
-                        "value": [
-                            "whoami",
-                            "who",
-                            "id",
-                            "w"
-                        ]
-                    },
-                    {
-                        "logic": "OR",
-                        "conditions": [
-                            {
-                                "field": "data.srcip",
-                                "operator": "==",
-                                "value": "192.168.56.40"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "www-data"
-                            },
-                            {
-                                "field": "full_log",
-                                "operator": "contains",
-                                "value": "tomcat"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
+
+
+
+
+
+
+
+
         {
             "mapping_id": "WAZ-T1018-001",
             "telemetry_source": "Wazuh",
@@ -1948,6 +1557,434 @@
                     }
                 ]
             }
+        },
+        {
+            "mapping_id": "WAZ-T1059.004-001",
+
+            "telemetry_source": "Wazuh",
+
+            "log_type": "archives.json",
+
+            "attack_technique": {
+                "technique_id": "T1059.004",
+                "technique_name": "Unix Shell",
+                "tactic": "Execution"
+            },
+
+            "mapping_type": "correlated",
+
+            "confidence_score": 0.82,
+
+            "required_fields": [],
+
+            "evidence_conditions": "SSH connection from attacker IP followed by whoami execution in the resulting session.",
+
+            "correlation_required": true,
+
+            "false_positive_notes": "whoami is commonly used by administrators. Restrict the source SSH event to the known attacker IP.",
+
+            "explanation": "Correlates an SSH connection from the attacker with subsequent whoami execution.",
+
+            "related_techniques": [
+                "T1021.004",
+                "T1078"
+            ],
+
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": []
+            },
+
+            "semantic_correlation": {
+                "type": "event_sequence",
+
+                "source_event": {
+                    "conditions": {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "sshd"
+                            },
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            }
+                        ]
+                    }
+                },
+
+                "followup_event": {
+                    "conditions": {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "auditd"
+                            },
+                            {
+                                "field": "data.audit.command",
+                                "operator": "==",
+                                "value": "whoami"
+                            }
+                        ]
+                    }
+                },
+
+                "context_fields": [
+                    "agent.id"
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1078-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1078",
+                "technique_name": "Valid Accounts",
+                "tactic": "Initial Access"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.84,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "rule.id",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Successful SSH authentication from attacker IP after brute force",
+                "Windows Event ID 4624 with Logon Type 10 indicating remote interactive logon"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may legitimately RDP or SSH from the same subnet. Validate against known admin workstations and time-of-day patterns.",
+            "explanation": "Successful authentication from the attacker IP following brute force indicates compromised valid credentials are being used for access.",
+            "related_techniques": [
+                "T1110",
+                "T1021.001",
+                "T1021.004"
+            ],
+            "semantic_conditions": {
+                "logic": "OR",
+                "conditions": [
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "sshd"
+                            },
+                            {
+                                "field": "rule.groups",
+                                "operator": "contains",
+                                "value": "authentication_success"
+                            },
+                            {
+                                "field": "data.srcip",
+                                "operator": "==",
+                                "value": "192.168.56.40"
+                            }
+                        ]
+                    },
+                    {
+                        "logic": "AND",
+                        "conditions": [
+                            {
+                                "field": "decoder.name",
+                                "operator": "==",
+                                "value": "windows_eventchannel"
+                            },
+                            {
+                                "field": "rule.id",
+                                "operator": "==",
+                                "value": "4624"
+                            },
+                            {
+                                "field": "full_log",
+                                "operator": "contains",
+                                "value": "Logon Type: 10"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+        "mapping_id": "WAZ-T1548.003-001",
+
+        "telemetry_source": "Wazuh",
+        "log_type": "archives.json",
+
+        "attack_technique": {
+            "technique_id": "T1548.003",
+            "technique_name": "Sudo and Sudo Caching",
+            "tactic": "Privilege Escalation"
+        },
+
+        "mapping_type": "semantic_correlation",
+
+        "confidence_score": 0.84,
+
+        "required_fields": [
+            "data.audit.command",
+            "data.audit.exe"
+        ],
+
+        "evidence_conditions": [
+            "A sudo execution occurs after a successful SSH connection from the lab attacker IP 192.168.56.40."
+        ],
+
+        "semantic_conditions": {
+            "logic": "OR",
+            "conditions": [
+            {
+                "field": "data.audit.command",
+                "operator": "==",
+                "value": "sudo"
+            },
+            {
+                "field": "data.audit.exe",
+                "operator": "endswith",
+                "value": "/sudo"
+            }
+            ]
+        },
+
+        "correlation_required": true,
+
+        "correlation": {
+            "type": "preceding_event",
+            "relationship": "ssh_success_then_target",
+            "max_time_seconds": 60,
+
+            "source_event": {
+            "description": "Successful SSH authentication from the known attacker IP",
+            "conditions": {
+                "logic": "AND",
+                "conditions": [
+                {
+                    "field": "data.srcip",
+                    "operator": "==",
+                    "value": "192.168.56.40"
+                },
+                {
+                    "field": "rule.groups",
+                    "operator": "contains",
+                    "value": "authentication_success"
+                }
+                ]
+            }
+            },
+
+            "correlation_keys": [
+            "host"
+            ],
+
+            "ordering": "source_before_target"
+        },
+
+        "false_positive_notes": "Administrators may legitimately use sudo after SSH login. The correlation is restricted to the known attacker IP in the lab environment.",
+
+        "explanation": "Sudo execution is considered a privilege-escalation signal when it follows an SSH authentication originating from the known attacker machine.",
+
+        "related_techniques": [
+            "T1021.001",
+            "T1059.004"
+        ]
+        },
+        {
+            "mapping_id": "WAZ-T1021.001-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1021.001",
+                "technique_name": "Remote Services: Remote Desktop Protocol",
+                "tactic": "Lateral Movement"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.9,
+            "required_fields": [
+                "decoder.name",
+                "rule.id",
+                "data.srcip",
+                "full_log"
+            ],
+            "evidence_conditions": [
+                "Windows Event ID 4624 with Logon Type 10",
+                "Source IP matches attacker Kali VM"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may legitimately RDP into servers. The attacker IP 192.168.56.40 is not a known admin workstation in this lab.",
+            "explanation": "RDP logon events from the attacker IP indicate lateral movement to the Windows AD server after credential compromise.",
+            "related_techniques": [
+                "T1078",
+                "T1021.002"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "windows_eventchannel"
+                    },
+                    {
+                        "field": "rule.id",
+                        "operator": "==",
+                        "value": "4624"
+                    },
+                    {
+                        "field": "full_log",
+                        "operator": "contains",
+                        "value": "Logon Type: 10"
+                    },
+                    {
+                        "field": "data.srcip",
+                        "operator": "==",
+                        "value": "192.168.56.40"
+                    }
+                ]
+            }
+        },
+        {
+            "mapping_id": "WAZ-T1021.004-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1021.004",
+                "technique_name": "Remote Services: SSH",
+                "tactic": "Lateral Movement"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.88,
+            "required_fields": [
+                "decoder.name",
+                "rule.groups",
+                "data.srcip"
+            ],
+            "evidence_conditions": [
+                "Successful SSH authentication from attacker IP",
+                "Follows brute force pattern against Ubuntu server"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators may SSH from the lab subnet. The attacker IP 192.168.56.40 is the Kali VM and not an authorized admin host.",
+            "explanation": "Successful SSH from the attacker IP after brute force indicates lateral movement and persistent access to the Ubuntu web server.",
+            "related_techniques": [
+                "T1078",
+                "T1110",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "sshd"
+                    },
+                    {
+                        "field": "rule.groups",
+                        "operator": "contains",
+                        "value": "authentication_success"
+                    },
+                    {
+                        "field": "data.srcip",
+                        "operator": "==",
+                        "value": "192.168.56.40"
+                    }
+                ]
+            }
+        },
+        {
+        "mapping_id": "WAZ-T1033-001",
+
+        "telemetry_source": "Wazuh",
+        "log_type": "archives.json",
+
+        "attack_technique": {
+            "technique_id": "T1033",
+            "technique_name": "System Owner/User Discovery",
+            "tactic": "Discovery"
+        },
+
+        "mapping_type": "semantic_correlation",
+
+        "confidence_score": 0.80,
+
+        "required_fields": [
+            "data.audit.command",
+            "data.audit.exe"
+        ],
+
+        "evidence_conditions": [
+            "The whoami command is executed after a successful SSH connection from the known attacker IP 192.168.56.40."
+        ],
+
+        "semantic_conditions": {
+            "logic": "OR",
+            "conditions": [
+            {
+                "field": "data.audit.command",
+                "operator": "==",
+                "value": "whoami"
+            },
+            {
+                "field": "data.audit.exe",
+                "operator": "endswith",
+                "value": "/whoami"
+            }
+            ]
+        },
+
+        "correlation_required": true,
+
+        "correlation": {
+            "type": "preceding_event",
+            "relationship": "ssh_success_then_target",
+            "max_time_seconds": 60,
+
+            "source_event": {
+            "description": "Successful SSH authentication from the known attacker IP",
+            "conditions": {
+                "logic": "AND",
+                "conditions": [
+                {
+                    "field": "data.srcip",
+                    "operator": "==",
+                    "value": "192.168.56.40"
+                },
+                {
+                    "field": "rule.groups",
+                    "operator": "contains",
+                    "value": "authentication_success"
+                }
+                ]
+            }
+            },
+
+            "correlation_keys": [
+            "host"
+            ],
+
+            "ordering": "source_before_target"
+        },
+
+        "false_positive_notes": "whoami is commonly executed by administrators and service processes. It should not map independently. Restricting it to a recent SSH success from 192.168.56.40 significantly reduces false positives.",
+
+        "explanation": "whoami is treated as suspicious only when it follows a successful SSH connection from the known attacker machine.",
+
+        "related_techniques": [
+            "T1021.001",
+            "T1059.004",
+            "T1548.003"
+        ]
         }
+
     ]
 }
