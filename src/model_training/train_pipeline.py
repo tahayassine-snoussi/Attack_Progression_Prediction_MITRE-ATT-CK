@@ -10,7 +10,7 @@ Steps:
   5. Evaluation: Top-K accuracy, MRR, Coverage
 
 Usage:
-  python src/model_training/train_pipeline.py --sequences model_training_data/unit42_sequences.json --stix attack_progression_knowledge.json
+  python src/model_training/train_pipeline.py --sequences model_training_data/unit42_sequences_filtered.json --stix attack_progression_knowledge.json
 """
 
 import json
