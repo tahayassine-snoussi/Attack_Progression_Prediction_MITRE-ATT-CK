@@ -5690,5 +5690,1313 @@
     ],
     "target": "T1105",
     "input_str": "T1078 -> T1203 -> T1059 -> T1505.003 -> T1027"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1595.002 -> T1190"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1595.002 -> T1190 -> T1505.003"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003",
+      "T1059.004"
+    ],
+    "target": "T1003.008",
+    "input_str": "T1595.002 -> T1190 -> T1505.003 -> T1059.004"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1003.008"
+    ],
+    "target": "T1016",
+    "input_str": "T1595.002 -> T1190 -> T1505.003 -> T1059.004 -> T1003.008"
+  },
+  {
+    "campaign": "LAB-WebServer-Tomcat-Compromise-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1003.008",
+      "T1016"
+    ],
+    "target": "T1041",
+    "input_str": "T1595.002 -> T1190 -> T1505.003 -> T1059.004 -> T1003.008 -> T1016"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046"
+    ],
+    "target": "T1189",
+    "input_str": "T1046"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1046 -> T1189"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1046 -> T1189 -> T1204.002"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1087.002"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001 -> T1087.002"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1087.002",
+      "T1021.002"
+    ],
+    "target": "T1039",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001 -> T1087.002 -> T1021.002"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1087.002",
+      "T1021.002",
+      "T1039"
+    ],
+    "target": "T1105",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001 -> T1087.002 -> T1021.002 -> T1039"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1087.002",
+      "T1021.002",
+      "T1039",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001 -> T1087.002 -> T1021.002 -> T1039 -> T1105"
+  },
+  {
+    "campaign": "LAB-WindowsAD-Malware-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1087.002",
+      "T1021.002",
+      "T1039",
+      "T1105",
+      "T1071.001"
+    ],
+    "target": "T1041",
+    "input_str": "T1046 -> T1189 -> T1204.002 -> T1059.001 -> T1547.001 -> T1003.001 -> T1087.002 -> T1021.002 -> T1039 -> T1105 -> T1071.001"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002"
+    ],
+    "target": "T1046",
+    "input_str": "T1590.002"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046"
+    ],
+    "target": "T1110.003",
+    "input_str": "T1590.002 -> T1046"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046",
+      "T1110.003"
+    ],
+    "target": "T1078",
+    "input_str": "T1590.002 -> T1046 -> T1110.003"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046",
+      "T1110.003",
+      "T1078"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1590.002 -> T1046 -> T1110.003 -> T1078"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046",
+      "T1110.003",
+      "T1078",
+      "T1021.004"
+    ],
+    "target": "T1033",
+    "input_str": "T1590.002 -> T1046 -> T1110.003 -> T1078 -> T1021.004"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046",
+      "T1110.003",
+      "T1078",
+      "T1021.004",
+      "T1033"
+    ],
+    "target": "T1083",
+    "input_str": "T1590.002 -> T1046 -> T1110.003 -> T1078 -> T1021.004 -> T1033"
+  },
+  {
+    "campaign": "LAB-LinuxSSH-BruteForce-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1046",
+      "T1110.003",
+      "T1078",
+      "T1021.004",
+      "T1033",
+      "T1083"
+    ],
+    "target": "T1048.003",
+    "input_str": "T1590.002 -> T1046 -> T1110.003 -> T1078 -> T1021.004 -> T1033 -> T1083"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592"
+    ],
+    "target": "T1133",
+    "input_str": "T1592"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1592 -> T1133"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1592 -> T1133 -> T1078"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078",
+      "T1021.001"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1592 -> T1133 -> T1078 -> T1021.001"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078",
+      "T1021.001",
+      "T1059.001"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1592 -> T1133 -> T1078 -> T1021.001 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078",
+      "T1021.001",
+      "T1059.001",
+      "T1003.001"
+    ],
+    "target": "T1018",
+    "input_str": "T1592 -> T1133 -> T1078 -> T1021.001 -> T1059.001 -> T1003.001"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078",
+      "T1021.001",
+      "T1059.001",
+      "T1003.001",
+      "T1018"
+    ],
+    "target": "T1210",
+    "input_str": "T1592 -> T1133 -> T1078 -> T1021.001 -> T1059.001 -> T1003.001 -> T1018"
+  },
+  {
+    "campaign": "LAB-RDP-Lateral-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1592",
+      "T1133",
+      "T1078",
+      "T1021.001",
+      "T1059.001",
+      "T1003.001",
+      "T1018",
+      "T1210"
+    ],
+    "target": "T1105",
+    "input_str": "T1592 -> T1133 -> T1078 -> T1021.001 -> T1059.001 -> T1003.001 -> T1018 -> T1210"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1203",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1190 -> T1203"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203",
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1190 -> T1203 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203",
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1203 -> T1059.001 -> T1027"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203",
+      "T1059.001",
+      "T1027",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1190 -> T1203 -> T1059.001 -> T1027 -> T1105"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203",
+      "T1059.001",
+      "T1027",
+      "T1105",
+      "T1071.001"
+    ],
+    "target": "T1572",
+    "input_str": "T1190 -> T1203 -> T1059.001 -> T1027 -> T1105 -> T1071.001"
+  },
+  {
+    "campaign": "LAB-WebC2-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1203",
+      "T1059.001",
+      "T1027",
+      "T1105",
+      "T1071.001",
+      "T1572"
+    ],
+    "target": "T1567",
+    "input_str": "T1190 -> T1203 -> T1059.001 -> T1027 -> T1105 -> T1071.001 -> T1572"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1190 -> T1505.003"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004"
+    ],
+    "target": "T1548.003",
+    "input_str": "T1190 -> T1505.003 -> T1059.004"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1548.003"
+    ],
+    "target": "T1003.008",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1548.003"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1548.003",
+      "T1003.008"
+    ],
+    "target": "T1016",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1548.003 -> T1003.008"
+  },
+  {
+    "campaign": "LAB-Linux-WebShell-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1548.003",
+      "T1003.008",
+      "T1016"
+    ],
+    "target": "T1049",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1548.003 -> T1003.008 -> T1016"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1021.002"
+    ],
+    "target": "T1069.002",
+    "input_str": "T1078 -> T1021.002"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1021.002",
+      "T1069.002"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1078 -> T1021.002 -> T1069.002"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1021.002",
+      "T1069.002",
+      "T1087.002"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1078 -> T1021.002 -> T1069.002 -> T1087.002"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1021.002",
+      "T1069.002",
+      "T1087.002",
+      "T1003.001"
+    ],
+    "target": "T1018",
+    "input_str": "T1078 -> T1021.002 -> T1069.002 -> T1087.002 -> T1003.001"
+  },
+  {
+    "campaign": "LAB-Domain-Recon-Lateral-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1021.002",
+      "T1069.002",
+      "T1087.002",
+      "T1003.001",
+      "T1018"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1078 -> T1021.002 -> T1069.002 -> T1087.002 -> T1003.001 -> T1018"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001"
+    ],
+    "target": "T1590.001",
+    "input_str": "T1595.001"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.001 -> T1590.001"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001",
+      "T1190"
+    ],
+    "target": "T1204",
+    "input_str": "T1595.001 -> T1590.001 -> T1190"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001",
+      "T1190",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1595.001 -> T1590.001 -> T1190 -> T1204"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001",
+      "T1190",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1595.001 -> T1590.001 -> T1190 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001",
+      "T1190",
+      "T1204",
+      "T1059.004",
+      "T1053.005"
+    ],
+    "target": "T1016",
+    "input_str": "T1595.001 -> T1590.001 -> T1190 -> T1204 -> T1059.004 -> T1053.005"
+  },
+  {
+    "campaign": "LAB-MultiStage-Web-Attack-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.001",
+      "T1590.001",
+      "T1190",
+      "T1204",
+      "T1059.004",
+      "T1053.005",
+      "T1016"
+    ],
+    "target": "T1041",
+    "input_str": "T1595.001 -> T1590.001 -> T1190 -> T1204 -> T1059.004 -> T1053.005 -> T1016"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1189 -> T1204.002"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1059.001"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1189 -> T1204.002 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1543.003"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1189 -> T1204.002 -> T1059.001 -> T1543.003"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1543.003",
+      "T1003.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1189 -> T1204.002 -> T1059.001 -> T1543.003 -> T1003.001"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1543.003",
+      "T1003.001",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1204.002 -> T1059.001 -> T1543.003 -> T1003.001 -> T1083"
+  },
+  {
+    "campaign": "LAB-Windows-Service-Persist-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1059.001",
+      "T1543.003",
+      "T1003.001",
+      "T1083",
+      "T1105"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1189 -> T1204.002 -> T1059.001 -> T1543.003 -> T1003.001 -> T1083 -> T1105"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046"
+    ],
+    "target": "T1190",
+    "input_str": "T1046"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1046 -> T1190"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1046 -> T1190 -> T1505.003"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190",
+      "T1505.003",
+      "T1059.004"
+    ],
+    "target": "T1083",
+    "input_str": "T1046 -> T1190 -> T1505.003 -> T1059.004"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1083"
+    ],
+    "target": "T1213",
+    "input_str": "T1046 -> T1190 -> T1505.003 -> T1059.004 -> T1083"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1083",
+      "T1213"
+    ],
+    "target": "T1071.002",
+    "input_str": "T1046 -> T1190 -> T1505.003 -> T1059.004 -> T1083 -> T1213"
+  },
+  {
+    "campaign": "LAB-FTP-Exfiltration-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1046",
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1083",
+      "T1213",
+      "T1071.002"
+    ],
+    "target": "T1048",
+    "input_str": "T1046 -> T1190 -> T1505.003 -> T1059.004 -> T1083 -> T1213 -> T1071.002"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002"
+    ],
+    "target": "T1497",
+    "input_str": "T1189 -> T1204.002"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1497"
+    ],
+    "target": "T1027",
+    "input_str": "T1189 -> T1204.002 -> T1497"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1497",
+      "T1027"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1189 -> T1204.002 -> T1497 -> T1027"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1497",
+      "T1027",
+      "T1059.001"
+    ],
+    "target": "T1568.002",
+    "input_str": "T1189 -> T1204.002 -> T1497 -> T1027 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1497",
+      "T1027",
+      "T1059.001",
+      "T1568.002"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1189 -> T1204.002 -> T1497 -> T1027 -> T1059.001 -> T1568.002"
+  },
+  {
+    "campaign": "LAB-Evasive-Malware-DGA-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1189",
+      "T1204.002",
+      "T1497",
+      "T1027",
+      "T1059.001",
+      "T1568.002",
+      "T1071.004"
+    ],
+    "target": "T1041",
+    "input_str": "T1189 -> T1204.002 -> T1497 -> T1027 -> T1059.001 -> T1568.002 -> T1071.004"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1190 -> T1505.003"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004"
+    ],
+    "target": "T1496",
+    "input_str": "T1190 -> T1505.003 -> T1059.004"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1496"
+    ],
+    "target": "T1016",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1496"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1496",
+      "T1016"
+    ],
+    "target": "T1049",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1496 -> T1016"
+  },
+  {
+    "campaign": "LAB-Resource-Hijacking-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1059.004",
+      "T1496",
+      "T1016",
+      "T1049"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1505.003 -> T1059.004 -> T1496 -> T1016 -> T1049"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002"
+    ],
+    "target": "T1592",
+    "input_str": "T1590.002"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1592"
+    ],
+    "target": "T1046",
+    "input_str": "T1590.002 -> T1592"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1592",
+      "T1046"
+    ],
+    "target": "T1110",
+    "input_str": "T1590.002 -> T1592 -> T1046"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1592",
+      "T1046",
+      "T1110"
+    ],
+    "target": "T1110.001",
+    "input_str": "T1590.002 -> T1592 -> T1046 -> T1110"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1592",
+      "T1046",
+      "T1110",
+      "T1110.001"
+    ],
+    "target": "T1078",
+    "input_str": "T1590.002 -> T1592 -> T1046 -> T1110 -> T1110.001"
+  },
+  {
+    "campaign": "LAB-BruteForce-SSH-Chain-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1590.002",
+      "T1592",
+      "T1046",
+      "T1110",
+      "T1110.001",
+      "T1078"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1590.002 -> T1592 -> T1046 -> T1110 -> T1110.001 -> T1078"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1021.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1133 -> T1078 -> T1021.002"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1021.002",
+      "T1105"
+    ],
+    "target": "T1572",
+    "input_str": "T1133 -> T1078 -> T1021.002 -> T1105"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1021.002",
+      "T1105",
+      "T1572"
+    ],
+    "target": "T1095",
+    "input_str": "T1133 -> T1078 -> T1021.002 -> T1105 -> T1572"
+  },
+  {
+    "campaign": "LAB-Protocol-Tunnel-SMB-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1021.002",
+      "T1105",
+      "T1572",
+      "T1095"
+    ],
+    "target": "T1041",
+    "input_str": "T1133 -> T1078 -> T1021.002 -> T1105 -> T1572 -> T1095"
+  },
+  {
+    "campaign": "LAB-Short-Tomcat-Exploit-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "LAB-Short-Tomcat-Exploit-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1595.002 -> T1190"
+  },
+  {
+    "campaign": "LAB-Short-Tomcat-Exploit-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1595.002 -> T1190 -> T1505.003"
+  },
+  {
+    "campaign": "LAB-Short-AD-Recon-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "LAB-Short-AD-Recon-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1078",
+      "T1087.002"
+    ],
+    "target": "T1069.002",
+    "input_str": "T1078 -> T1087.002"
+  },
+  {
+    "campaign": "LAB-Short-Windows-CredDump-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "LAB-Short-Windows-CredDump-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1204.002",
+      "T1059.001"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1204.002 -> T1059.001"
+  },
+  {
+    "campaign": "LAB-Short-Linux-Recon-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1021.004"
+    ],
+    "target": "T1033",
+    "input_str": "T1021.004"
+  },
+  {
+    "campaign": "LAB-Short-Linux-Recon-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1021.004",
+      "T1033"
+    ],
+    "target": "T1016",
+    "input_str": "T1021.004 -> T1033"
+  },
+  {
+    "campaign": "LAB-Short-Linux-Recon-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1021.004",
+      "T1033",
+      "T1016"
+    ],
+    "target": "T1049",
+    "input_str": "T1021.004 -> T1033 -> T1016"
+  },
+  {
+    "campaign": "LAB-Short-Web-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1083",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "LAB-Short-Web-Exfil-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1190",
+      "T1083"
+    ],
+    "target": "T1567",
+    "input_str": "T1190 -> T1083"
+  },
+  {
+    "campaign": "LAB-Short-RDP-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1021.001"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1021.001"
+  },
+  {
+    "campaign": "LAB-Short-RDP-Pivot-001",
+    "source_file": "lab_synthetic",
+    "input": [
+      "T1021.001",
+      "T1059.001"
+    ],
+    "target": "T1018",
+    "input_str": "T1021.001 -> T1059.001"
   }
 ]
