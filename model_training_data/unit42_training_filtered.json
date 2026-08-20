@@ -1,0 +1,5694 @@
+[
+  {
+    "campaign": "2022-08-08 IcedID delivered via ISO image leads to CobaltStrike",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "2022-08-08 IcedID delivered via ISO image leads to CobaltStrike",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1105"
+  },
+  {
+    "campaign": "2022-08-10 Three Cobalt Strike stagers from one IcedID infection",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "2022-08-10 Three Cobalt Strike stagers from one IcedID infection",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1105"
+  },
+  {
+    "campaign": "2022-08-10 Three Cobalt Strike stagers from one IcedID infection",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "2022-08-10 Three Cobalt Strike stagers from one IcedID infection",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1105"
+  },
+  {
+    "campaign": "April 2015",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "April 2015",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1204 -> T1059"
+  },
+  {
+    "campaign": "April 2015",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1547.001"
+    ],
+    "target": "T1033",
+    "input_str": "T1204 -> T1059 -> T1547.001"
+  },
+  {
+    "campaign": "April 2015",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1547.001",
+      "T1033"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1059 -> T1547.001 -> T1033"
+  },
+  {
+    "campaign": "April 2015",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1547.001",
+      "T1033",
+      "T1016"
+    ],
+    "target": "T1041",
+    "input_str": "T1204 -> T1059 -> T1547.001 -> T1033 -> T1016"
+  },
+  {
+    "campaign": "Atlassian Confluence Remote Code Execution Vulnerability (CVE-2022-26134)",
+    "source_file": "bundle--75a0f9cf-112c-4f81-b442-3d41f8ff0cac",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "Atlassian Confluence Remote Code Execution Vulnerability (CVE-2022-26134)",
+    "source_file": "bundle--75a0f9cf-112c-4f81-b442-3d41f8ff0cac",
+    "input": [
+      "T1595.002",
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1595.002 -> T1190"
+  },
+  {
+    "campaign": "Atlassian Confluence Remote Code Execution Vulnerability (CVE-2022-26134)",
+    "source_file": "bundle--75a0f9cf-112c-4f81-b442-3d41f8ff0cac",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1003.008",
+    "input_str": "T1595.002 -> T1190 -> T1505.003"
+  },
+  {
+    "campaign": "BackConfig Campaign 4",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1027",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "BackConfig Campaign 4",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1189",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1027"
+  },
+  {
+    "campaign": "BackConfig Campaign 6",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "BackConfig Campaign 6",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1189",
+      "T1059.004"
+    ],
+    "target": "T1027",
+    "input_str": "T1189 -> T1059.004"
+  },
+  {
+    "campaign": "BackConfig Campaign 6",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1189",
+      "T1059.004",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1059.004 -> T1027"
+  },
+  {
+    "campaign": "BackConfig Campaign 7",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "BackConfig Campaign 7",
+    "source_file": "bundle--240002a5-4b16-4197-aebc-50c52610192a",
+    "input": [
+      "T1059.004",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1027"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1059 -> T1059.001"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1543.003"
+    ],
+    "target": "T1016",
+    "input_str": "T1059 -> T1059.001 -> T1543.003"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1543.003",
+      "T1016"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1059 -> T1059.001 -> T1543.003 -> T1016"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1543.003",
+      "T1016",
+      "T1087.002"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1059 -> T1059.001 -> T1543.003 -> T1016 -> T1087.002"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1543.003",
+      "T1016",
+      "T1087.002",
+      "T1021.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059 -> T1059.001 -> T1543.003 -> T1016 -> T1087.002 -> T1021.001"
+  },
+  {
+    "campaign": "Black Basta Ransomware Threat Assessment",
+    "source_file": "bundle--b4859209-6c52-4aef-b240-c2f70138bc1e",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1543.003",
+      "T1016",
+      "T1087.002",
+      "T1021.001",
+      "T1105"
+    ],
+    "target": "T1567",
+    "input_str": "T1059 -> T1059.001 -> T1543.003 -> T1016 -> T1087.002 -> T1021.001 -> T1105"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1059.001 -> T1204"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059.001 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1016",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027 -> T1016"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027",
+      "T1016",
+      "T1033"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027 -> T1016 -> T1033"
+  },
+  {
+    "campaign": "BlackWater Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027",
+      "T1016",
+      "T1033",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027 -> T1016 -> T1033 -> T1105"
+  },
+  {
+    "campaign": "Bluesky Ransomware",
+    "source_file": "bundle--e05cc3e0-bd3c-4da1-9e77-4b32b191b6ff",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Bluesky Ransomware",
+    "source_file": "bundle--e05cc3e0-bd3c-4da1-9e77-4b32b191b6ff",
+    "input": [
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1083",
+    "input_str": "T1059.001 -> T1027"
+  },
+  {
+    "campaign": "Bluesky Ransomware",
+    "source_file": "bundle--e05cc3e0-bd3c-4da1-9e77-4b32b191b6ff",
+    "input": [
+      "T1059.001",
+      "T1027",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1027 -> T1083"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1190",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190"
+    ],
+    "target": "T1133",
+    "input_str": "T1078 -> T1190"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1078 -> T1190 -> T1133"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001"
+    ],
+    "target": "T1110",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001"
+    ],
+    "target": "T1018",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018"
+    ],
+    "target": "T1083",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083",
+      "T1016",
+      "T1021.002"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083 -> T1016 -> T1021.002"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083",
+      "T1016",
+      "T1021.002",
+      "T1021.001"
+    ],
+    "target": "T1039",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083 -> T1016 -> T1021.002 -> T1021.001"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083",
+      "T1016",
+      "T1021.002",
+      "T1021.001",
+      "T1039"
+    ],
+    "target": "T1105",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083 -> T1016 -> T1021.002 -> T1021.001 -> T1039"
+  },
+  {
+    "campaign": "Campaign - Understanding REvil",
+    "source_file": "bundle--83159fd9-3fc7-4c47-b653-b9027bc4bf4f",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1133",
+      "T1204.002",
+      "T1059.001",
+      "T1110",
+      "T1003.001",
+      "T1018",
+      "T1083",
+      "T1016",
+      "T1021.002",
+      "T1021.001",
+      "T1039",
+      "T1105"
+    ],
+    "target": "T1567",
+    "input_str": "T1078 -> T1190 -> T1133 -> T1204.002 -> T1059.001 -> T1110 -> T1003.001 -> T1018 -> T1083 -> T1016 -> T1021.002 -> T1021.001 -> T1039 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - AcidBox",
+    "source_file": "bundle--6f40d0d9-a0a0-491d-9ba7-33419281da2a",
+    "input": [
+      "T1203"
+    ],
+    "target": "T1027",
+    "input_str": "T1203"
+  },
+  {
+    "campaign": "Campaign 1 - AcidBox",
+    "source_file": "bundle--6f40d0d9-a0a0-491d-9ba7-33419281da2a",
+    "input": [
+      "T1203",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1203 -> T1027"
+  },
+  {
+    "campaign": "Campaign 1 - Black-T - Adept Libra cryptojacking variant",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "Campaign 1 - Black-T - Adept Libra cryptojacking variant",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059",
+      "T1059.004"
+    ],
+    "target": "T1046",
+    "input_str": "T1059 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 1 - Black-T - Adept Libra cryptojacking variant",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059",
+      "T1059.004",
+      "T1046"
+    ],
+    "target": "T1105",
+    "input_str": "T1059 -> T1059.004 -> T1046"
+  },
+  {
+    "campaign": "Campaign 1 - Black-T - Adept Libra cryptojacking variant",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059",
+      "T1059.004",
+      "T1046",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059 -> T1059.004 -> T1046 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - CLOP",
+    "source_file": "bundle--94fc8d4f-505f-4e73-93b2-a8e192cb5ddc",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1083",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Campaign 1 - CLOP",
+    "source_file": "bundle--94fc8d4f-505f-4e73-93b2-a8e192cb5ddc",
+    "input": [
+      "T1190",
+      "T1083"
+    ],
+    "target": "T1041",
+    "input_str": "T1190 -> T1083"
+  },
+  {
+    "campaign": "Campaign 1 - Cryptomining Operations",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "Campaign 1 - Cryptomining Operations",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1018",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "Campaign 1 - Cryptomining Operations",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1018"
+    ],
+    "target": "T1083",
+    "input_str": "T1133 -> T1078 -> T1018"
+  },
+  {
+    "campaign": "Campaign 1 - Cryptomining Operations",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1018",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1133 -> T1078 -> T1018 -> T1083"
+  },
+  {
+    "campaign": "Campaign 1 - Cryptomining Operations",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1018",
+      "T1083",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1133 -> T1078 -> T1018 -> T1083 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - DEARCRY RANSOMWARE",
+    "source_file": "bundle--08b9a88e-0d79-46c1-94b7-75e531fb3daf",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Campaign 1 - DEARCRY RANSOMWARE",
+    "source_file": "bundle--08b9a88e-0d79-46c1-94b7-75e531fb3daf",
+    "input": [
+      "T1190",
+      "T1547.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1190 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1190",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1133 -> T1078 -> T1190"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005",
+      "T1059.001"
+    ],
+    "target": "T1497",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005",
+      "T1059.001",
+      "T1497"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005 -> T1059.001 -> T1497"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005",
+      "T1059.001",
+      "T1497",
+      "T1003.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005 -> T1059.001 -> T1497 -> T1003.001"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005",
+      "T1059.001",
+      "T1497",
+      "T1003.001",
+      "T1083"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005 -> T1059.001 -> T1497 -> T1003.001 -> T1083"
+  },
+  {
+    "campaign": "Campaign 1 - Darkside",
+    "source_file": "bundle--02ac66d2-ab86-498d-95e5-e6ad098e44b9",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1190",
+      "T1053.005",
+      "T1059.001",
+      "T1497",
+      "T1003.001",
+      "T1083",
+      "T1021.001"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1133 -> T1078 -> T1190 -> T1053.005 -> T1059.001 -> T1497 -> T1003.001 -> T1083 -> T1021.001"
+  },
+  {
+    "campaign": "Campaign 1 - EKANS Ransomware",
+    "source_file": "bundle--36a466c6-7ece-4738-8e9b-706430fef302",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1204",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 1 - EKANS Ransomware",
+    "source_file": "bundle--36a466c6-7ece-4738-8e9b-706430fef302",
+    "input": [
+      "T1078",
+      "T1204"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1078 -> T1204"
+  },
+  {
+    "campaign": "Campaign 1 - EKANS Ransomware",
+    "source_file": "bundle--36a466c6-7ece-4738-8e9b-706430fef302",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1547.001"
+    ],
+    "target": "T1497",
+    "input_str": "T1078 -> T1204 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - EKANS Ransomware",
+    "source_file": "bundle--36a466c6-7ece-4738-8e9b-706430fef302",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1547.001",
+      "T1497"
+    ],
+    "target": "T1083",
+    "input_str": "T1078 -> T1204 -> T1547.001 -> T1497"
+  },
+  {
+    "campaign": "Campaign 1 - Egregor Ransomware",
+    "source_file": "bundle--d6e15d39-5710-4f1e-bb96-72c6cbc8ae9f",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 1 - Egregor Ransomware",
+    "source_file": "bundle--d6e15d39-5710-4f1e-bb96-72c6cbc8ae9f",
+    "input": [
+      "T1078",
+      "T1059.001"
+    ],
+    "target": "T1497",
+    "input_str": "T1078 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - Egregor Ransomware",
+    "source_file": "bundle--d6e15d39-5710-4f1e-bb96-72c6cbc8ae9f",
+    "input": [
+      "T1078",
+      "T1059.001",
+      "T1497"
+    ],
+    "target": "T1027",
+    "input_str": "T1078 -> T1059.001 -> T1497"
+  },
+  {
+    "campaign": "Campaign 1 - Egregor Ransomware",
+    "source_file": "bundle--d6e15d39-5710-4f1e-bb96-72c6cbc8ae9f",
+    "input": [
+      "T1078",
+      "T1059.001",
+      "T1497",
+      "T1027"
+    ],
+    "target": "T1083",
+    "input_str": "T1078 -> T1059.001 -> T1497 -> T1027"
+  },
+  {
+    "campaign": "Campaign 1 - Hive Leaks",
+    "source_file": "bundle--c5ca6f05-4417-4a09-88f3-3955d53494fe",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Campaign 1 - Hive Leaks",
+    "source_file": "bundle--c5ca6f05-4417-4a09-88f3-3955d53494fe",
+    "input": [
+      "T1204",
+      "T1053.005"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1204 -> T1053.005"
+  },
+  {
+    "campaign": "Campaign 1 - Hive Leaks",
+    "source_file": "bundle--c5ca6f05-4417-4a09-88f3-3955d53494fe",
+    "input": [
+      "T1204",
+      "T1053.005",
+      "T1547.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1204 -> T1053.005 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - Lockbit 2.0",
+    "source_file": "bundle--0f87b517-6ac8-4677-be79-b769843a433b",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 1 - Lockbit 2.0",
+    "source_file": "bundle--0f87b517-6ac8-4677-be79-b769843a433b",
+    "input": [
+      "T1078",
+      "T1547.001"
+    ],
+    "target": "T1018",
+    "input_str": "T1078 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - Lockbit 2.0",
+    "source_file": "bundle--0f87b517-6ac8-4677-be79-b769843a433b",
+    "input": [
+      "T1078",
+      "T1547.001",
+      "T1018"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1078 -> T1547.001 -> T1018"
+  },
+  {
+    "campaign": "Campaign 1 - Lockbit 2.0",
+    "source_file": "bundle--0f87b517-6ac8-4677-be79-b769843a433b",
+    "input": [
+      "T1078",
+      "T1547.001",
+      "T1018",
+      "T1021.002"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1078 -> T1547.001 -> T1018 -> T1021.002"
+  },
+  {
+    "campaign": "Campaign 1 - Lockbit 2.0",
+    "source_file": "bundle--0f87b517-6ac8-4677-be79-b769843a433b",
+    "input": [
+      "T1078",
+      "T1547.001",
+      "T1018",
+      "T1021.002",
+      "T1021.001"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1078 -> T1547.001 -> T1018 -> T1021.002 -> T1021.001"
+  },
+  {
+    "campaign": "Campaign 1 - Manga Taurus: Novel Chinese Shellcode Unmasked",
+    "source_file": "bundle--857cf4f3-028e-43b4-a5c4-88f54133b37a",
+    "input": [
+      "T1027"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1027"
+  },
+  {
+    "campaign": "Campaign 1 - Manga Taurus: Novel Chinese Shellcode Unmasked",
+    "source_file": "bundle--857cf4f3-028e-43b4-a5c4-88f54133b37a",
+    "input": [
+      "T1027",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1027 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 1 - Mespinoza Ransomware",
+    "source_file": "bundle--83c00363-262b-4140-b3e3-9c18a2dff44c",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - Mespinoza Ransomware",
+    "source_file": "bundle--83c00363-262b-4140-b3e3-9c18a2dff44c",
+    "input": [
+      "T1059.001",
+      "T1547.001"
+    ],
+    "target": "T1497",
+    "input_str": "T1059.001 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - Operation Exchange Marauder: Active Exploitation of Multiple Zero-Day Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--c8ec886d-b88b-45b9-96df-3e0f7628eab0",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Campaign 1 - Operation Exchange Marauder: Active Exploitation of Multiple Zero-Day Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--c8ec886d-b88b-45b9-96df-3e0f7628eab0",
+    "input": [
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1190 -> T1505.003"
+  },
+  {
+    "campaign": "Campaign 1 - Operation Exchange Marauder: Active Exploitation of Multiple Zero-Day Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--c8ec886d-b88b-45b9-96df-3e0f7628eab0",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1003.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1505.003 -> T1003.001"
+  },
+  {
+    "campaign": "Campaign 1 - Operation Exchange Marauder: Active Exploitation of Multiple Zero-Day Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--c8ec886d-b88b-45b9-96df-3e0f7628eab0",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1003.001",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1190 -> T1505.003 -> T1003.001 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - Operation Exchange Marauder: Active Exploitation of Multiple Zero-Day Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--c8ec886d-b88b-45b9-96df-3e0f7628eab0",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1003.001",
+      "T1105",
+      "T1071.001"
+    ],
+    "target": "T1041",
+    "input_str": "T1190 -> T1505.003 -> T1003.001 -> T1105 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 1 - Ryuk Ransomware",
+    "source_file": "bundle--55bd4b44-18a6-468a-8f7f-8f863cf512d0",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 1 - Ryuk Ransomware",
+    "source_file": "bundle--55bd4b44-18a6-468a-8f7f-8f863cf512d0",
+    "input": [
+      "T1078",
+      "T1547.001"
+    ],
+    "target": "T1016",
+    "input_str": "T1078 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - Ryuk Ransomware",
+    "source_file": "bundle--55bd4b44-18a6-468a-8f7f-8f863cf512d0",
+    "input": [
+      "T1078",
+      "T1547.001",
+      "T1016"
+    ],
+    "target": "T1083",
+    "input_str": "T1078 -> T1547.001 -> T1016"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1505.003"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1505.003 -> T1543.003"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003",
+      "T1027"
+    ],
+    "target": "T1083",
+    "input_str": "T1505.003 -> T1543.003 -> T1027"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1505.003 -> T1543.003 -> T1027 -> T1083"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1083",
+      "T1105"
+    ],
+    "target": "T1568.002",
+    "input_str": "T1505.003 -> T1543.003 -> T1027 -> T1083 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1083",
+      "T1105",
+      "T1568.002"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1505.003 -> T1543.003 -> T1027 -> T1083 -> T1105 -> T1568.002"
+  },
+  {
+    "campaign": "Campaign 1 - SUNBURST",
+    "source_file": "bundle--55e654ab-1859-4a34-948f-c7becfd2daf6",
+    "input": [
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1083",
+      "T1105",
+      "T1568.002",
+      "T1071.004"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1505.003 -> T1543.003 -> T1027 -> T1083 -> T1105 -> T1568.002 -> T1071.004"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004"
+    ],
+    "target": "T1110.003",
+    "input_str": "T1059.001 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004",
+      "T1110.003"
+    ],
+    "target": "T1018",
+    "input_str": "T1059.001 -> T1059.004 -> T1110.003"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004",
+      "T1110.003",
+      "T1018"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1059.001 -> T1059.004 -> T1110.003 -> T1018"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004",
+      "T1110.003",
+      "T1018",
+      "T1021.004"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1059.001 -> T1059.004 -> T1110.003 -> T1018 -> T1021.004"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004",
+      "T1110.003",
+      "T1018",
+      "T1021.004",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1059.004 -> T1110.003 -> T1018 -> T1021.004 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 1 - Tsunami Mining",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.001",
+      "T1059.004",
+      "T1110.003",
+      "T1018",
+      "T1021.004",
+      "T1071.001",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.001 -> T1059.004 -> T1110.003 -> T1018 -> T1021.004 -> T1071.001 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1189",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189"
+    ],
+    "target": "T1133",
+    "input_str": "T1078 -> T1189"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078 -> T1189 -> T1133"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001"
+    ],
+    "target": "T1059",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1110",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027",
+      "T1110"
+    ],
+    "target": "T1083",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027 -> T1110"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027",
+      "T1110",
+      "T1083"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027 -> T1110 -> T1083"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027",
+      "T1110",
+      "T1083",
+      "T1021.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027 -> T1110 -> T1083 -> T1021.001"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027",
+      "T1110",
+      "T1083",
+      "T1021.001",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027 -> T1110 -> T1083 -> T1021.001 -> T1105"
+  },
+  {
+    "campaign": "Campaign 1 - [Endor] Maze Ransomware",
+    "source_file": "bundle--cc142fea-ba1b-40d1-a632-bc1d6fe3c457",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1133",
+      "T1059.001",
+      "T1059",
+      "T1059.004",
+      "T1543.003",
+      "T1547.001",
+      "T1027",
+      "T1110",
+      "T1083",
+      "T1021.001",
+      "T1105",
+      "T1041"
+    ],
+    "target": "T1048",
+    "input_str": "T1078 -> T1189 -> T1133 -> T1059.001 -> T1059 -> T1059.004 -> T1543.003 -> T1547.001 -> T1027 -> T1110 -> T1083 -> T1021.001 -> T1105 -> T1041"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Mule Libra",
+    "source_file": "bundle--98581e81-5599-46a6-b62d-c9b54d63ea8b",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Mule Libra",
+    "source_file": "bundle--98581e81-5599-46a6-b62d-c9b54d63ea8b",
+    "input": [
+      "T1059.004",
+      "T1204"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1204"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1059.001 -> T1204"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1203",
+    "input_str": "T1059.001 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1203"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1203"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1203",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1203 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 1 - [Playbook] Pasty Draco",
+    "source_file": "bundle--a700c71e-e36e-49da-9b36-fe36676aa0b1",
+    "input": [
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1203",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1204 -> T1059.004 -> T1203 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "Campaign 2 - Adept Libra malware targeting Kubernetes",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Campaign 2 - Adept Libra malware targeting Kubernetes",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059.004",
+      "T1027"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1059.004 -> T1027"
+  },
+  {
+    "campaign": "Campaign 2 - Adept Libra malware targeting Kubernetes",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059.004",
+      "T1027",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1027 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 2 - Adept Libra malware targeting Kubernetes",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1059.004",
+      "T1027",
+      "T1071.001",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.004 -> T1027 -> T1071.001 -> T1105"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001"
+    ],
+    "target": "T1110.001",
+    "input_str": "T1059.004 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001"
+    ],
+    "target": "T1110.003",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001",
+      "T1110.003"
+    ],
+    "target": "T1018",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001 -> T1110.003"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001",
+      "T1110.003",
+      "T1018"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001 -> T1110.003 -> T1018"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001",
+      "T1110.003",
+      "T1018",
+      "T1021.004"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001 -> T1110.003 -> T1018 -> T1021.004"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001",
+      "T1110.003",
+      "T1018",
+      "T1021.004",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001 -> T1110.003 -> T1018 -> T1021.004 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 2 - Docker Usage",
+    "source_file": "bundle--9c4f2973-7b1e-42c4-a452-b8b75ac1ebad",
+    "input": [
+      "T1059.004",
+      "T1059.001",
+      "T1110.001",
+      "T1110.003",
+      "T1018",
+      "T1021.004",
+      "T1071.001",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.004 -> T1059.001 -> T1110.001 -> T1110.003 -> T1018 -> T1021.004 -> T1071.001 -> T1105"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1059",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059"
+    ],
+    "target": "T1083",
+    "input_str": "T1133 -> T1078 -> T1059"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059",
+      "T1083"
+    ],
+    "target": "T1018",
+    "input_str": "T1133 -> T1078 -> T1059 -> T1083"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059",
+      "T1083",
+      "T1018"
+    ],
+    "target": "T1105",
+    "input_str": "T1133 -> T1078 -> T1059 -> T1083 -> T1018"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059",
+      "T1083",
+      "T1018",
+      "T1105"
+    ],
+    "target": "T1095",
+    "input_str": "T1133 -> T1078 -> T1059 -> T1083 -> T1018 -> T1105"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059",
+      "T1083",
+      "T1018",
+      "T1105",
+      "T1095"
+    ],
+    "target": "T1048",
+    "input_str": "T1133 -> T1078 -> T1059 -> T1083 -> T1018 -> T1105 -> T1095"
+  },
+  {
+    "campaign": "Campaign 2 - Leveraging Log4j to gain CSP credentials",
+    "source_file": "bundle--90311545-6cb4-41c1-ae49-b6cca4e5d5a0",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059",
+      "T1083",
+      "T1018",
+      "T1105",
+      "T1095",
+      "T1048"
+    ],
+    "target": "T1496",
+    "input_str": "T1133 -> T1078 -> T1059 -> T1083 -> T1018 -> T1105 -> T1095 -> T1048"
+  },
+  {
+    "campaign": "Campaign 2 - XBash",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1110",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Campaign 2 - XBash",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1059.004",
+      "T1110"
+    ],
+    "target": "T1046",
+    "input_str": "T1059.004 -> T1110"
+  },
+  {
+    "campaign": "Campaign 2 - XBash",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1059.004",
+      "T1110",
+      "T1046"
+    ],
+    "target": "T1018",
+    "input_str": "T1059.004 -> T1110 -> T1046"
+  },
+  {
+    "campaign": "Campaign 2 - XBash",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1059.004",
+      "T1110",
+      "T1046",
+      "T1018"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1110 -> T1046 -> T1018"
+  },
+  {
+    "campaign": "Campaign 2 - XBash",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1059.004",
+      "T1110",
+      "T1046",
+      "T1018",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.004 -> T1110 -> T1046 -> T1018 -> T1105"
+  },
+  {
+    "campaign": "Campaign 2018",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Campaign 2018",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.004",
+      "T1204"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1059.004 -> T1204"
+  },
+  {
+    "campaign": "Campaign 2018",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.004",
+      "T1204",
+      "T1059.001"
+    ],
+    "target": "T1497",
+    "input_str": "T1059.004 -> T1204 -> T1059.001"
+  },
+  {
+    "campaign": "Campaign 2018",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.004",
+      "T1204",
+      "T1059.001",
+      "T1497"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1059.004 -> T1204 -> T1059.001 -> T1497"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1189",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1189"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1078 -> T1189"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1059.004"
+    ],
+    "target": "T1046",
+    "input_str": "T1078 -> T1189 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1059.004",
+      "T1046"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1078 -> T1189 -> T1059.004 -> T1046"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1059.004",
+      "T1046",
+      "T1021.001"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1078 -> T1189 -> T1059.004 -> T1046 -> T1021.001"
+  },
+  {
+    "campaign": "Campaign 2019",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1189",
+      "T1059.004",
+      "T1046",
+      "T1021.001",
+      "T1021.002"
+    ],
+    "target": "T1048",
+    "input_str": "T1078 -> T1189 -> T1059.004 -> T1046 -> T1021.001 -> T1021.002"
+  },
+  {
+    "campaign": "Campaign 3 - Aged Libra",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Campaign 3 - Aged Libra",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004"
+    ],
+    "target": "T1049",
+    "input_str": "T1190 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 3 - Aged Libra",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1049"
+    ],
+    "target": "T1496",
+    "input_str": "T1190 -> T1059.004 -> T1049"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.001"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190"
+    ],
+    "target": "T1078",
+    "input_str": "T1595.001 -> T1190"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1595.001 -> T1190 -> T1078"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078",
+      "T1059.004"
+    ],
+    "target": "T1210",
+    "input_str": "T1595.001 -> T1190 -> T1078 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078",
+      "T1059.004",
+      "T1210"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1595.001 -> T1190 -> T1078 -> T1059.004 -> T1210"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078",
+      "T1059.004",
+      "T1210",
+      "T1021.004"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1595.001 -> T1190 -> T1078 -> T1059.004 -> T1210 -> T1021.004"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078",
+      "T1059.004",
+      "T1210",
+      "T1021.004",
+      "T1071.001"
+    ],
+    "target": "T1041",
+    "input_str": "T1595.001 -> T1190 -> T1078 -> T1059.004 -> T1210 -> T1021.004 -> T1071.001"
+  },
+  {
+    "campaign": "Campaign 3 - Chimera Repository",
+    "source_file": "bundle--cb547986-7ee6-4951-b781-a1cde6ef8a11",
+    "input": [
+      "T1595.001",
+      "T1190",
+      "T1078",
+      "T1059.004",
+      "T1210",
+      "T1021.004",
+      "T1071.001",
+      "T1041"
+    ],
+    "target": "T1496",
+    "input_str": "T1595.001 -> T1190 -> T1078 -> T1059.004 -> T1210 -> T1021.004 -> T1071.001 -> T1041"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1190 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1110",
+    "input_str": "T1190 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001",
+      "T1110"
+    ],
+    "target": "T1049",
+    "input_str": "T1190 -> T1059.004 -> T1547.001 -> T1110"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001",
+      "T1110",
+      "T1049"
+    ],
+    "target": "T1018",
+    "input_str": "T1190 -> T1059.004 -> T1547.001 -> T1110 -> T1049"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001",
+      "T1110",
+      "T1049",
+      "T1018"
+    ],
+    "target": "T1046",
+    "input_str": "T1190 -> T1059.004 -> T1547.001 -> T1110 -> T1049 -> T1018"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001",
+      "T1110",
+      "T1049",
+      "T1018",
+      "T1046"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1059.004 -> T1547.001 -> T1110 -> T1049 -> T1018 -> T1046"
+  },
+  {
+    "campaign": "Campaign 4 - Godlua",
+    "source_file": "bundle--f2ff249b-9281-4b01-87c7-0230286fd353",
+    "input": [
+      "T1190",
+      "T1059.004",
+      "T1547.001",
+      "T1110",
+      "T1049",
+      "T1018",
+      "T1046",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1190 -> T1059.004 -> T1547.001 -> T1110 -> T1049 -> T1018 -> T1046 -> T1105"
+  },
+  {
+    "campaign": "Campaign 4 - Stately Taurus (0day JP)",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Campaign 4 - Stately Taurus (0day JP)",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1027",
+    "input_str": "T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 7 - Stately Taurus (Farseer)",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Campaign 7 - Stately Taurus (Farseer)",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Campaign 7 - Stately Taurus (Farseer)",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1204 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "Chinese Playful Taurus Activity in Iran",
+    "source_file": "bundle--ee09cec1-cbe9-404d-b1b4-00bf8442cf98",
+    "input": [
+      "T1543.003"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1543.003"
+  },
+  {
+    "campaign": "Chinese Playful Taurus Activity in Iran",
+    "source_file": "bundle--ee09cec1-cbe9-404d-b1b4-00bf8442cf98",
+    "input": [
+      "T1543.003",
+      "T1547.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1543.003 -> T1547.001"
+  },
+  {
+    "campaign": "CryptoClippy Speaks Portuguese",
+    "source_file": "bundle--d070d671-e872-411a-852e-dbf39f89ba0d",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "CryptoClippy Speaks Portuguese",
+    "source_file": "bundle--d070d671-e872-411a-852e-dbf39f89ba0d",
+    "input": [
+      "T1204.002",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1204.002 -> T1059.001"
+  },
+  {
+    "campaign": "Dear Joohn Campaign",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1105",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Dear Joohn Campaign",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1204",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1204 -> T1105"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1204 -> T1059"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1059.004"
+    ],
+    "target": "T1027",
+    "input_str": "T1204 -> T1059 -> T1059.004"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1059.004",
+      "T1027"
+    ],
+    "target": "T1083",
+    "input_str": "T1204 -> T1059 -> T1059.004 -> T1027"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1059.004",
+      "T1027",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1059 -> T1059.004 -> T1027 -> T1083"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1059.004",
+      "T1027",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1204 -> T1059 -> T1059.004 -> T1027 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "December 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1059.004",
+      "T1027",
+      "T1083",
+      "T1016",
+      "T1033"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1059 -> T1059.004 -> T1027 -> T1083 -> T1016 -> T1033"
+  },
+  {
+    "campaign": "Emotet Malware",
+    "source_file": "bundle--05b3078a-0428-4222-8e4e-54711e789f16",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Emotet Malware",
+    "source_file": "bundle--05b3078a-0428-4222-8e4e-54711e789f16",
+    "input": [
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1027"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203"
+    ],
+    "target": "T1059",
+    "input_str": "T1203"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059"
+    ],
+    "target": "T1204",
+    "input_str": "T1203 -> T1059"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059",
+      "T1204"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1203 -> T1059 -> T1204"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059",
+      "T1204",
+      "T1547.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1203 -> T1059 -> T1204 -> T1547.001"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059",
+      "T1204",
+      "T1547.001",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1203 -> T1059 -> T1204 -> T1547.001 -> T1083"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059",
+      "T1204",
+      "T1547.001",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1105",
+    "input_str": "T1203 -> T1059 -> T1204 -> T1547.001 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "Espionage Campaign Targets Minority Activists",
+    "source_file": "bundle--3c9c8485-feed-45fe-8d00-074770245d08",
+    "input": [
+      "T1203",
+      "T1059",
+      "T1204",
+      "T1547.001",
+      "T1083",
+      "T1016",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1203 -> T1059 -> T1204 -> T1547.001 -> T1083 -> T1016 -> T1105"
+  },
+  {
+    "campaign": "Eurasia Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "Eurasia Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1059",
+      "T1547.001"
+    ],
+    "target": "T1016",
+    "input_str": "T1059 -> T1547.001"
+  },
+  {
+    "campaign": "Eurasia Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1059 -> T1547.001 -> T1016"
+  },
+  {
+    "campaign": "Evil New Year 2017",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "Evil New Year 2017",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1189",
+      "T1204"
+    ],
+    "target": "T1033",
+    "input_str": "T1189 -> T1204"
+  },
+  {
+    "campaign": "Evil New Year 2017",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1033"
+    ],
+    "target": "T1083",
+    "input_str": "T1189 -> T1204 -> T1033"
+  },
+  {
+    "campaign": "Evil New Year 2017",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1033",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1204 -> T1033 -> T1083"
+  },
+  {
+    "campaign": "Fighting Ursa_play1",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Fighting Ursa_play1",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.004",
+      "T1204"
+    ],
+    "target": "T1083",
+    "input_str": "T1059.004 -> T1204"
+  },
+  {
+    "campaign": "Fighting Ursa_play1",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.004",
+      "T1204",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1059.004 -> T1204 -> T1083"
+  },
+  {
+    "campaign": "Fighting Ursa_play1",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.004",
+      "T1204",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004 -> T1204 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "Fractured Statue Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Fractured Statue Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1059",
+    "input_str": "T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Fractured Statue Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059"
+    ],
+    "target": "T1027",
+    "input_str": "T1204 -> T1059.004 -> T1059"
+  },
+  {
+    "campaign": "FreeMilk",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1203"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1203"
+  },
+  {
+    "campaign": "FreeMilk",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1203",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1203 -> T1059.004"
+  },
+  {
+    "campaign": "FreeMilk",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1203",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1203 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "FreeMilk",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1203",
+      "T1059.004",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1016",
+    "input_str": "T1203 -> T1059.004 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "FreeMilk",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1203",
+      "T1059.004",
+      "T1547.001",
+      "T1027",
+      "T1016"
+    ],
+    "target": "T1105",
+    "input_str": "T1203 -> T1059.004 -> T1547.001 -> T1027 -> T1016"
+  },
+  {
+    "campaign": "GoBruteforcer",
+    "source_file": "bundle--1946caf3-bc8c-4092-be86-4b953933f639",
+    "input": [
+      "T1505.003"
+    ],
+    "target": "T1110",
+    "input_str": "T1505.003"
+  },
+  {
+    "campaign": "GoBruteforcer",
+    "source_file": "bundle--1946caf3-bc8c-4092-be86-4b953933f639",
+    "input": [
+      "T1505.003",
+      "T1110"
+    ],
+    "target": "T1105",
+    "input_str": "T1505.003 -> T1110"
+  },
+  {
+    "campaign": "GoZebrocy",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1059",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "GoZebrocy",
+    "source_file": "bundle--6f78c51e-9817-4063-8ebe-0319be1417d0",
+    "input": [
+      "T1059.001",
+      "T1059"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1059"
+  },
+  {
+    "campaign": "Golden Time",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1204",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Golden Time",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1078",
+      "T1204"
+    ],
+    "target": "T1041",
+    "input_str": "T1078 -> T1204"
+  },
+  {
+    "campaign": "Google Drive used to Deliver Cobalt Strike",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "Google Drive used to Deliver Cobalt Strike",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1059",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059 -> T1547.001"
+  },
+  {
+    "campaign": "Google Drive used to Deliver Cobalt Strike",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1016",
+    "input_str": "T1059 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "Google Drive used to Deliver Cobalt Strike",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027",
+      "T1016"
+    ],
+    "target": "T1105",
+    "input_str": "T1059 -> T1547.001 -> T1027 -> T1016"
+  },
+  {
+    "campaign": "HTML Help Files Deliver Agent Tesla",
+    "source_file": "bundle--4ba604f9-4f09-42a0-9f16-e66b650933d1",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "HTML Help Files Deliver Agent Tesla",
+    "source_file": "bundle--4ba604f9-4f09-42a0-9f16-e66b650933d1",
+    "input": [
+      "T1059.001",
+      "T1105"
+    ],
+    "target": "T1048",
+    "input_str": "T1059.001 -> T1105"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003"
+    ],
+    "target": "T1083",
+    "input_str": "T1059.001 -> T1505.003"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083"
+    ],
+    "target": "T1018",
+    "input_str": "T1059.001 -> T1505.003 -> T1083"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002"
+    ],
+    "target": "T1016",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016",
+      "T1033"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016 -> T1033"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016",
+      "T1033",
+      "T1021.002"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016 -> T1033 -> T1021.002"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016",
+      "T1033",
+      "T1021.002",
+      "T1021.001"
+    ],
+    "target": "T1213",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016 -> T1033 -> T1021.002 -> T1021.001"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016",
+      "T1033",
+      "T1021.002",
+      "T1021.001",
+      "T1213"
+    ],
+    "target": "T1039",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016 -> T1033 -> T1021.002 -> T1021.001 -> T1213"
+  },
+  {
+    "campaign": "Hunter Serpens BumbleBee Webshell Activity",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1059.001",
+      "T1505.003",
+      "T1083",
+      "T1018",
+      "T1087.002",
+      "T1016",
+      "T1033",
+      "T1021.002",
+      "T1021.001",
+      "T1213",
+      "T1039"
+    ],
+    "target": "T1572",
+    "input_str": "T1059.001 -> T1505.003 -> T1083 -> T1018 -> T1087.002 -> T1016 -> T1033 -> T1021.002 -> T1021.001 -> T1213 -> T1039"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1059",
+    "input_str": "T1204 -> T1059.004"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1204 -> T1059.004 -> T1059"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1204 -> T1059.004 -> T1059 -> T1059.001"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059",
+      "T1059.001",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1204 -> T1059.004 -> T1059 -> T1059.001 -> T1547.001"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059",
+      "T1059.001",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1059.004 -> T1059 -> T1059.001 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059",
+      "T1059.001",
+      "T1547.001",
+      "T1027",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1204 -> T1059.004 -> T1059 -> T1059.001 -> T1547.001 -> T1027 -> T1016"
+  },
+  {
+    "campaign": "IQY Attachment E-mails",
+    "source_file": "bundle--fa9394ae-30d1-4b4d-8430-b2c8e5fb53c0",
+    "input": [
+      "T1204",
+      "T1059.004",
+      "T1059",
+      "T1059.001",
+      "T1547.001",
+      "T1027",
+      "T1016",
+      "T1033"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1059.004 -> T1059 -> T1059.001 -> T1547.001 -> T1027 -> T1016 -> T1033"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1203"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001"
+    ],
+    "target": "T1204",
+    "input_str": "T1203 -> T1059.001"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1203 -> T1059.001 -> T1204"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1203 -> T1059.001 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1203 -> T1059.001 -> T1204 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1203 -> T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "January 2017",
+    "source_file": "bundle--7e4c7191-205b-4394-bfbf-65ca79cc6883",
+    "input": [
+      "T1203",
+      "T1059.001",
+      "T1204",
+      "T1059.004",
+      "T1547.001",
+      "T1027",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1203 -> T1059.001 -> T1204 -> T1059.004 -> T1547.001 -> T1027 -> T1105"
+  },
+  {
+    "campaign": "July 2017",
+    "source_file": "bundle--3dd0e9a6-a5c9-43aa-aef0-0b0a944e460b",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1204",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "July 2017",
+    "source_file": "bundle--3dd0e9a6-a5c9-43aa-aef0-0b0a944e460b",
+    "input": [
+      "T1059",
+      "T1204"
+    ],
+    "target": "T1046",
+    "input_str": "T1059 -> T1204"
+  },
+  {
+    "campaign": "June 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "June 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1059"
+  },
+  {
+    "campaign": "June 2018 Cambodia",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1016"
+    ],
+    "target": "T1095",
+    "input_str": "T1204 -> T1059 -> T1016"
+  },
+  {
+    "campaign": "June 2018 Singapore",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "June 2018 Singapore",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1083",
+    "input_str": "T1204 -> T1059"
+  },
+  {
+    "campaign": "June 2018 Singapore",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1059 -> T1083"
+  },
+  {
+    "campaign": "June 2018 Singapore",
+    "source_file": "bundle--0b83c60c-633d-4c38-a2ac-884c6b054f81",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1095",
+    "input_str": "T1204 -> T1059 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1059",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1190 -> T1059"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059",
+      "T1505.003"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1190 -> T1059 -> T1505.003"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059",
+      "T1505.003",
+      "T1543.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1190 -> T1059 -> T1505.003 -> T1543.003"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059",
+      "T1505.003",
+      "T1543.003",
+      "T1027"
+    ],
+    "target": "T1095",
+    "input_str": "T1190 -> T1059 -> T1505.003 -> T1543.003 -> T1027"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059",
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1095"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1190 -> T1059 -> T1505.003 -> T1543.003 -> T1027 -> T1095"
+  },
+  {
+    "campaign": "Microsoft Exchange Vulnerabilities",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1059",
+      "T1505.003",
+      "T1543.003",
+      "T1027",
+      "T1095",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1059 -> T1505.003 -> T1543.003 -> T1027 -> T1095 -> T1071.001"
+  },
+  {
+    "campaign": "Middle East Attacks Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "Middle East Attacks Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1189",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1189 -> T1204"
+  },
+  {
+    "campaign": "Middle East Attacks Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1497",
+    "input_str": "T1189 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Middle East Attacks Campaign",
+    "source_file": "bundle--5255859a-24c0-443d-9fe3-7104116c1921",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1059.004",
+      "T1497"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1204 -> T1059.004 -> T1497"
+  },
+  {
+    "campaign": "MiniDionis Campaign",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "MiniDionis Campaign",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1189",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1189 -> T1204"
+  },
+  {
+    "campaign": "MiniDionis Campaign",
+    "source_file": "bundle--14383a41-22d8-435d-a3a7-19c58e4b8e9b",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1105",
+    "input_str": "T1189 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Monster Libra Campaign 1 - Spoofing Legitimate Email Chains",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1083",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "Monster Libra Campaign 1 - Spoofing Legitimate Email Chains",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002 -> T1083"
+  },
+  {
+    "campaign": "Monster Libra Campaign 1 - Spoofing Legitimate Email Chains",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002",
+      "T1083",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1083 -> T1105"
+  },
+  {
+    "campaign": "Monster Libra Campaign 2 - Malicious Macro Documents Dropping Valak",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1053.005"
+  },
+  {
+    "campaign": "Monster Libra Campaign 2 - Malicious Macro Documents Dropping Valak",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005",
+      "T1204.002"
+    ],
+    "target": "T1027",
+    "input_str": "T1053.005 -> T1204.002"
+  },
+  {
+    "campaign": "Monster Libra Campaign 2 - Malicious Macro Documents Dropping Valak",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1027"
+    ],
+    "target": "T1033",
+    "input_str": "T1053.005 -> T1204.002 -> T1027"
+  },
+  {
+    "campaign": "Monster Libra Campaign 2 - Malicious Macro Documents Dropping Valak",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1027",
+      "T1033"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1053.005 -> T1204.002 -> T1027 -> T1033"
+  },
+  {
+    "campaign": "Monster Libra Campaign 2 - Malicious Macro Documents Dropping Valak",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1027",
+      "T1033",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1053.005 -> T1204.002 -> T1027 -> T1033 -> T1071.001"
+  },
+  {
+    "campaign": "Monster Libra Campaign 3 - Email Attack Campaign switches from Valak to IcedID",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Monster Libra Campaign 3 - Email Attack Campaign switches from Valak to IcedID",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204",
+      "T1053.005"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1204 -> T1053.005"
+  },
+  {
+    "campaign": "Monster Libra Campaign 3 - Email Attack Campaign switches from Valak to IcedID",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204",
+      "T1053.005",
+      "T1204.002"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204 -> T1053.005 -> T1204.002"
+  },
+  {
+    "campaign": "Monster Libra Campaign 3 - Email Attack Campaign switches from Valak to IcedID",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204",
+      "T1053.005",
+      "T1204.002",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1053.005 -> T1204.002 -> T1071.001"
+  },
+  {
+    "campaign": "Monster Libra pushing SVCready malware",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005"
+    ],
+    "target": "T1204",
+    "input_str": "T1053.005"
+  },
+  {
+    "campaign": "Monster Libra pushing SVCready malware",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1053.005",
+      "T1204"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1053.005 -> T1204"
+  },
+  {
+    "campaign": "Monster Libra thread-hijacked email activity",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1204",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "Monster Libra thread-hijacked email activity",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002",
+      "T1204"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002 -> T1204"
+  },
+  {
+    "campaign": "Monster Libra thread-hijacked email activity",
+    "source_file": "bundle--40f451ed-13b3-49d4-a072-4b69dca2895e",
+    "input": [
+      "T1204.002",
+      "T1204",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1204 -> T1105"
+  },
+  {
+    "campaign": "Nascent Ursa",
+    "source_file": "bundle--c2a0764f-7ec1-4b76-a83d-29c0accb6bf4",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "Nascent Ursa",
+    "source_file": "bundle--c2a0764f-7ec1-4b76-a83d-29c0accb6bf4",
+    "input": [
+      "T1059.001",
+      "T1204.002"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1059.001 -> T1204.002"
+  },
+  {
+    "campaign": "Nascent Ursa",
+    "source_file": "bundle--c2a0764f-7ec1-4b76-a83d-29c0accb6bf4",
+    "input": [
+      "T1059.001",
+      "T1204.002",
+      "T1071.004"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1204.002 -> T1071.004"
+  },
+  {
+    "campaign": "Nascent Ursa",
+    "source_file": "bundle--c2a0764f-7ec1-4b76-a83d-29c0accb6bf4",
+    "input": [
+      "T1059.001",
+      "T1204.002",
+      "T1071.004",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1059.001 -> T1204.002 -> T1071.004 -> T1105"
+  },
+  {
+    "campaign": "New SolarMarker (Jupyter) malware campaign targets US companies",
+    "source_file": "bundle--a0600426-57c4-4639-b4cf-478c98889ebf",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "New SolarMarker (Jupyter) malware campaign targets US companies",
+    "source_file": "bundle--a0600426-57c4-4639-b4cf-478c98889ebf",
+    "input": [
+      "T1059.001",
+      "T1204.002"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001 -> T1204.002"
+  },
+  {
+    "campaign": "New SolarMarker (Jupyter) malware campaign targets US companies",
+    "source_file": "bundle--a0600426-57c4-4639-b4cf-478c98889ebf",
+    "input": [
+      "T1059.001",
+      "T1204.002",
+      "T1027"
+    ],
+    "target": "T1497",
+    "input_str": "T1059.001 -> T1204.002 -> T1027"
+  },
+  {
+    "campaign": "New SolarMarker (Jupyter) malware campaign targets US companies",
+    "source_file": "bundle--a0600426-57c4-4639-b4cf-478c98889ebf",
+    "input": [
+      "T1059.001",
+      "T1204.002",
+      "T1027",
+      "T1497"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1204.002 -> T1027 -> T1497"
+  },
+  {
+    "campaign": "North Korea Human Rights",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "North Korea Human Rights",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1059.004",
+      "T1204"
+    ],
+    "target": "T1083",
+    "input_str": "T1059.004 -> T1204"
+  },
+  {
+    "campaign": "North Korea Human Rights",
+    "source_file": "bundle--4ea8b1ad-da47-427e-9740-878153318fd9",
+    "input": [
+      "T1059.004",
+      "T1204",
+      "T1083"
+    ],
+    "target": "T1041",
+    "input_str": "T1059.004 -> T1204 -> T1083"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1595.002 -> T1059.001"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1595.002 -> T1059.001 -> T1027"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001",
+      "T1027",
+      "T1003.001"
+    ],
+    "target": "T1083",
+    "input_str": "T1595.002 -> T1059.001 -> T1027 -> T1003.001"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1595.002 -> T1059.001 -> T1027 -> T1003.001 -> T1083"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1083",
+      "T1105"
+    ],
+    "target": "T1095",
+    "input_str": "T1595.002 -> T1059.001 -> T1027 -> T1003.001 -> T1083 -> T1105"
+  },
+  {
+    "campaign": "Novel tools and techniques used with Cuba Ransomware",
+    "source_file": "bundle--5d0b42f4-5fc4-4190-b230-c96b7bc8bf27",
+    "input": [
+      "T1595.002",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1083",
+      "T1105",
+      "T1095"
+    ],
+    "target": "T1041",
+    "input_str": "T1595.002 -> T1059.001 -> T1027 -> T1003.001 -> T1083 -> T1105 -> T1095"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1190 -> T1059.001"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1190 -> T1059.001 -> T1027"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027",
+      "T1003.001"
+    ],
+    "target": "T1033",
+    "input_str": "T1190 -> T1059.001 -> T1027 -> T1003.001"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1033"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1190 -> T1059.001 -> T1027 -> T1003.001 -> T1033"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1033",
+      "T1021.001"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1190 -> T1059.001 -> T1027 -> T1003.001 -> T1033 -> T1021.001"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1033",
+      "T1021.001",
+      "T1071.001"
+    ],
+    "target": "T1572",
+    "input_str": "T1190 -> T1059.001 -> T1027 -> T1003.001 -> T1033 -> T1021.001 -> T1071.001"
+  },
+  {
+    "campaign": "OWASSRF Vulnerability Exploitation used to deliver SilverArrow",
+    "source_file": "bundle--d4ad0cb0-481d-4282-a674-35e38f3f8f80",
+    "input": [
+      "T1190",
+      "T1059.001",
+      "T1027",
+      "T1003.001",
+      "T1033",
+      "T1021.001",
+      "T1071.001",
+      "T1572"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1059.001 -> T1027 -> T1003.001 -> T1033 -> T1021.001 -> T1071.001 -> T1572"
+  },
+  {
+    "campaign": "Other PlugX PLUG Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1543.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1543.003"
+  },
+  {
+    "campaign": "Other PlugX PLUG Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1543.003",
+      "T1027"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1543.003 -> T1027"
+  },
+  {
+    "campaign": "Other PlugX THOR Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Other PlugX THOR Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1543.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1190 -> T1543.003"
+  },
+  {
+    "campaign": "Other PlugX THOR Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1543.003",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1543.003 -> T1027"
+  },
+  {
+    "campaign": "Other PlugX THOR Payloads & Loaders",
+    "source_file": "bundle--9e4ba482-4243-4e24-8cf3-2263638895cf",
+    "input": [
+      "T1190",
+      "T1543.003",
+      "T1027",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1190 -> T1543.003 -> T1027 -> T1105"
+  },
+  {
+    "campaign": "POWERSHOWER",
+    "source_file": "bundle--c15f8532-09be-448e-abd9-bb3df65af9b0",
+    "input": [
+      "T1203"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1203"
+  },
+  {
+    "campaign": "POWERSHOWER",
+    "source_file": "bundle--c15f8532-09be-448e-abd9-bb3df65af9b0",
+    "input": [
+      "T1203",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1203 -> T1059.001"
+  },
+  {
+    "campaign": "Part 1: Malicious XLL Files and Agent Tesla Case Studies",
+    "source_file": "bundle--4ba604f9-4f09-42a0-9f16-e66b650933d1",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Part 1: Malicious XLL Files and Agent Tesla Case Studies",
+    "source_file": "bundle--4ba604f9-4f09-42a0-9f16-e66b650933d1",
+    "input": [
+      "T1204",
+      "T1204.002"
+    ],
+    "target": "T1048",
+    "input_str": "T1204 -> T1204.002"
+  },
+  {
+    "campaign": "Polyglot File Delivers IcedID",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "Polyglot File Delivers IcedID",
+    "source_file": "bundle--f0a35b7b-8794-4d9f-89e3-b7a08fc00f60",
+    "input": [
+      "T1204.002",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1204.002 -> T1105"
+  },
+  {
+    "campaign": "Prying Libra_play1",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1204",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "Prying Libra_play1",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1059.004",
+      "T1204"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.004 -> T1204"
+  },
+  {
+    "campaign": "Prying Libra_play2",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1189"
+    ],
+    "target": "T1204",
+    "input_str": "T1189"
+  },
+  {
+    "campaign": "Prying Libra_play2",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1189",
+      "T1204"
+    ],
+    "target": "T1059.004",
+    "input_str": "T1189 -> T1204"
+  },
+  {
+    "campaign": "Prying Libra_play2",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1059.004"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1189 -> T1204 -> T1059.004"
+  },
+  {
+    "campaign": "Prying Libra_play2",
+    "source_file": "bundle--a0ffcc72-4f7a-4adf-ba1c-4286e1b8dedf",
+    "input": [
+      "T1189",
+      "T1204",
+      "T1059.004",
+      "T1547.001"
+    ],
+    "target": "T1496",
+    "input_str": "T1189 -> T1204 -> T1059.004 -> T1547.001"
+  },
+  {
+    "campaign": "RDAT",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "RDAT",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1059",
+      "T1059.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059 -> T1059.001"
+  },
+  {
+    "campaign": "RDAT",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1059 -> T1059.001 -> T1105"
+  },
+  {
+    "campaign": "RDAT",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1059",
+      "T1059.001",
+      "T1105",
+      "T1041"
+    ],
+    "target": "T1048",
+    "input_str": "T1059 -> T1059.001 -> T1105 -> T1041"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1133 -> T1078 -> T1059.001"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001"
+    ],
+    "target": "T1003.008",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1003.008"
+    ],
+    "target": "T1083",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001 -> T1003.008"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1003.008",
+      "T1083"
+    ],
+    "target": "T1046",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001 -> T1003.008 -> T1083"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1003.008",
+      "T1083",
+      "T1046"
+    ],
+    "target": "T1021.004",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001 -> T1003.008 -> T1083 -> T1046"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1003.008",
+      "T1083",
+      "T1046",
+      "T1021.004"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001 -> T1003.008 -> T1083 -> T1046 -> T1021.004"
+  },
+  {
+    "campaign": "Ransom Cartel ",
+    "source_file": "bundle--8c896f25-138c-47ae-a75b-f5dace476b14",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1059.001",
+      "T1547.001",
+      "T1003.001",
+      "T1003.008",
+      "T1083",
+      "T1046",
+      "T1021.004",
+      "T1021.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1133 -> T1078 -> T1059.001 -> T1547.001 -> T1003.001 -> T1003.008 -> T1083 -> T1046 -> T1021.004 -> T1021.001"
+  },
+  {
+    "campaign": "Russia\u2019s Trident Ursa / Primitive Bear actively targeting Ukraine",
+    "source_file": "bundle--48e0199f-6fd7-41b8-951d-d43359b6d46c",
+    "input": [
+      "T1053.005"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1053.005"
+  },
+  {
+    "campaign": "Russia\u2019s Trident Ursa / Primitive Bear actively targeting Ukraine",
+    "source_file": "bundle--48e0199f-6fd7-41b8-951d-d43359b6d46c",
+    "input": [
+      "T1053.005",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1053.005 -> T1071.001"
+  },
+  {
+    "campaign": "September - November 2016",
+    "source_file": "bundle--d95a4023-2e01-43c5-aa1e-f46bb90dc6b7",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1083",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "September - November 2016",
+    "source_file": "bundle--d95a4023-2e01-43c5-aa1e-f46bb90dc6b7",
+    "input": [
+      "T1204",
+      "T1083"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1083"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190",
+      "T1505.003"
+    ],
+    "target": "T1046",
+    "input_str": "T1190 -> T1505.003"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1046"
+    ],
+    "target": "T1210",
+    "input_str": "T1190 -> T1505.003 -> T1046"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1046",
+      "T1210"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1190 -> T1505.003 -> T1046 -> T1210"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1046",
+      "T1210",
+      "T1021.002"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1505.003 -> T1046 -> T1210 -> T1021.002"
+  },
+  {
+    "campaign": "SharePoint Webshells - APT27",
+    "source_file": "bundle--c52bfbd2-aa41-48bc-b86c-9bad5b9b8407",
+    "input": [
+      "T1190",
+      "T1505.003",
+      "T1046",
+      "T1210",
+      "T1021.002",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1190 -> T1505.003 -> T1046 -> T1210 -> T1021.002 -> T1105"
+  },
+  {
+    "campaign": "SkySky Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1059.004"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.004"
+  },
+  {
+    "campaign": "SkySky Campaign",
+    "source_file": "bundle--dbfb1a75-7734-41c7-9919-28350e3c0223",
+    "input": [
+      "T1059.004",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1059.004 -> T1105"
+  },
+  {
+    "campaign": "SockDetour Backdoor targets U.S Defense Industries",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "SockDetour Backdoor targets U.S Defense Industries",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1059.001",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001 -> T1027"
+  },
+  {
+    "campaign": "SockDetour Backdoor targets U.S Defense Industries",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1059.001",
+      "T1027",
+      "T1105"
+    ],
+    "target": "T1071.002",
+    "input_str": "T1059.001 -> T1027 -> T1105"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1595.002 -> T1190"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1547.001"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1595.002 -> T1190 -> T1547.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1547.001",
+      "T1505.003"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1595.002 -> T1190 -> T1547.001 -> T1505.003"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1547.001",
+      "T1505.003",
+      "T1003.001"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1595.002 -> T1190 -> T1547.001 -> T1505.003 -> T1003.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1547.001",
+      "T1505.003",
+      "T1003.001",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1595.002 -> T1190 -> T1547.001 -> T1505.003 -> T1003.001 -> T1071.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against ManageEngine ADSelfService",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1547.001",
+      "T1505.003",
+      "T1003.001",
+      "T1071.001",
+      "T1105"
+    ],
+    "target": "T1048.003",
+    "input_str": "T1595.002 -> T1190 -> T1547.001 -> T1505.003 -> T1003.001 -> T1071.001 -> T1105"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002"
+    ],
+    "target": "T1190",
+    "input_str": "T1595.002"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1595.002 -> T1190"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1595.002 -> T1190 -> T1059.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003",
+      "T1027"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003 -> T1027"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003",
+      "T1027",
+      "T1003.001"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003 -> T1027 -> T1003.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003",
+      "T1027",
+      "T1003.001",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003 -> T1027 -> T1003.001 -> T1071.001"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003",
+      "T1027",
+      "T1003.001",
+      "T1071.001",
+      "T1105"
+    ],
+    "target": "T1071.002",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003 -> T1027 -> T1003.001 -> T1071.001 -> T1105"
+  },
+  {
+    "campaign": "Targeted Attack Campaign Against MangeEngine ServiceDesk Plus",
+    "source_file": "bundle--1e1b6975-2db1-44b5-a980-664a447c1174",
+    "input": [
+      "T1595.002",
+      "T1190",
+      "T1059.001",
+      "T1547.001",
+      "T1505.003",
+      "T1027",
+      "T1003.001",
+      "T1071.001",
+      "T1105",
+      "T1071.002"
+    ],
+    "target": "T1048.003",
+    "input_str": "T1595.002 -> T1190 -> T1059.001 -> T1547.001 -> T1505.003 -> T1027 -> T1003.001 -> T1071.001 -> T1105 -> T1071.002"
+  },
+  {
+    "campaign": "Thief Libra Cryptomining Operation",
+    "source_file": "bundle--536b7c9b-4125-4f22-9272-76065bf42c5e",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1046",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Thief Libra Cryptomining Operation",
+    "source_file": "bundle--536b7c9b-4125-4f22-9272-76065bf42c5e",
+    "input": [
+      "T1204",
+      "T1046"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1046"
+  },
+  {
+    "campaign": "Thief Libra Cryptomining Operation",
+    "source_file": "bundle--536b7c9b-4125-4f22-9272-76065bf42c5e",
+    "input": [
+      "T1204",
+      "T1046",
+      "T1105"
+    ],
+    "target": "T1496",
+    "input_str": "T1204 -> T1046 -> T1105"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133"
+    ],
+    "target": "T1078",
+    "input_str": "T1133"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078"
+    ],
+    "target": "T1069.002",
+    "input_str": "T1133 -> T1078"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002"
+    ],
+    "target": "T1018",
+    "input_str": "T1133 -> T1078 -> T1069.002"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018"
+    ],
+    "target": "T1046",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046"
+    ],
+    "target": "T1016",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016"
+    ],
+    "target": "T1083",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016",
+      "T1083"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016 -> T1083"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016",
+      "T1083",
+      "T1021.001"
+    ],
+    "target": "T1572",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016 -> T1083 -> T1021.001"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016",
+      "T1083",
+      "T1021.001",
+      "T1572"
+    ],
+    "target": "T1105",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016 -> T1083 -> T1021.001 -> T1572"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016",
+      "T1083",
+      "T1021.001",
+      "T1572",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016 -> T1083 -> T1021.001 -> T1572 -> T1105"
+  },
+  {
+    "campaign": "Threat Assessment 2023",
+    "source_file": "bundle--e3ea6051-264e-49aa-80b3-03e89915821b",
+    "input": [
+      "T1133",
+      "T1078",
+      "T1069.002",
+      "T1018",
+      "T1046",
+      "T1016",
+      "T1083",
+      "T1021.001",
+      "T1572",
+      "T1105",
+      "T1041"
+    ],
+    "target": "T1048",
+    "input_str": "T1133 -> T1078 -> T1069.002 -> T1018 -> T1046 -> T1016 -> T1083 -> T1021.001 -> T1572 -> T1105 -> T1041"
+  },
+  {
+    "campaign": "Threat Assessment: Conti Ransomware",
+    "source_file": "bundle--08438c8f-9d36-41cb-a9da-3ce1e7e9b02f",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1027",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "Threat Assessment: Conti Ransomware",
+    "source_file": "bundle--08438c8f-9d36-41cb-a9da-3ce1e7e9b02f",
+    "input": [
+      "T1204",
+      "T1027"
+    ],
+    "target": "T1087.002",
+    "input_str": "T1204 -> T1027"
+  },
+  {
+    "campaign": "Threat Assessment: Conti Ransomware",
+    "source_file": "bundle--08438c8f-9d36-41cb-a9da-3ce1e7e9b02f",
+    "input": [
+      "T1204",
+      "T1027",
+      "T1087.002"
+    ],
+    "target": "T1083",
+    "input_str": "T1204 -> T1027 -> T1087.002"
+  },
+  {
+    "campaign": "Threat Assessment: Conti Ransomware",
+    "source_file": "bundle--08438c8f-9d36-41cb-a9da-3ce1e7e9b02f",
+    "input": [
+      "T1204",
+      "T1027",
+      "T1087.002",
+      "T1083"
+    ],
+    "target": "T1016",
+    "input_str": "T1204 -> T1027 -> T1087.002 -> T1083"
+  },
+  {
+    "campaign": "Threat Assessment: Conti Ransomware",
+    "source_file": "bundle--08438c8f-9d36-41cb-a9da-3ce1e7e9b02f",
+    "input": [
+      "T1204",
+      "T1027",
+      "T1087.002",
+      "T1083",
+      "T1016"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1204 -> T1027 -> T1087.002 -> T1083 -> T1016"
+  },
+  {
+    "campaign": "Threat Brief: CVE-2022-1388",
+    "source_file": "bundle--b8a763a2-ba1e-488c-9c16-8dea19551823",
+    "input": [
+      "T1190"
+    ],
+    "target": "T1203",
+    "input_str": "T1190"
+  },
+  {
+    "campaign": "Threat Brief: CVE-2022-1388",
+    "source_file": "bundle--b8a763a2-ba1e-488c-9c16-8dea19551823",
+    "input": [
+      "T1190",
+      "T1203"
+    ],
+    "target": "T1105",
+    "input_str": "T1190 -> T1203"
+  },
+  {
+    "campaign": "TriFive and Snugy Backdoors Campaign",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1059",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "TriFive and Snugy Backdoors Campaign",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1059"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1078 -> T1059"
+  },
+  {
+    "campaign": "TriFive and Snugy Backdoors Campaign",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1059",
+      "T1053.005"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078 -> T1059 -> T1053.005"
+  },
+  {
+    "campaign": "TriFive and Snugy Backdoors Campaign",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1059",
+      "T1053.005",
+      "T1059.001"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1078 -> T1059 -> T1053.005 -> T1059.001"
+  },
+  {
+    "campaign": "TriFive and Snugy Backdoors Campaign",
+    "source_file": "bundle--bdf1a2e6-653a-4bfa-a34c-22d960580e74",
+    "input": [
+      "T1078",
+      "T1059",
+      "T1053.005",
+      "T1059.001",
+      "T1071.004"
+    ],
+    "target": "T1048",
+    "input_str": "T1078 -> T1059 -> T1053.005 -> T1059.001 -> T1071.004"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005"
+    ],
+    "target": "T1204.002",
+    "input_str": "T1053.005"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005",
+      "T1204.002"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1053.005 -> T1204.002"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1543.003"
+    ],
+    "target": "T1016",
+    "input_str": "T1053.005 -> T1204.002 -> T1543.003"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1543.003",
+      "T1016"
+    ],
+    "target": "T1018",
+    "input_str": "T1053.005 -> T1204.002 -> T1543.003 -> T1016"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1543.003",
+      "T1016",
+      "T1018"
+    ],
+    "target": "T1071.004",
+    "input_str": "T1053.005 -> T1204.002 -> T1543.003 -> T1016 -> T1018"
+  },
+  {
+    "campaign": "Trickbot Anchor Malware",
+    "source_file": "bundle--b9393d0f-900f-4808-bb16-da4d3047041b",
+    "input": [
+      "T1053.005",
+      "T1204.002",
+      "T1543.003",
+      "T1016",
+      "T1018",
+      "T1071.004"
+    ],
+    "target": "T1041",
+    "input_str": "T1053.005 -> T1204.002 -> T1543.003 -> T1016 -> T1018 -> T1071.004"
+  },
+  {
+    "campaign": "Trident Ursa",
+    "source_file": "bundle--48e0199f-6fd7-41b8-951d-d43359b6d46c",
+    "input": [
+      "T1053.005"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1053.005"
+  },
+  {
+    "campaign": "Trident Ursa",
+    "source_file": "bundle--48e0199f-6fd7-41b8-951d-d43359b6d46c",
+    "input": [
+      "T1053.005",
+      "T1071.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1053.005 -> T1071.001"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1059"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001"
+    ],
+    "target": "T1027",
+    "input_str": "T1059 -> T1547.001"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1059 -> T1547.001 -> T1027"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027",
+      "T1003.001"
+    ],
+    "target": "T1016",
+    "input_str": "T1059 -> T1547.001 -> T1027 -> T1003.001"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027",
+      "T1003.001",
+      "T1016"
+    ],
+    "target": "T1046",
+    "input_str": "T1059 -> T1547.001 -> T1027 -> T1003.001 -> T1016"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027",
+      "T1003.001",
+      "T1016",
+      "T1046"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1059 -> T1547.001 -> T1027 -> T1003.001 -> T1016 -> T1046"
+  },
+  {
+    "campaign": "Trigona Ransomware",
+    "source_file": "bundle--5242da6f-c6bd-438e-bafa-8a5c0a1047db",
+    "input": [
+      "T1059",
+      "T1547.001",
+      "T1027",
+      "T1003.001",
+      "T1016",
+      "T1046",
+      "T1021.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059 -> T1547.001 -> T1027 -> T1003.001 -> T1016 -> T1046 -> T1021.001"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1190",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078 -> T1190"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001"
+    ],
+    "target": "T1053.005",
+    "input_str": "T1078 -> T1190 -> T1059.001"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005"
+    ],
+    "target": "T1547.001",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001"
+    ],
+    "target": "T1543.003",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003"
+    ],
+    "target": "T1497",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003",
+      "T1497"
+    ],
+    "target": "T1003.001",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003 -> T1497"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003",
+      "T1497",
+      "T1003.001"
+    ],
+    "target": "T1046",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003 -> T1497 -> T1003.001"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003",
+      "T1497",
+      "T1003.001",
+      "T1046"
+    ],
+    "target": "T1021.002",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003 -> T1497 -> T1003.001 -> T1046"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003",
+      "T1497",
+      "T1003.001",
+      "T1046",
+      "T1021.002"
+    ],
+    "target": "T1048",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003 -> T1497 -> T1003.001 -> T1046 -> T1021.002"
+  },
+  {
+    "campaign": "Vice Society",
+    "source_file": "bundle--2ef4b1e2-49b8-493f-9653-19a8d65866ad",
+    "input": [
+      "T1078",
+      "T1190",
+      "T1059.001",
+      "T1053.005",
+      "T1547.001",
+      "T1543.003",
+      "T1497",
+      "T1003.001",
+      "T1046",
+      "T1021.002",
+      "T1048"
+    ],
+    "target": "T1041",
+    "input_str": "T1078 -> T1190 -> T1059.001 -> T1053.005 -> T1547.001 -> T1543.003 -> T1497 -> T1003.001 -> T1046 -> T1021.002 -> T1048"
+  },
+  {
+    "campaign": "WhisperGate malware targeting Ukraine",
+    "source_file": "bundle--62a15a03-ffae-44df-906f-250611822df2",
+    "input": [
+      "T1059.001"
+    ],
+    "target": "T1105",
+    "input_str": "T1059.001"
+  },
+  {
+    "campaign": "WhisperGate malware targeting Ukraine",
+    "source_file": "bundle--62a15a03-ffae-44df-906f-250611822df2",
+    "input": [
+      "T1059.001",
+      "T1105"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1059.001 -> T1105"
+  },
+  {
+    "campaign": "Winter 2022",
+    "source_file": "bundle--f2f8ba5a-368f-42d5-8909-1fba75a8e015",
+    "input": [
+      "T1204.002"
+    ],
+    "target": "T1027",
+    "input_str": "T1204.002"
+  },
+  {
+    "campaign": "Winter 2022",
+    "source_file": "bundle--f2f8ba5a-368f-42d5-8909-1fba75a8e015",
+    "input": [
+      "T1204.002",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1204.002 -> T1027"
+  },
+  {
+    "campaign": "analytic detectors to detect global statistical anomalies on endpoints",
+    "source_file": "bundle--04589bf2-c43a-484f-9610-ff9fb52e65ca",
+    "input": [
+      "T1003.001"
+    ],
+    "target": "T1016",
+    "input_str": "T1003.001"
+  },
+  {
+    "campaign": "analytic detectors to detect global statistical anomalies on endpoints",
+    "source_file": "bundle--04589bf2-c43a-484f-9610-ff9fb52e65ca",
+    "input": [
+      "T1003.001",
+      "T1016"
+    ],
+    "target": "T1046",
+    "input_str": "T1003.001 -> T1016"
+  },
+  {
+    "campaign": "analytic detectors to detect global statistical anomalies on endpoints",
+    "source_file": "bundle--04589bf2-c43a-484f-9610-ff9fb52e65ca",
+    "input": [
+      "T1003.001",
+      "T1016",
+      "T1046"
+    ],
+    "target": "T1021.001",
+    "input_str": "T1003.001 -> T1016 -> T1046"
+  },
+  {
+    "campaign": "analytic detectors to detect global statistical anomalies on endpoints",
+    "source_file": "bundle--04589bf2-c43a-484f-9610-ff9fb52e65ca",
+    "input": [
+      "T1003.001",
+      "T1016",
+      "T1046",
+      "T1021.001"
+    ],
+    "target": "T1071.001",
+    "input_str": "T1003.001 -> T1016 -> T1046 -> T1021.001"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1204",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1078 -> T1204"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1059.001",
+    "input_str": "T1078 -> T1204 -> T1059"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001"
+    ],
+    "target": "T1203",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003",
+      "T1027"
+    ],
+    "target": "T1033",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003 -> T1027"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003",
+      "T1027",
+      "T1033"
+    ],
+    "target": "T1016",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003 -> T1027 -> T1033"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003",
+      "T1027",
+      "T1033",
+      "T1016"
+    ],
+    "target": "T1105",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003 -> T1027 -> T1033 -> T1016"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003",
+      "T1027",
+      "T1033",
+      "T1016",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003 -> T1027 -> T1033 -> T1016 -> T1105"
+  },
+  {
+    "campaign": "first",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1204",
+      "T1059",
+      "T1059.001",
+      "T1203",
+      "T1505.003",
+      "T1027",
+      "T1033",
+      "T1016",
+      "T1105",
+      "T1041"
+    ],
+    "target": "T1048",
+    "input_str": "T1078 -> T1204 -> T1059 -> T1059.001 -> T1203 -> T1505.003 -> T1027 -> T1033 -> T1016 -> T1105 -> T1041"
+  },
+  {
+    "campaign": "fourth",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1059",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "fourth",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1204",
+      "T1059"
+    ],
+    "target": "T1105",
+    "input_str": "T1204 -> T1059"
+  },
+  {
+    "campaign": "fourth",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1204",
+      "T1059",
+      "T1105"
+    ],
+    "target": "T1041",
+    "input_str": "T1204 -> T1059 -> T1105"
+  },
+  {
+    "campaign": "second",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1204"
+    ],
+    "target": "T1016",
+    "input_str": "T1204"
+  },
+  {
+    "campaign": "second",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1204",
+      "T1016"
+    ],
+    "target": "T1033",
+    "input_str": "T1204 -> T1016"
+  },
+  {
+    "campaign": "third",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078"
+    ],
+    "target": "T1203",
+    "input_str": "T1078"
+  },
+  {
+    "campaign": "third",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1203"
+    ],
+    "target": "T1059",
+    "input_str": "T1078 -> T1203"
+  },
+  {
+    "campaign": "third",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1203",
+      "T1059"
+    ],
+    "target": "T1505.003",
+    "input_str": "T1078 -> T1203 -> T1059"
+  },
+  {
+    "campaign": "third",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1203",
+      "T1059",
+      "T1505.003"
+    ],
+    "target": "T1027",
+    "input_str": "T1078 -> T1203 -> T1059 -> T1505.003"
+  },
+  {
+    "campaign": "third",
+    "source_file": "bundle--1e41fa17-fd53-46b6-819b-c8b672beb8b9",
+    "input": [
+      "T1078",
+      "T1203",
+      "T1059",
+      "T1505.003",
+      "T1027"
+    ],
+    "target": "T1105",
+    "input_str": "T1078 -> T1203 -> T1059 -> T1505.003 -> T1027"
+  }
+]
