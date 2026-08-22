@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 class ProgressionStore:
     """
     Stores:
-      - attack_events.jsonl    : every accepted semantic ATT&CK mapping
+      - attack_events.jsonl    : every mapped event (eligible + rejected)
       - user_sequences.jsonl   : chronological technique sequence per user
       - predictions.jsonl      : snapshot predictions per user
     """
@@ -20,19 +20,54 @@ class ProgressionStore:
         self.predictions_file = self.output_dir / "predictions.jsonl"
         self.sequences_file = self.output_dir / "user_sequences.jsonl"
 
-        # In-memory cache for user sequences to avoid re-reading every time
+        # In-memory cache for user sequences
         self._sequence_cache = {}
+
+        # In-memory dedup set: "user_id:event_id:technique_id:mapping_id"
+        self._seen_keys = set()
+        self._load_seen_keys()
+
+    # -----------------------------------------------------------------
+    # Dedup
+    # -----------------------------------------------------------------
+    def _make_key(self, user_id, event_id, technique_id, mapping_id):
+        return f"{user_id}:{event_id}:{technique_id}:{mapping_id}"
+
+    def _load_seen_keys(self):
+        if not self.attack_events_file.exists():
+            return
+        with open(self.attack_events_file, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                    key = self._make_key(
+                        rec.get("user_id"),
+                        rec.get("event_id"),
+                        rec.get("technique_id"),
+                        rec.get("mapping_id")
+                    )
+                    self._seen_keys.add(key)
+                except Exception:
+                    continue
+
+    def is_duplicate(self, user_id, event_id, technique_id, mapping_id):
+        key = self._make_key(user_id, event_id, technique_id, mapping_id)
+        return key in self._seen_keys
 
     # -----------------------------------------------------------------
     # Attack Events
     # -----------------------------------------------------------------
     def store_attack_event(self, event_record):
-        """
-        event_record: dict with keys:
-            event_id, user_id, timestamp, source, log_type,
-            mapping_id, technique_id, technique_name, tactic,
-            confidence, score, raw_event
-        """
+        key = self._make_key(
+            event_record.get("user_id"),
+            event_record.get("event_id"),
+            event_record.get("technique_id"),
+            event_record.get("mapping_id")
+        )
+        self._seen_keys.add(key)
         with open(self.attack_events_file, "a", encoding="utf-8") as f:
             f.write(json.dumps(event_record, default=str) + "\n")
 
@@ -40,10 +75,6 @@ class ProgressionStore:
     # User Sequence
     # -----------------------------------------------------------------
     def append_technique(self, user_id, technique_id, timestamp):
-        """
-        Append technique to user's chronological sequence.
-        Returns the updated sequence list.
-        """
         seq = self._load_sequence(user_id)
         seq.append({
             "technique_id": technique_id,
@@ -79,8 +110,6 @@ class ProgressionStore:
         return seq
 
     def _flush_sequence(self, user_id, sequence):
-        # Simple append-only line for the user.
-        # In V1 we write a new line every update; readers take the last.
         record = {
             "user_id": user_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -93,9 +122,6 @@ class ProgressionStore:
     # Predictions
     # -----------------------------------------------------------------
     def store_prediction(self, user_id, history, predictions):
-        """
-        predictions: list of (technique_id, score) from predictor
-        """
         record = {
             "prediction_id": f"pred-{uuid.uuid4().hex[:8]}",
             "user_id": user_id,
@@ -114,6 +140,5 @@ class ProgressionStore:
     # Reporting
     # -----------------------------------------------------------------
     def get_user_history(self, user_id):
-        """Return printable history list."""
         seq = self._load_sequence(user_id)
         return seq

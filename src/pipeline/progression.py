@@ -2,23 +2,76 @@ from datetime import datetime, timezone
 
 from storage.progression_store import ProgressionStore
 from prediction.predictor import AttackPredictor
+from pipeline.progression_filter import ProgressionFilter
 
 
-DEFAULT_USER_ID = "lab_user"
+DEFAULT_USER_ID = "lab_attacker"
 
 
 class ProgressionIntegration:
     """
     Glue layer between semantic mappings and the prediction model.
+    Includes progression filtering before timeline update.
     """
 
     def __init__(self,
                  predictor=None,
                  progression_store=None,
+                 progression_filter=None,
                  default_user=DEFAULT_USER_ID):
         self.default_user = default_user
         self.store = progression_store or ProgressionStore()
         self.predictor = predictor or AttackPredictor()
+        self.filter = progression_filter or ProgressionFilter()
+
+    # -----------------------------------------------------------------
+    # IP Extraction
+    # -----------------------------------------------------------------
+    def _extract_ips(self, event, source):
+        """
+        Robust IP extraction from normalized Zeek/Wazuh events.
+        """
+        decoded = event.get("decoded_fields", {})
+        source_ip = None
+        dest_ip = None
+
+        if source == "Zeek":
+            for key in ["id.orig_h", "ssh.id.orig_h", "conn.id.orig_h",
+                        "http.id.orig_h", "dns.id.orig_h"]:
+                val = decoded.get(key)
+                if val:
+                    source_ip = val
+                    break
+            for key in ["id.resp_h", "ssh.id.resp_h", "conn.id.resp_h",
+                        "http.id.resp_h", "dns.id.resp_h"]:
+                val = decoded.get(key)
+                if val:
+                    dest_ip = val
+                    break
+            # files.log uses tx_hosts / rx_hosts (can be list)
+            if not source_ip:
+                tx = decoded.get("files.tx_hosts")
+                if isinstance(tx, list) and tx:
+                    source_ip = tx[0]
+                elif isinstance(tx, str):
+                    source_ip = tx
+            if not dest_ip:
+                rx = decoded.get("files.rx_hosts")
+                if isinstance(rx, list) and rx:
+                    dest_ip = rx[0]
+                elif isinstance(rx, str):
+                    dest_ip = rx
+
+        elif source == "Wazuh":
+            data = decoded.get("data", {})
+            source_ip = data.get("srcip")
+            dest_ip = data.get("dstip")
+            if not source_ip:
+                source_ip = decoded.get("srcip") or decoded.get("source_ip")
+            if not dest_ip:
+                dest_ip = decoded.get("dstip") or decoded.get("destination_ip")
+
+        return source_ip, dest_ip
 
     # -----------------------------------------------------------------
     # Zeek
@@ -30,6 +83,7 @@ class ProgressionIntegration:
         """
         results = semantic_results.get("semantic_results", [])
         match_count = 0
+        accepted_count = 0
 
         for item in results:
             event = item.get("event", {})
@@ -37,13 +91,16 @@ class ProgressionIntegration:
 
             for match in matches:
                 match_count += 1
-                self._handle_match(
+                accepted = self._handle_match(
                     source="Zeek",
                     log_type=log_type,
                     event=event,
                     match=match
                 )
+                if accepted:
+                    accepted_count += 1
 
+        print(f"[PROGRESSION] Zeek: {match_count} semantic matches, {accepted_count} accepted")
         return match_count
 
     # -----------------------------------------------------------------
@@ -54,9 +111,9 @@ class ProgressionIntegration:
         mapped_events: list from map_wazuh_events()
         """
         match_count = 0
+        accepted_count = 0
 
         for item in mapped_events:
-            # Skip correlation-only results (different structure)
             if item.get("correlation") is True:
                 continue
 
@@ -65,13 +122,16 @@ class ProgressionIntegration:
 
             for match in mappings:
                 match_count += 1
-                self._handle_match(
+                accepted = self._handle_match(
                     source="Wazuh",
                     log_type=event.get("log_type", "unknown"),
                     event=event,
                     match=match
                 )
+                if accepted:
+                    accepted_count += 1
 
+        print(f"[PROGRESSION] Wazuh: {match_count} semantic matches, {accepted_count} accepted")
         return match_count
 
     # -----------------------------------------------------------------
@@ -87,7 +147,6 @@ class ProgressionIntegration:
         score = 0.0
 
         if isinstance(match, dict):
-            # Zeek format
             technique_id = match.get("technique_id")
             technique_name = match.get("technique_name")
             tactic = match.get("tactic")
@@ -95,7 +154,6 @@ class ProgressionIntegration:
             confidence = match.get("confidence_score", 0.0)
             score = match.get("score", 0.0)
 
-            # Wazuh format (nested under "technique")
             if not technique_id and "technique" in match:
                 tech = match["technique"]
                 if isinstance(tech, dict):
@@ -112,14 +170,20 @@ class ProgressionIntegration:
             if not score and "match" in match:
                 score = float(match["match"].get("score", 0.0))
 
-        # Timestamp from event
+        # Timestamp
         timestamp = event.get("timestamp")
         if not timestamp:
             timestamp = datetime.now(timezone.utc).isoformat()
 
+        # IPs
+        source_ip, dest_ip = self._extract_ips(event, source)
+
+        # Event ID
+        raw_event_id = event.get("id") or event.get("event_id") or "unknown"
+
         # Build attack event record
         attack_event = {
-            "event_id": event.get("id") or f"evt-{datetime.now(timezone.utc).timestamp()}",
+            "event_id": raw_event_id,
             "user_id": self.default_user,
             "timestamp": timestamp,
             "source": source,
@@ -130,47 +194,94 @@ class ProgressionIntegration:
             "tactic": tactic,
             "confidence": confidence,
             "score": score,
-            "raw_event": event
+            "source_ip": source_ip,
+            "destination_ip": dest_ip,
+            "raw_event": event,
+            "progression_eligible": False,
+            "progression_reason": None,
+            "progression_rejected_reason": None
         }
 
-        # Persist attack event
-        self.store.store_attack_event(attack_event)
+        # Print semantic mapping
+        print()
+        print("[SEMANTIC]")
+        print(f"  Technique : {technique_id} {technique_name or ''}")
+        print(f"  Source    : {source}/{log_type}")
+        print(f"  Confidence: {confidence}")
+        print(f"  Score     : {score}")
+        if source_ip:
+            print(f"  Source IP : {source_ip}")
 
-        print(f"[PROGRESSION] Stored attack event: {technique_id} ({technique_name}) "
-              f"from {source}/{log_type} for {self.default_user}")
+        # Get current sequence for filtering
+        current_seq = self.store.get_sequence(self.default_user)
 
-        # Vocabulary filter
-        vocab = set(self.predictor.vocab) if self.predictor.vocab else set()
-        if technique_id and technique_id in vocab:
-            # Append to sequence and predict
-            full_sequence = self.store.append_technique(
-                self.default_user,
-                technique_id,
-                timestamp
-            )
+        # Evaluate filter
+        eligible, reason = self.filter.evaluate(attack_event, current_seq)
 
-            print(f"[PROGRESSION] User sequence: {' -> '.join(full_sequence)}")
+        # Check deduplication
+        is_dup = self.store.is_duplicate(
+            self.default_user,
+            attack_event["event_id"],
+            technique_id,
+            mapping_id
+        )
 
-            # Trigger prediction (minimum length = 1, per training script)
-            if len(full_sequence) >= 1:
-                try:
-                    preds = self.predictor.predict(full_sequence, top_k=5)
-                    if preds:
-                        pred_record = self.store.store_prediction(
-                            self.default_user,
-                            full_sequence,
-                            preds
-                        )
-                        print(f"[PROGRESSION] Prediction stored: {pred_record['prediction_id']}")
-                        self._print_prediction(preds)
-                except Exception as e:
-                    print(f"[PROGRESSION] Prediction error (non-fatal): {e}")
+        if eligible and not is_dup:
+            attack_event["progression_eligible"] = True
+            attack_event["progression_reason"] = reason
+            self.store.store_attack_event(attack_event)
+
+            print("[PROGRESSION]")
+            print("  ACCEPTED")
+            print(f"  Reason    : {reason}")
+            print(f"  User      : {self.default_user}")
+
+            # Vocabulary filter
+            vocab = set(self.predictor.vocab) if self.predictor.vocab else set()
+            if technique_id and technique_id in vocab:
+                full_sequence = self.store.append_technique(
+                    self.default_user,
+                    technique_id,
+                    timestamp
+                )
+
+                print("[TIMELINE]")
+                print(f"  Appended  : {technique_id}")
+                print(f"  Sequence  : {' -> '.join(full_sequence)}")
+
+                if len(full_sequence) >= 1:
+                    try:
+                        preds = self.predictor.predict(full_sequence, top_k=5)
+                        if preds:
+                            pred_record = self.store.store_prediction(
+                                self.default_user,
+                                full_sequence,
+                                preds
+                            )
+                            print("[PREDICTION]")
+                            print(f"  Prediction ID: {pred_record['prediction_id']}")
+                            print(f"  Current chain:")
+                            print(f"    {' -> '.join(full_sequence)}")
+                            print("  Top-5 next techniques:")
+                            for rank, (tid, pscore) in enumerate(preds, 1):
+                                print(f"    {rank}. {tid}  (score={pscore:.4f})")
+                    except Exception as e:
+                        print(f"[PREDICTION] ERROR: {e}")
+            else:
+                if technique_id:
+                    print(f"[PROGRESSION] Technique {technique_id} not in model vocabulary. Stored as evidence only.")
+            return True
+
         else:
-            if technique_id:
-                print(f"[PROGRESSION] Technique {technique_id} not in model vocabulary. "
-                      f"Stored as evidence only.")
+            attack_event["progression_eligible"] = False
+            if is_dup:
+                attack_event["progression_rejected_reason"] = "duplicate_event"
+            else:
+                attack_event["progression_rejected_reason"] = reason
 
-    def _print_prediction(self, preds):
-        print("[PREDICTOR] Top-5 next techniques:")
-        for rank, (tid, score) in enumerate(preds, 1):
-            print(f"  {rank}. {tid}  (score={score:.4f})")
+            self.store.store_attack_event(attack_event)
+
+            print("[PROGRESSION]")
+            print("  REJECTED")
+            print(f"  Reason    : {attack_event['progression_rejected_reason']}")
+            return False
