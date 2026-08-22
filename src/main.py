@@ -48,9 +48,7 @@ def main():
                     )
 
                     if not zeek_events:
-                        print(
-                            f"[MAIN] No valid Zeek events decoded from {log_type}"
-                        )
+                        print(f"[MAIN] No valid Zeek events decoded from {log_type}")
                         continue
 
                     semantic_results = map_zeek_events(
@@ -62,25 +60,19 @@ def main():
                         zeek_events
                     )
 
-                    print(
-                        f"[MAIN] Semantic mappings: "
-                        f"{len(semantic_results.get('semantic_results', []))}"
-                    )
-
-                    print(
-                        f"[MAIN] Correlation detections: "
-                        f"{len(correlation_results)}"
-                    )
+                    print(f"[MAIN] Semantic mappings: {len(semantic_results.get('semantic_results', []))}")
+                    print(f"[MAIN] Correlation detections: {len(correlation_results)}")
 
                     # -------------------------------------------------
                     # ATTACK PROGRESSION INTEGRATION (ZEEK)
                     # -------------------------------------------------
-                    zeek_match_count = progression.process_zeek_semantic_results(
+                    progression.process_zeek_semantic_results(
                         semantic_results,
                         log_type
                     )
-                    print(
-                        f"[MAIN] Zeek ATT&CK matches processed: {zeek_match_count}"
+                    progression.process_zeek_correlation_results(
+                        correlation_results,
+                        log_type
                     )
 
                     event_store.store_events(
@@ -88,10 +80,7 @@ def main():
                         log_type
                     )
 
-                    print(
-                        f"[MAIN] Stored "
-                        f"{len(zeek_events)} events from {log_type}"
-                    )
+                    print(f"[MAIN] Stored {len(zeek_events)} events from {log_type}")
 
                 elif source["source"] == "wazuh":
 
@@ -101,9 +90,7 @@ def main():
                     )
 
                     if not wazuh_events:
-                        print(
-                            f"[MAIN] No valid Wazuh events decoded from {log_type}"
-                        )
+                        print(f"[MAIN] No valid Wazuh events decoded from {log_type}")
                         continue
 
                     all_wazuh_events.extend(
@@ -114,11 +101,7 @@ def main():
                         wazuh_events,
                         log_type
                     )
-
-                    print(
-                        f"[MAIN] Stored "
-                        f"{len(wazuh_events)} events from {log_type}"
-                    )
+                    print(f"[MAIN] Stored {len(wazuh_events)} events from {log_type}")
 
                 collector.commit_offset(
                     result["source_id"],
@@ -126,18 +109,11 @@ def main():
                     result["inode"]
                 )
 
-                print(
-                    f"[MAIN] Offset committed: "
-                    f"{result['new_offset']}"
-                )
+                print(f"[MAIN] Offset committed: {result['new_offset']}")
 
             except Exception as error:
 
-                print(
-                    f"[{source['id']}] ERROR: {error}"
-                )
-
-                # Do not commit offset when processing fails.
+                print(f"[{source['id']}] ERROR: {error}")
 
         if all_wazuh_events:
 
@@ -198,11 +174,8 @@ def main():
             # -------------------------------------------------
             # ATTACK PROGRESSION INTEGRATION (WAZUH)
             # -------------------------------------------------
-            wazuh_match_count = progression.process_wazuh_mapped_events(
+            progression.process_wazuh_mapped_events(
                 mapped_wazuh_events
-            )
-            print(
-                f"[MAIN] Wazuh ATT&CK matches processed: {wazuh_match_count}"
             )
 
     finally:
