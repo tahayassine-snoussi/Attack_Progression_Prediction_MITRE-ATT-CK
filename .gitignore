@@ -26,3 +26,5 @@ wazuh_mappingDB_lab.csv
 
 
 src/model_training/note.txt
+src/logs_extraction/state/*
+src/logs_extraction/state

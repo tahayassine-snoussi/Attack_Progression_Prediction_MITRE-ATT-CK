@@ -8,13 +8,6 @@
             "decoder": "zeek"
         },
         {
-            "id": "zeek_dns",
-            "source": "zeek",
-            "log_type": "dns.log",
-            "remote_path": "/opt/zeek/logs/current/dns.log",
-            "decoder": "zeek"
-        },
-        {
             "id": "zeek_files",
             "source": "zeek",
             "log_type": "files.log",

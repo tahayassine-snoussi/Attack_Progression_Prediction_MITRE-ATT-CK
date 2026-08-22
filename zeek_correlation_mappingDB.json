@@ -927,7 +927,7 @@
                 {
                     "metric": "unique_smb_targets",
                     "operator": ">=",
-                    "value": 2
+                    "value": 20
                 }
             ],
             "optional_conditions": [
