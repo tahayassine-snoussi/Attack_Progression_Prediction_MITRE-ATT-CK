@@ -72,28 +72,40 @@ class ProgressionIntegration:
     def _extract_ips_from_correlation(self, detection):
         """
         Correlation detections aggregate multiple events.
-        Try group_key first, then fallback to first event.
+        Try group_key first (it may be a tuple or a string), then fallback to first event.
         """
         group_key = detection.get("group_key")
-        if group_key:
-            try:
-                gk = ast.literal_eval(group_key)
-                if isinstance(gk, (list, tuple)) and len(gk) >= 1:
-                    src = gk[0]
-                    dst = gk[1] if len(gk) > 1 else None
-                    if src and isinstance(src, str):
-                        src = src.split(':')[0]
-                    if dst and isinstance(dst, str):
-                        dst = dst.split(':')[0]
+        if group_key is not None:
+            gk = None
+            # group_key may already be a tuple/list
+            if isinstance(group_key, (list, tuple)):
+                gk = group_key
+            else:
+                try:
+                    gk = ast.literal_eval(group_key)
+                except Exception:
+                    pass
+
+            if isinstance(gk, (list, tuple)) and len(gk) >= 1:
+                src = gk[0]
+                dst = gk[1] if len(gk) > 1 else None
+                if src and isinstance(src, str):
+                    src = src.split(':')[0]
+                    if src == "None":
+                        src = None
+                if dst and isinstance(dst, str):
+                    dst = dst.split(':')[0]
+                    if dst == "None":
+                        dst = None
+                if src or dst:
                     return src, dst
-            except Exception:
-                pass
 
         events = detection.get("events", [])
         if events:
             return self._extract_ips(events[0], "Zeek")
         return None, None
 
+    
     # -----------------------------------------------------------------
     # Zeek Semantic
     # -----------------------------------------------------------------
