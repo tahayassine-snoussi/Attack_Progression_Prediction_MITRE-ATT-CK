@@ -78,11 +78,6 @@ class ProgressionFilter:
             print(f"[FILTER] -> REJECTED (infrastructure_agent: {agent_name})")
             return False, "infrastructure_agent"
 
-        # 1.5 Session correlation: local escalation after attacker remote access
-        if technique_id == "T1548.003" and not source_ip:
-            if any(tid in current_sequence for tid in ("T1021.004", "T1078")):
-                print(f"[FILTER] -> ACCEPTED (post_ssh_escalation)")
-                return True, "post_ssh_escalation"
 
         # 1. Global thresholds
         min_conf = self.global_rules.get("min_confidence", 0.0)
@@ -92,6 +87,18 @@ class ProgressionFilter:
         if score < min_score:
             return False, f"score_below_threshold:{score:.3f}<{min_score}"
 
+
+        # 1.5 Session correlation: local escalation after attacker remote access
+        if technique_id == "T1548.003" and not source_ip:
+            if any(tid in current_sequence for tid in ("T1021.004", "T1078")):
+                # Only accept the FIRST escalation in this session
+                if technique_id in current_sequence:
+                    print(f"[FILTER] -> REJECTED (technique_already_in_sequence)")
+                    return False, "technique_already_in_sequence"
+                print(f"[FILTER] -> ACCEPTED (post_ssh_escalation)")
+                return True, "post_ssh_escalation"
+
+            
         # 2. Technique-specific or default source-IP requirement
         tech_rule = self.by_technique.get(technique_id, {})
         requires_attacker_ip = tech_rule.get(
