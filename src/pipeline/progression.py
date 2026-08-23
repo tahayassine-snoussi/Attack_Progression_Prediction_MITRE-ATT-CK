@@ -237,8 +237,16 @@ class ProgressionIntegration:
 
         timestamp = event.get("timestamp") or datetime.now(timezone.utc).isoformat()
         source_ip, dest_ip = self._extract_ips(event, source)
-        raw_event_id = event.get("id") or event.get("event_id") or "unknown"
 
+        # Stable synthetic ID when raw event has no native ID
+        raw_event_id = event.get("id") or event.get("event_id")
+        if not raw_event_id:
+            ts = event.get("timestamp", "") or datetime.now(timezone.utc).isoformat()
+            src = source_ip or "none"
+            dst = dest_ip or "none"
+            raw_event_id = f"synth:{source}:{log_type}:{ts}:{src}:{dst}"
+
+            
         attack_event = {
             "event_id": raw_event_id,
             "user_id": self.default_user,
