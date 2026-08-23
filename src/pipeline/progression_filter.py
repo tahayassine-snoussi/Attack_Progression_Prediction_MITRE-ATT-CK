@@ -72,6 +72,18 @@ class ProgressionFilter:
             print(f"[FILTER] -> REJECTED (ignored_source_ip: {source_ip})")
             return False, f"ignored_source_ip:{source_ip}"
 
+        # 0.5 Reject known infrastructure noise
+        agent_name = attack_event.get("agent_name")
+        if agent_name == "wazuh-server" and technique_id == "T1548.003":
+            print(f"[FILTER] -> REJECTED (infrastructure_agent: {agent_name})")
+            return False, "infrastructure_agent"
+
+        # 1.5 Session correlation: local escalation after attacker remote access
+        if technique_id == "T1548.003" and not source_ip:
+            if any(tid in current_sequence for tid in ("T1021.004", "T1078")):
+                print(f"[FILTER] -> ACCEPTED (post_ssh_escalation)")
+                return True, "post_ssh_escalation"
+
         # 1. Global thresholds
         min_conf = self.global_rules.get("min_confidence", 0.0)
         min_score = self.global_rules.get("min_score", 0.0)

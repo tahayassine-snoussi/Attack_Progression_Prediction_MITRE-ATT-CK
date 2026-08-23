@@ -1498,6 +1498,50 @@
                 ]
             }
         },
+        {
+            "mapping_id": "WAZ-T1548.003-001",
+            "telemetry_source": "Wazuh",
+            "log_type": "archives.json",
+            "attack_technique": {
+                "technique_id": "T1548.003",
+                "technique_name": "Sudo and Sudo Caching",
+                "tactic": "Privilege Escalation"
+            },
+            "mapping_type": "direct",
+            "confidence_score": 0.95,
+            "required_fields": [
+                "decoder.name",
+                "rule.id",
+                "data.srcuser",
+                "data.dstuser"
+            ],
+            "evidence_conditions": [
+                "Sudo session opened for root user",
+                "Rule 5402 fires on successful sudo to ROOT"
+            ],
+            "correlation_required": false,
+            "false_positive_notes": "Administrators legitimately use sudo. Execution from compromised accounts or unusual commands indicates privilege escalation.",
+            "explanation": "Successful sudo to root establishes elevated privileges on the target system, representing a privilege escalation step in the attack chain.",
+            "related_techniques": [
+                "T1078",
+                "T1059.004"
+            ],
+            "semantic_conditions": {
+                "logic": "AND",
+                "conditions": [
+                    {
+                        "field": "decoder.name",
+                        "operator": "==",
+                        "value": "sudo"
+                    },
+                    {
+                        "field": "rule.id",
+                        "operator": "==",
+                        "value": "5402"
+                    }
+                ]
+            }
+        },
 
 
 

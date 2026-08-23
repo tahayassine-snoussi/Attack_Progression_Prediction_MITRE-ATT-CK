@@ -240,6 +240,9 @@ class ProgressionIntegration:
 
         # Stable synthetic ID when raw event has no native ID
         raw_event_id = event.get("id") or event.get("event_id")
+        decoded = event.get("decoded_fields", {})
+        agent_name = decoded.get("agent", {}).get("name")
+
         if not raw_event_id:
             ts = event.get("timestamp", "") or datetime.now(timezone.utc).isoformat()
             src = source_ip or "none"
@@ -261,6 +264,7 @@ class ProgressionIntegration:
             "score": score,
             "source_ip": source_ip,
             "destination_ip": dest_ip,
+            "agent_name": agent_name,
             "raw_event": event,
             "progression_eligible": False,
             "progression_reason": None,
