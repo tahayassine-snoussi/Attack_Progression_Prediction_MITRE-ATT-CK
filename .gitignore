@@ -30,4 +30,4 @@ src/logs_extraction/state/*
 src/logs_extraction/state
 
 src/config
-src/log_extraction/state
+src/logs_extraction/state/offsets.json
