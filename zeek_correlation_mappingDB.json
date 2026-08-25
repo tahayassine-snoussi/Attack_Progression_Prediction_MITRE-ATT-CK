@@ -839,8 +839,8 @@
         "correlation_rule": {
             "window_seconds": 300,
             "group_by": [
-                "http.host",
-                "http.uri"
+                "http.id.orig_h",
+                "http.host"
             ],
             "aggregations": {
                 "request_count": {
@@ -851,7 +851,7 @@
                 {
                     "metric": "request_count",
                     "operator": ">=",
-                    "value": 3
+                    "value": 2
                 }
             ],
             "scoring": {
@@ -1583,7 +1583,7 @@
                 {
                     "metric": "request_count",
                     "operator": ">=",
-                    "value": 4
+                    "value": 6
                 },
                 {
                     "metric": "interval_cv",
