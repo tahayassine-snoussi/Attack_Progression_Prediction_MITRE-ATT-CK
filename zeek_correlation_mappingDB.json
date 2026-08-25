@@ -3231,6 +3231,248 @@
             "T1572",
             "T1105"
         ]
+    },
+
+    {
+        "mapping_id": "ZEK-T1059.004-001",
+        "telemetry_source": "Zeek",
+        "log_type": "http.log",
+        "attack_technique": {
+            "technique_id": "T1059.004",
+            "technique_name": "Command and Scripting Interpreter: Unix Shell",
+            "tactic": "Execution"
+        },
+        "mapping_type": "behavioral",
+        "confidence_score": 0.85,
+        "correlation_required": true,
+        "correlation_rule": {
+            "window_seconds": 300,
+            "group_by": [
+                "http.id.orig_h",
+                "http.host"
+            ],
+            "aggregations": {
+                "request_count": {
+                    "function": "count"
+                }
+            },
+            "conditions": [
+                {
+                    "metric": "request_count",
+                    "operator": ">=",
+                    "value": 4
+                }
+            ]
+        },
+        "semantic_conditions": {
+            "logic": "OR",
+            "conditions": [
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "cmd="
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "exec="
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "command="
+                }
+            ]
+        }
+    },
+
+    {
+        "mapping_id": "ZEK-T1003.008-001",
+        "telemetry_source": "Zeek",
+        "log_type": "http.log",
+        "attack_technique": {
+            "technique_id": "T1003.008",
+            "technique_name": "OS Credential Dumping: /etc/passwd and /etc/shadow",
+            "tactic": "Credential Access"
+        },
+        "mapping_type": "behavioral",
+        "confidence_score": 0.88,
+        "required_fields": [
+            "http.id.orig_h",
+            "http.host",
+            "http.uri",
+            "http.method",
+            "http.status_code",
+            "http.ts"
+        ],
+        "evidence_conditions": [
+            "HTTP request URI contains references to sensitive credential files (/etc/shadow, /etc/passwd, SSH private keys)",
+            "Request originates from external attacker IP to internal web server",
+            "Response status 200 OK indicates successful file read",
+            "Activity occurs through established web shell endpoint"
+        ],
+        "correlation_required": true,
+        "correlation_rule": {
+            "window_seconds": 300,
+            "group_by": [
+                "http.id.orig_h",
+                "http.host"
+            ],
+            "aggregations": {
+                "request_count": {
+                    "function": "count"
+                }
+            },
+            "conditions": [
+                {
+                    "metric": "request_count",
+                    "operator": ">=",
+                    "value": 1
+                }
+            ],
+            "scoring": {
+                "base_weight": 1.0,
+                "supporting_conditions": [
+                    {
+                        "description": "URI references /etc/shadow specifically",
+                        "weight": 1.15
+                    },
+                    {
+                        "description": "URI references SSH keys (id_rsa)",
+                        "weight": 1.1
+                    }
+                ]
+            }
+        },
+        "false_positive_notes": "System administrators may legitimately access these files through web-based management interfaces. Restrict to attacker IPs or unusual source hosts to reduce noise.",
+        "explanation": "When an attacker accesses credential files through a web shell, Zeek http.log captures the request URI containing file paths like /etc/shadow or /etc/passwd. The correlation engine identifies these sensitive file references in HTTP traffic originating from the attacker.",
+        "related_techniques": [
+            "T1003",
+            "T1078",
+            "T1505.003"
+        ],
+        "semantic_conditions": {
+            "logic": "OR",
+            "conditions": [
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "/etc/shadow"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "/etc/passwd"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "id_rsa"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "authorized_keys"
+                }
+            ]
+        }
+    },
+    {
+        "mapping_id": "ZEK-T1016-001",
+        "telemetry_source": "Zeek",
+        "log_type": "http.log",
+        "attack_technique": {
+            "technique_id": "T1016",
+            "technique_name": "System Network Configuration Discovery",
+            "tactic": "Discovery"
+        },
+        "mapping_type": "behavioral",
+        "confidence_score": 0.85,
+        "required_fields": [
+            "http.id.orig_h",
+            "http.host",
+            "http.uri",
+            "http.method",
+            "http.status_code",
+            "http.ts"
+        ],
+        "evidence_conditions": [
+            "HTTP request URI contains network reconnaissance commands (ip, ifconfig, route, netstat)",
+            "Requests target internal web server from external attacker IP",
+            "Multiple network configuration queries in short time window",
+            "Activity occurs through established web shell endpoint"
+        ],
+        "correlation_required": true,
+        "correlation_rule": {
+            "window_seconds": 300,
+            "group_by": [
+                "http.id.orig_h",
+                "http.host"
+            ],
+            "aggregations": {
+                "request_count": {
+                    "function": "count"
+                }
+            },
+            "conditions": [
+                {
+                    "metric": "request_count",
+                    "operator": ">=",
+                    "value": 2
+                }
+            ],
+            "scoring": {
+                "base_weight": 1.0,
+                "supporting_conditions": [
+                    {
+                        "description": "Multiple distinct network commands observed",
+                        "weight": 1.1
+                    }
+                ]
+            }
+        },
+        "false_positive_notes": "Network administrators and diagnostic tools may issue similar commands. Context of web shell usage distinguishes attacker activity.",
+        "explanation": "Attackers discovering network configuration through a web shell generate HTTP requests containing network command parameters. Zeek http.log captures these URI patterns, allowing the correlation engine to identify reconnaissance behavior.",
+        "related_techniques": [
+            "T1049",
+            "T1018",
+            "T1007"
+        ],
+        "semantic_conditions": {
+            "logic": "OR",
+            "conditions": [
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "ip%20addr"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "ifconfig"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "route"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "netstat"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "resolv.conf"
+                },
+                {
+                    "field": "http.uri",
+                    "operator": "contains",
+                    "value": "network/interfaces"
+                }
+            ]
+        }
     }
     
   
