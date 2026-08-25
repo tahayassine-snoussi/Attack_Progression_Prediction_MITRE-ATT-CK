@@ -8,6 +8,9 @@ from pathlib import Path
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas" / "zeek"
 
+# Deduplicate schema loading prints
+_printed_schemas = set()
+
 
 # ============================================================
 # LOAD SCHEMA
@@ -40,7 +43,10 @@ def load_schema(log_type: str) -> dict:
     with open(schema_path, "r", encoding="utf-8") as f:
         schema = json.load(f)
 
-    print(f"[DECODER] Loaded schema: {schema_path}")
+    # Only print the first time a schema is loaded
+    if schema_path not in _printed_schemas:
+        _printed_schemas.add(schema_path)
+        print(f"[DECODER] Loaded schema: {schema_path}")
 
     return schema
 

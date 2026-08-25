@@ -326,6 +326,20 @@ class WazuhMappingEngine:
                 or "N/A"
             )
 
+            
+            # =====================================================
+            # SKIP INFRASTRUCTURE AGENT NOISE
+            # =====================================================
+
+            agent_name = (
+                decoded_fields
+                .get("agent", {})
+                .get("name", "")
+            )
+
+            if agent_name == "wazuh-server":
+                continue
+
             # =====================================================
             # PRINT SEMANTIC MATCH
             # =====================================================
